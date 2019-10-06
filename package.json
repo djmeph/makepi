@@ -13,5 +13,21 @@
     "crm"
   ],
   "author": "Norman Witte III",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/hapi": "^18.4.0",
+    "@hapi/inert": "^5.2.2",
+    "@hapi/joi": "^16.1.7",
+    "@hapi/vision": "^5.5.4",
+    "dynamodb-wrapper": "git+https://git@github.com/qloan/dynamodb-wrapper.git",
+    "hapi-swagger": "^10.1.2",
+    "lodash": "^4.17.15",
+    "moment-timezone": "^0.5.26"
+  },
+  "devDependencies": {
+    "aws-cli": "0.0.2",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.1",
+    "sinon": "^7.5.0"
+  }
 }

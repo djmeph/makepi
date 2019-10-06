@@ -1,0 +1,17 @@
+{
+  "name": "makepi",
+  "version": "0.0.1",
+  "description": "An Open Source Makerspace CRM API",
+  "main": "index.js",
+  "scripts": {
+    "test": "exit 0"
+  },
+  "keywords": [
+    "makerspace",
+    "hackerspace",
+    "api",
+    "crm"
+  ],
+  "author": "Norman Witte III",
+  "license": "ISC"
+}

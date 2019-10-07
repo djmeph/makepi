@@ -4,7 +4,8 @@
   "description": "An Open Source Makerspace CRM API",
   "main": "index.js",
   "scripts": {
-    "test": "exit 0"
+    "test": "exit 0",
+    "eslint": "eslint *.js"
   },
   "keywords": [
     "makerspace",
@@ -26,6 +27,11 @@
   "devDependencies": {
     "aws-cli": "0.0.2",
     "chai": "^4.2.0",
+    "eslint": "^6.5.1",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.16.0",
     "mocha": "^6.2.1",
     "serverless": "^1.53.0",
     "serverless-offline": "^5.12.0",

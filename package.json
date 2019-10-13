@@ -4,8 +4,10 @@
   "description": "An Open Source Makerspace CRM API",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon app.js",
     "test": "exit 0",
-    "eslint": "eslint *.js"
+    "eslint": "eslint *.js",
+    "deploy": "serverless deploy"
   },
   "keywords": [
     "makerspace",
@@ -16,16 +18,18 @@
   "author": "Norman Witte III",
   "license": "ISC",
   "dependencies": {
-    "@hapi/joi": "^16.1.7",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.19.0",
-    "dynamodb-wrapper": "git+https://git@github.com/qloan/dynamodb-wrapper.git",
+    "dynamodb-wrapper": "github:qloan/dynamodb-wrapper#v0.3.5",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "moment-timezone": "^0.5.26",
-    "serverless-http": "^2.3.0"
+    "serverless-http": "^2.3.0",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "aws-cli": "0.0.2",
+    "aws-sdk": "^2.548.0",
     "chai": "^4.2.0",
     "eslint": "^6.5.1",
     "eslint-config-airbnb": "^18.0.1",
@@ -33,6 +37,8 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.16.0",
     "mocha": "^6.2.1",
+    "nodemon": "^1.19.3",
+    "react": "^16.10.2",
     "serverless": "^1.53.0",
     "serverless-offline": "^5.12.0",
     "sinon": "^7.5.0"

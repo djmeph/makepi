@@ -12,7 +12,8 @@
     "no-plusplus": "off",
     "consistent-return": "off",
     "camelcase": "off",
-    "no-await-in-loop": "off"
+    "no-await-in-loop": "off",
+    "import/no-extraneous-dependencies": "off"
   },
   "env": {
     "browser": true,

@@ -6,13 +6,28 @@ const { joi } = DB;
 
 const id = joi.string()
   .description('User ID');
+
 const key = joi.string()
   .description('Table key');
 
-const username = joi.string();
-const password = joi.string();
-const remember = joi.boolean();
-const token = joi.string();
+const username = joi.string()
+  .description('Username');
+
+const password = joi.string()
+  .min(8)
+  .max(255)
+  .regex(/[a-zA-Z]/)
+  .regex(/[0-9]/)
+  .description('New password in plain-text');
+
+const passwordHash = joi.string()
+  .description('Salted and Hashed Password');
+
+const remember = joi.boolean()
+  .description('Conditional: expiration set on token');
+
+const token = joi.string()
+  .description('JWT Auth token');
 
 module.exports = {
   elements: {
@@ -24,13 +39,13 @@ module.exports = {
   register: {
     body: joi.object({
       username: username.required(),
-      password: password.required()
+      password
     })
   },
   login: {
     body: joi.object({
       username: username.required(),
-      password: password.required(),
+      password: joi.string().required(),
       remember: remember.required()
     })
   },
@@ -46,8 +61,7 @@ module.exports = {
       id: id.required(),
       key: key.required(),
       username: username.required(),
-      password: password.optional(),
-      passwordHash: password.optional()
+      passwordHash: passwordHash.optional()
     }
   })
 };

@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 module.exports = {
   JWT_SECRET: process.env.JWT_SECRET,
   EXPIRY: Number(process.env.EXPIRY),

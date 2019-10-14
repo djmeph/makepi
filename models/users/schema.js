@@ -29,12 +29,17 @@ const remember = joi.boolean()
 const token = joi.string()
   .description('JWT Auth token');
 
+const access = joi.array()
+  .items(joi.string().allow(Object.values(config.access.level)))
+  .description('Access levels granted to user');
+
 module.exports = {
   elements: {
     username,
     password,
     token,
-    remember
+    remember,
+    access
   },
   register: {
     body: joi.object({
@@ -61,7 +66,8 @@ module.exports = {
       id: id.required(),
       key: key.required(),
       username: username.required(),
-      passwordHash: passwordHash.optional()
+      passwordHash: passwordHash.optional(),
+      access: access.optional()
     }
   })
 };

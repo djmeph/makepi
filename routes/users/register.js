@@ -9,7 +9,7 @@ const UserItem = require('../../models/users/item');
 const config = require('../../config');
 
 module.exports = {
-  method: 'post',
+  method: 'POST',
   endpoint: '/register',
   validate: {
     body: models.users.schema.register.body

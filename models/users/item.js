@@ -32,7 +32,7 @@ class Users extends ItemWithHistory {
     const attrs = { ...params };
     // If key not provided use default
     if (typeof params.key === 'undefined') {
-      attrs.key = config.itemKeyPrefixes.users;
+      attrs.key = config.keyPrefixes.users;
     }
     // If id not provided generate new UUID
     if (typeof params.id === 'undefined') {

@@ -19,13 +19,13 @@ module.exports = {
       // Check if user exists
       const user = await models.users.table.getByUsername(req.body.username);
       if (!user) {
-        req.data = { status: 403, response: { message: 'Username not found' } };
+        req.data = { status: 401, response: { message: 'Username not found' } };
         return next();
       }
       // Check password against hash
       const authenticated = await user.checkPassword(req.body.password);
       if (!authenticated) {
-        req.data = { status: 403, response: { message: 'Unauthorized' } };
+        req.data = { status: 401, response: { message: 'Unauthorized' } };
         return next();
       }
       // Generate token, set expiration if remember set to false

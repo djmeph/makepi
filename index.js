@@ -10,7 +10,9 @@
 const serverless = require('serverless-http');
 const bodyParser = require('body-parser');
 const express = require('express');
+const expressJwt = require('express-jwt');
 const router = require('./router');
+const config = require('./config');
 
 // Build express app and export to serverless or vanilla nodeJS
 const app = express();
@@ -28,13 +30,29 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   next();
 });
+
 // parse all requests as JSON
 app.use(bodyParser.json({ type: 'application/json' }));
+
+// Authenticate token and reject unauthorized access
+app.use(
+  '/',
+  expressJwt({ secret: config.JWT_SECRET, output: 'json' })
+    .unless({ path: ['/login', '/register'] })
+);
+
 // Initialize routes
 app.use('/', router());
+
 // 404 Not Found fallback
 app.use((req, res) => {
   res.status(404).json({ message: 'NOT FOUND' });
+});
+
+app.use((err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).json({ message: 'Invalid Token' });
+  }
 });
 
 module.exports = {

@@ -4,10 +4,11 @@
  */
 
 const express = require('express');
-const bodyParser = require('body-parser');
 const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
+
+const models = require('./models');
 
 const router = express.Router();
 const routesDir = `${__dirname}/routes`;
@@ -72,6 +73,19 @@ async function validateInput(req, res, next) {
   next();
 }
 
+// Validate Access
+async function validateAccess(req, res, next) {
+  if (!req.access) return next();
+  const user = await models.users.table.get(req.user.sub);
+  const access = user.get('access', []);
+  let authorized = false;
+  req.access.forEach((level) => {
+    if (access.indexOf(level) > -1) authorized = true;
+  });
+  if (authorized) return next();
+  res.status(403).json({ message: 'Access Denied' });
+}
+
 // Builds routes by scanning for .js files in routes folder
 // This function can be called within itself to scan recursively
 function getRoutes(dir) {
@@ -99,11 +113,11 @@ function getRoutes(dir) {
       route.endpoint,
       _.merge([
         // Parse all payloads as JSON
-        bodyParser.json(),
         (req, res, next) => {
           // Attach validations to request object
           req.validate = route.validate;
           // Attach universal fail function for returning uncaught errors.
+          req.access = route.access;
           req.fail = (err) => {
             req.data = { status: err.statusCode || 500, response: { message: err.message } };
             next();
@@ -112,6 +126,8 @@ function getRoutes(dir) {
         },
         // Validate all input payloads
         validateInput,
+        // Validate access
+        validateAccess,
         // Process route logic middleware
         route.middleware
       ]),

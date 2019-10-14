@@ -11,10 +11,18 @@ module.exports = {
     }
   },
   tableNames: {
-    users: `makepi-${process.env.ENV_NAME}-users`
+    users: `makepi-${process.env.ENV_NAME}-users`,
+    settings: `makepi-${process.env.ENV_NAME}-settings`
   },
-  itemKeyPrefixes: {
-    users: 'base'
+  keyPrefixes: {
+    users: 'base',
+    settings: 'general',
+    stripeCredit: 'stripe-credit'
   },
-  itemKeyDelimiter: '#'
+  keyDelimiter: '#',
+  access: {
+    level: {
+      admin: 'admin'
+    }
+  }
 };

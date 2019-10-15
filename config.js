@@ -17,7 +17,7 @@ module.exports = {
   keyPrefixes: {
     users: 'base',
     settings: 'general',
-    stripeCredit: 'stripe-credit'
+    stripeCredits: 'stripe-credits'
   },
   keyDelimiter: '#',
   access: {

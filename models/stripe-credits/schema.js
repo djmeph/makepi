@@ -10,6 +10,8 @@ const id = joi.string()
 const key = joi.string()
   .description('Settings Key');
 
+const createdAt = joi.date();
+
 const publicToken = joi.string();
 
 const source = joi
@@ -47,6 +49,12 @@ const sourceOutput = joi.object({
   funding: joi.string().required()
 });
 
+const output = joi.object({
+  key,
+  createdAt,
+  source: sourceOutput
+});
+
 module.exports = {
   elements: {
     id,
@@ -57,10 +65,13 @@ module.exports = {
     body: joi.object({
       publicToken: publicToken.required()
     }),
-    response: joi.object({
-      key,
-      source: sourceOutput
-    })
+    response: output
+  },
+  getAll: {
+    response: joi.array().items(output)
+  },
+  get: {
+    response: output
   },
   dynamo: new Schema({
     tableName: config.tableNames.users,

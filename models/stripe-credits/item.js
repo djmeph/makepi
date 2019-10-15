@@ -6,7 +6,7 @@ const { ItemWithHistory } = require('dynamodb-wrapper');
 const config = require('../../config');
 const utils = require('../../utils');
 
-class StripeCredit extends ItemWithHistory {
+class StripeCredits extends ItemWithHistory {
   /**
    * @param  {} params={}
    * @param { String } params.key
@@ -16,7 +16,7 @@ class StripeCredit extends ItemWithHistory {
     const attrs = { ...params };
     // If key not provided generate new UUID
     if (typeof params.key === 'undefined') {
-      attrs.key = `${config.keyPrefixes.stripeCredit}${config.keyDelimiter}${utils.uuid()}`;
+      attrs.key = `${config.keyPrefixes.stripeCredits}${config.keyDelimiter}${utils.uuid()}`;
     }
     // Attach params and schema to item
     super({
@@ -26,4 +26,4 @@ class StripeCredit extends ItemWithHistory {
   }
 }
 
-module.exports = StripeCredit;
+module.exports = StripeCredits;

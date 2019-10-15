@@ -134,7 +134,7 @@ function getRoutes(dir) {
       // Attach status code and data to response
       (req, res) => {
         // Check for response validation
-        if (req.validate.response) {
+        if (_.get(req, 'validate.response')) {
           // If it exists, validate the output payload, filter artifacts, and send filtered response
           return req.validate.response.validate(req.data.response, { stripUnknown: true }, (err, response) => {
             if (err) return res.status(500).json({ message: 'Internal Error' });

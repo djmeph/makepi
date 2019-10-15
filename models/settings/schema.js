@@ -40,6 +40,11 @@ module.exports = {
       value: value.optional()
     })
   },
+  get: {
+    params: joi.object({
+      id: id.required()
+    })
+  },
   dynamo: new Schema({
     tableName: config.tableNames.settings,
     key: {

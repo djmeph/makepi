@@ -27,6 +27,7 @@
     "lodash": "^4.17.15",
     "moment-timezone": "^0.5.26",
     "serverless-http": "^2.3.0",
+    "stripe": "^7.10.0",
     "uuid": "^3.3.3"
   },
   "devDependencies": {

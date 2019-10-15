@@ -40,6 +40,13 @@ const source = joi
   })
   .description('Stripe source data');
 
+const sourceOutput = joi.object({
+  object: joi.string().required(),
+  brand: joi.string().required(),
+  last4: joi.string().required(),
+  funding: joi.string().required()
+});
+
 module.exports = {
   elements: {
     id,
@@ -49,6 +56,10 @@ module.exports = {
   post: {
     body: joi.object({
       publicToken: publicToken.required()
+    }),
+    response: joi.object({
+      key,
+      source: sourceOutput
     })
   },
   dynamo: new Schema({

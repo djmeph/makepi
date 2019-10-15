@@ -132,7 +132,18 @@ function getRoutes(dir) {
         route.middleware
       ]),
       // Attach status code and data to response
-      (req, res) => res.status(req.data.status).json(req.data.response)
+      (req, res) => {
+        // Check for response validation
+        if (req.validate.response) {
+          // If it exists, validate the output payload, filter artifacts, and send filtered response
+          return req.validate.response.validate(req.data.response, { stripUnknown: true }, (err, response) => {
+            if (err) return res.status(500).json({ message: 'Internal Error' });
+            res.status(req.data.status).json(response);
+          });
+        }
+        // If no validation specified, output as is
+        res.status(req.data.status).json(req.data.response);
+      }
     );
   });
 }

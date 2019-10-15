@@ -4,7 +4,8 @@ module.exports = {
   method: 'POST',
   endpoint: '/stripe-credit',
   validate: {
-    body: models.stripeCredit.schema.post.body
+    body: models.stripeCredit.schema.post.body,
+    response: models.stripeCredit.schema.post.response
   },
   middleware: [async (req, res, next) => {
     let stripe;

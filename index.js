@@ -38,7 +38,10 @@ app.use(bodyParser.json({ type: 'application/json' }));
 app.use(
   '/',
   expressJwt({ secret: config.JWT_SECRET, output: 'json' })
-    .unless({ path: ['/login', '/register'] })
+    .unless((req) => {
+      if (req.method === 'OPTIONS') return true;
+      return ['/login', '/register'].indexOf(req.url) > -1;
+    })
 );
 
 // Initialize routes

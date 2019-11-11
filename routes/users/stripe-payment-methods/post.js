@@ -2,15 +2,15 @@ const models = require('../../../models');
 
 module.exports = {
   method: 'POST',
-  endpoint: '/stripe-credits',
+  endpoint: '/stripe-payment-methods',
   validate: {
-    body: models.stripeCredits.schema.post.body,
-    response: models.stripeCredits.schema.post.response
+    body: models.stripePaymentMethods.schema.post.body,
+    response: models.stripePaymentMethods.schema.post.response
   },
   middleware: [async (req, res, next) => {
     let stripe;
     let customer;
-    let stripeCredits;
+    let stripePaymentMethods;
     try {
       // Get Stripe secret key from database.
       const { value: stripeKey } = await models.settings.table.get('stripe-key');
@@ -29,14 +29,14 @@ module.exports = {
       });
 
       // Insert source data into database
-      stripeCredits = new models.stripeCredits.Item({
+      stripePaymentMethods = new models.stripePaymentMethods.Item({
         id: req.user.sub,
         source
       });
-      await stripeCredits.create();
+      await stripePaymentMethods.create();
 
       // Return Stripe source data
-      req.data = { status: 200, response: stripeCredits.get() };
+      req.data = { status: 200, response: stripePaymentMethods.get() };
       next();
     } catch (err) { req.fail(err); }
   }]

@@ -119,6 +119,7 @@ function getRoutes(dir) {
           // Attach universal fail function for returning uncaught errors.
           req.access = route.access;
           req.fail = (err) => {
+            console.error(err);
             req.data = { status: err.statusCode || 500, response: { message: err.message } };
             next();
           };

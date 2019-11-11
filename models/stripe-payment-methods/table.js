@@ -3,14 +3,14 @@ const _ = require('lodash');
 const config = require('../../config');
 const utils = require('../../utils');
 
-class StripeCreditsTable extends PromisifiedTable {
+class StripePaymentMethodsTable extends PromisifiedTable {
   async getAll(id) {
     const result = await super.query({
       TableName: config.tableNames.users,
       KeyConditionExpression: '#id = :id and begins_with(#key, :key)',
       ExpressionAttributeValues: {
         ':id': id,
-        ':key': config.keyPrefixes.stripeCredits
+        ':key': config.keyPrefixes.stripePaymentMethods
       },
       ExpressionAttributeNames: {
         '#id': 'id',
@@ -24,7 +24,7 @@ class StripeCreditsTable extends PromisifiedTable {
   }
 }
 
-module.exports = new StripeCreditsTable({
+module.exports = new StripePaymentMethodsTable({
   schema: require('./schema').dynamo,
   itemConstructor: require('./item')
 });

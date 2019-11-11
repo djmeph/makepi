@@ -3,15 +3,15 @@ const config = require('../../../config');
 
 module.exports = {
   method: 'GET',
-  endpoint: '/stripe-credits/:key',
+  endpoint: '/stripe-payment-methods/:key',
   validate: {
-    response: models.stripeCredits.schema.get.response
+    response: models.stripePaymentMethods.schema.get.response
   },
   middleware: [async (req, res, next) => {
     try {
-      const stripeCredit = await models.stripeCredits.table.get({
+      const stripeCredit = await models.stripePaymentMethods.table.get({
         id: req.user.sub,
-        key: `${config.keyPrefixes.stripeCredits}${config.keyDelimiter}${req.params.key}`
+        key: `${config.keyPrefixes.stripePaymentMethods}${config.keyDelimiter}${req.params.key}`
       });
       if (!stripeCredit) req.data = { status: 404, response: { message: 'Not Found' } };
       else req.data = { status: 200, response: stripeCredit.get() };

@@ -13,5 +13,5 @@
 module.exports = {
   users: require('./users'),
   settings: require('./settings'),
-  stripeCredits: require('./stripe-credits')
+  stripePaymentMethods: require('./stripe-payment-methods')
 };

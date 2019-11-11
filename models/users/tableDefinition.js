@@ -14,6 +14,10 @@ module.exports = {
     {
       AttributeName: 'username',
       AttributeType: 'S'
+    },
+    {
+      AttributeName: 'object',
+      AttributeType: 'S'
     }
   ],
   KeySchema: [{
@@ -33,6 +37,17 @@ module.exports = {
       KeySchema: [
         {
           AttributeName: 'username',
+          KeyType: 'HASH'
+        }
+      ],
+      Projection: {
+        ProjectionType: 'ALL'
+      }
+    }, {
+      IndexName: 'object-index',
+      KeySchema: [
+        {
+          AttributeName: 'object',
           KeyType: 'HASH'
         }
       ],

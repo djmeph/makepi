@@ -13,13 +13,14 @@ module.exports = {
   tableNames: {
     users: `makepi-${process.env.ENV_NAME}-users`,
     settings: `makepi-${process.env.ENV_NAME}-settings`,
-    plans: `makepi-${process.env.ENV_NAME}-plans`
+    plans: `makepi-${process.env.ENV_NAME}-plans`,
   },
   keyPrefixes: {
     users: 'base',
     settings: 'general',
     stripePaymentMethods: 'stripe-payment-methods',
-    plans: 'base'
+    plans: 'base',
+    subscriptions: 'subscriptions',
   },
   keyDelimiter: '#',
   access: {

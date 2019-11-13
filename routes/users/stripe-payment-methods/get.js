@@ -10,7 +10,7 @@ module.exports = {
   middleware: [async (req, res, next) => {
     try {
       const stripeCredit = await models.stripePaymentMethods.table.get({
-        id: req.user.sub,
+        userId: req.user.sub,
         key: `${config.keyPrefixes.stripePaymentMethods}${config.keyDelimiter}${req.params.key}`
       });
       if (!stripeCredit) req.data = { status: 404, response: { message: 'Not Found' } };

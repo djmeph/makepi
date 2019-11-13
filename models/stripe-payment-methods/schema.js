@@ -1,14 +1,18 @@
 const DB = require('dynamodb-wrapper');
 const config = require('../../config');
+const modelConfig = require('./config');
 
 const Schema = DB.schema(config.awsConfig);
 const { joi } = DB;
 
-const id = joi.string()
-  .description('Settings ID');
+const userId = joi.string()
+  .description('User ID');
 
 const key = joi.string()
-  .description('Settings Key');
+  .description('Stripe Payment Method Key');
+
+const stripePaymentMethodId = joi.string()
+  .description('Unique ID for Stripe Payment Method Item');
 
 const createdAt = joi.date();
 
@@ -18,12 +22,11 @@ const source = joi
   .object()
   .description('Stripe source data');
 
-const object = joi.string().allow(['card', 'bank_account']);
+const type = joi.number().allow(Object.values(modelConfig.types));
 
 const sourceOutput = joi.object({
-  object: object.required(),
   brand: joi.string().optional(),
-  last4: joi.string().required(),
+  last4: joi.string().optional(),
   funding: joi.string().optional(),
   bank_name: joi.string().optional(),
 });
@@ -31,12 +34,13 @@ const sourceOutput = joi.object({
 const output = joi.object({
   key,
   createdAt,
+  type,
   source: sourceOutput
 });
 
 module.exports = {
   elements: {
-    id,
+    userId,
     key,
     source
   },
@@ -55,15 +59,16 @@ module.exports = {
   dynamo: new Schema({
     tableName: config.tableNames.users,
     key: {
-      hash: 'id',
+      hash: 'userId',
       range: 'key'
     },
     timestamps: true,
     schema: {
-      id: id.required(),
+      userId: userId.required(),
       key: key.required(),
-      object: object.required(),
-      source: source.required(),
+      stripePaymentMethodId: stripePaymentMethodId.required(),
+      type: type.required(),
+      source: source.required()
     }
   })
 };

@@ -4,7 +4,7 @@ const config = require('../../config');
 const Schema = DB.schema(config.awsConfig);
 const { joi } = DB;
 
-const id = joi.string()
+const settingsId = joi.string()
   .description('Settings ID');
 
 const key = joi.string()
@@ -28,7 +28,7 @@ const type = joi.string()
 
 module.exports = {
   elements: {
-    id,
+    settingsId,
     key,
     value,
     label,
@@ -36,25 +36,25 @@ module.exports = {
   },
   post: {
     body: joi.object({
-      id: id.required(),
+      settingsId: settingsId.required(),
       value: value.optional()
     })
   },
   get: {
     params: joi.object({
-      id: id.required()
+      settingsId: settingsId.required()
     })
   },
   dynamo: new Schema({
     tableName: config.tableNames.settings,
     key: {
-      hash: 'id',
+      hash: 'settingsId',
       range: 'key'
     },
     timestamps: true,
     tableDefinition: require('./tableDefinition'),
     schema: {
-      id: id.required(),
+      settingsId: settingsId.required(),
       key: key.required(),
       value: value.optional(),
       type: value.required(),

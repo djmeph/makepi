@@ -30,7 +30,7 @@ module.exports = {
 
       // Insert source data into database
       stripePaymentMethods = new models.stripePaymentMethods.Item({
-        id: req.user.sub,
+        userId: req.user.sub,
         source
       });
       await stripePaymentMethods.create();

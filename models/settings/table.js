@@ -1,10 +1,11 @@
 const { PromisifiedTable } = require('dynamodb-wrapper');
 const config = require('../../config');
+const modelConfig = require('./config');
 
 class SettingsTable extends PromisifiedTable {
-  async get(id) { // Query by ID
+  async get(settingsId) { // Query by ID
     const result = await super.get({
-      id,
+      settingsId,
       key: config.keyPrefixes.settings
     });
     return this._processSettingResponse(result);
@@ -13,19 +14,21 @@ class SettingsTable extends PromisifiedTable {
   _processSettingResponse(payload) {
     const setting = payload.get();
     switch (setting.type) {
-    case 'number':
+    case modelConfig.types.number:
       setting.value = Number(setting.value);
       break;
-    case 'boolean':
+    case modelConfig.types.boolean:
       setting.value = !!setting.value;
       break;
-    case 'json':
+    case modelConfig.types.json:
       setting.value = JSON.stringify(setting.value);
       break;
-    case 'base64':
+    case modelConfig.types.base64:
       setting.value = Buffer.from(setting.value, 'base64');
       break;
-    case 'string':
+    case modelConfig.types.string:
+      setting.value = `${setting.value}`;
+      break;
     default:
     }
     return {

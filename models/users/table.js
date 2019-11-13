@@ -2,9 +2,9 @@ const { PromisifiedTable } = require('dynamodb-wrapper');
 const config = require('../../config');
 
 class UsersTable extends PromisifiedTable {
-  async get(id) { // Query by ID
+  async get(userId) { // Query by ID
     const result = await super.get({
-      id,
+      userId,
       key: config.keyPrefixes.users
     });
     return result;

@@ -4,7 +4,7 @@ const config = require('../../config');
 const Schema = DB.schema(config.awsConfig);
 const { joi } = DB;
 
-const id = joi.string()
+const userId = joi.string()
   .description('User ID');
 
 const key = joi.string()
@@ -30,7 +30,7 @@ const token = joi.string()
   .description('JWT Auth token');
 
 const access = joi.array()
-  .items(joi.string().allow(Object.values(config.access.level)))
+  .items(joi.number().allow(Object.values(config.access.level)))
   .description('Access levels granted to user');
 
 module.exports = {
@@ -57,13 +57,13 @@ module.exports = {
   dynamo: new Schema({
     tableName: config.tableNames.users,
     key: {
-      hash: 'id',
+      hash: 'userId',
       range: 'key'
     },
     timestamps: true,
     tableDefinition: require('./tableDefinition'),
     schema: {
-      id: id.required(),
+      userId: userId.required(),
       key: key.required(),
       username: username.required(),
       passwordHash: passwordHash.optional(),

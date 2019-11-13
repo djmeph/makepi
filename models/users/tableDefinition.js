@@ -4,7 +4,7 @@ module.exports = {
   TableName: config.tableNames.users,
   AttributeDefinitions: [
     {
-      AttributeName: 'id',
+      AttributeName: 'userId',
       AttributeType: 'S'
     },
     {
@@ -16,12 +16,12 @@ module.exports = {
       AttributeType: 'S'
     },
     {
-      AttributeName: 'object',
-      AttributeType: 'S'
+      AttributeName: 'type',
+      AttributeType: 'N'
     }
   ],
   KeySchema: [{
-    AttributeName: 'id',
+    AttributeName: 'userId',
     KeyType: 'HASH'
   }, {
     AttributeName: 'key',
@@ -44,10 +44,10 @@ module.exports = {
         ProjectionType: 'ALL'
       }
     }, {
-      IndexName: 'object-index',
+      IndexName: 'type-index',
       KeySchema: [
         {
-          AttributeName: 'object',
+          AttributeName: 'type',
           KeyType: 'HASH'
         }
       ],

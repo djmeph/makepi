@@ -12,17 +12,19 @@ module.exports = {
   },
   tableNames: {
     users: `makepi-${process.env.ENV_NAME}-users`,
-    settings: `makepi-${process.env.ENV_NAME}-settings`
+    settings: `makepi-${process.env.ENV_NAME}-settings`,
+    plans: `makepi-${process.env.ENV_NAME}-plans`
   },
   keyPrefixes: {
     users: 'base',
     settings: 'general',
-    stripePaymentMethods: 'stripe-payment-methods'
+    stripePaymentMethods: 'stripe-payment-methods',
+    plans: 'plans'
   },
   keyDelimiter: '#',
   access: {
     level: {
-      admin: 'admin'
+      admin: 0
     }
   }
 };

@@ -2,7 +2,7 @@
  * Users model item class:
  * Promisified Item with History
  */
-const { ItemWithHistory } = require('dynamodb-wrapper');
+const { PromisifiedItem } = require('dynamodb-wrapper');
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
@@ -20,11 +20,11 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
   region: config.awsConfig.region
 });
 
-class Users extends ItemWithHistory {
+class Users extends PromisifiedItem {
   /**
    * @param  {} params={}
    * @param { String } params.key
-   * @param { String } params.id
+   * @param { String } params.userId
    * @param { String } params.username
    * @param { String } params.password
    */
@@ -35,8 +35,8 @@ class Users extends ItemWithHistory {
       attrs.key = config.keyPrefixes.users;
     }
     // If id not provided generate new UUID
-    if (typeof params.id === 'undefined') {
-      attrs.id = utils.uuid();
+    if (typeof params.userId === 'undefined') {
+      attrs.userId = utils.uuid();
     }
     // Attach params and schema to item
     super({
@@ -77,7 +77,7 @@ class Users extends ItemWithHistory {
   }
 
   getToken(expiry) {
-    const sub = this.get('id');
+    const sub = this.get('userId');
     const token = expiry
       ? jwt.sign({ sub }, config.JWT_SECRET, { expiresIn: config.EXPIRY })
       : jwt.sign({ sub }, config.JWT_SECRET);

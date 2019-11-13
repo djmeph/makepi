@@ -4,16 +4,16 @@ const config = require('../../config');
 const utils = require('../../utils');
 
 class StripePaymentMethodsTable extends PromisifiedTable {
-  async getAll(id) {
+  async getAll(userId) {
     const result = await super.query({
       TableName: config.tableNames.users,
       KeyConditionExpression: '#id = :id and begins_with(#key, :key)',
       ExpressionAttributeValues: {
-        ':id': id,
+        ':id': userId,
         ':key': config.keyPrefixes.stripePaymentMethods
       },
       ExpressionAttributeNames: {
-        '#id': 'id',
+        '#id': 'userId',
         '#key': 'key'
       }
     });

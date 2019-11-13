@@ -1,10 +1,10 @@
 const config = require('../../config');
 
 module.exports = {
-  TableName: config.tableNames.settings,
+  TableName: config.tableNames.plans,
   AttributeDefinitions: [
     {
-      AttributeName: 'settingsId',
+      AttributeName: 'planId',
       AttributeType: 'S'
     },
     {
@@ -13,7 +13,7 @@ module.exports = {
     }
   ],
   KeySchema: [{
-    AttributeName: 'settingsId',
+    AttributeName: 'planId',
     KeyType: 'HASH'
   }, {
     AttributeName: 'key',

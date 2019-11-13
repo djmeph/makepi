@@ -4,7 +4,7 @@ module.exports = {
   TableName: config.tableNames.settings,
   AttributeDefinitions: [
     {
-      AttributeName: 'settingsId',
+      AttributeName: 'settingId',
       AttributeType: 'S'
     },
     {
@@ -13,7 +13,7 @@ module.exports = {
     }
   ],
   KeySchema: [{
-    AttributeName: 'settingsId',
+    AttributeName: 'settingId',
     KeyType: 'HASH'
   }, {
     AttributeName: 'key',

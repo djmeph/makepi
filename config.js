@@ -19,7 +19,7 @@ module.exports = {
     users: 'base',
     settings: 'general',
     stripePaymentMethods: 'stripe-payment-methods',
-    plans: 'plans'
+    plans: 'base'
   },
   keyDelimiter: '#',
   access: {

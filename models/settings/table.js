@@ -3,9 +3,9 @@ const config = require('../../config');
 const modelConfig = require('./config');
 
 class SettingsTable extends PromisifiedTable {
-  async get(settingsId) { // Query by ID
+  async get(settingId) { // Query by ID
     const result = await super.get({
-      settingsId,
+      settingId,
       key: config.keyPrefixes.settings
     });
     return this._processSettingResponse(result);

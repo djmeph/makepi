@@ -6,6 +6,14 @@ const types = {
   string: 4
 };
 
+const items = {
+  'stripe-key': {
+    type: types.string,
+    label: 'Stripe API Key'
+  }
+};
+
 module.exports = {
-  types
+  types,
+  items
 };

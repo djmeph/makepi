@@ -11,16 +11,24 @@ module.exports = {
     let stripe;
     let customer;
     let stripePaymentMethods;
+    let username;
     try {
       // Get Stripe secret key from database.
       const { value: stripeKey } = await models.settings.table.get('stripe-key');
       stripe = require('stripe')(stripeKey);
+      // Fetch user item
+      const user = await models.users.table.get(req.user.sub);
+      username = user.get('username');
       // Attempt to fetch customer
       customer = await stripe.customers.retrieve(req.user.sub);
     } catch (err) {
       // Create customer if they dont' exist yet
-      if (err.statusCode === 404) customer = await stripe.customers.create({ id: req.user.sub });
-      else return req.fail(err);
+      if (err.statusCode === 404) {
+        customer = await stripe.customers.create({
+          id: req.user.sub,
+          email: username
+        });
+      } else return req.fail(err);
     }
     try {
       // Create source and attach to customer using public token

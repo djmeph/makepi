@@ -11,7 +11,7 @@ module.exports = {
   },
   middleware: [async (req, res, next) => {
     try {
-      const modelConfig = _.get(models, `settings.config.${req.body.settingId}`);
+      const modelConfig = _.get(models, `settings.config.items.${req.body.settingId}`);
       if (!modelConfig) {
         req.data = { status: 404, response: { message: 'Invalid setting ID' } };
         return next();

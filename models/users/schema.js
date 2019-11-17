@@ -11,6 +11,7 @@ const key = joi.string()
   .description('Table key');
 
 const username = joi.string()
+  .email()
   .description('Username');
 
 const password = joi.string()

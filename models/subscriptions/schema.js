@@ -13,6 +13,9 @@ const key = joi.string()
 const planId = joi.string()
   .description('Plan ID');
 
+const stripePaymentMethodId = joi.string()
+  .description('Unique ID for Stripe Payment Method Item');
+
 module.exports = {
   elements: {
     userId,
@@ -30,6 +33,7 @@ module.exports = {
       userId: userId.required(),
       key: key.required(),
       planId: planId.required(),
+      stripePaymentMethodId: stripePaymentMethodId.required(),
     }
   })
 };

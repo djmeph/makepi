@@ -1,5 +1,6 @@
 const DB = require('dynamodb-wrapper');
 const config = require('../../config');
+const modelConfig = require('./config');
 
 const Schema = DB.schema(config.awsConfig);
 const { joi } = DB;
@@ -16,14 +17,8 @@ const value = joi.string()
 const label = joi.string()
   .description('Setting label');
 
-const type = joi.string()
-  .allow([
-    'string',
-    'number',
-    'boolean',
-    'json',
-    'base64'
-  ])
+const type = joi.number()
+  .allow(Object.values(modelConfig.types))
   .description('Setting type');
 
 module.exports = {
@@ -57,7 +52,7 @@ module.exports = {
       settingId: settingId.required(),
       key: key.required(),
       value: value.optional(),
-      type: value.required(),
+      type: type.required(),
       label: label.required()
     }
   })

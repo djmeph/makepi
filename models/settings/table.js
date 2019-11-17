@@ -8,6 +8,7 @@ class SettingsTable extends PromisifiedTable {
       settingId,
       key: config.keyPrefixes.settings
     });
+    if (!result) throw new Error('Setting not found');
     return this._processSettingResponse(result);
   }
 

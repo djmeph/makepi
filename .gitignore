@@ -2,3 +2,4 @@ node_modules/
 .serverless/
 serverless.yml
 nodemon.json
+build/

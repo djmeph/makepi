@@ -7,20 +7,17 @@ class StripePaymentMethodsTable extends PromisifiedTable {
   async getAll(userId) {
     const result = await super.query({
       TableName: config.tableNames.users,
-      KeyConditionExpression: '#id = :id and begins_with(#key, :key)',
+      KeyConditionExpression: '#id = :id and begins_with(#itemKey, :itemKey)',
       ExpressionAttributeValues: {
         ':id': userId,
-        ':key': config.keyPrefixes.stripePaymentMethods
+        ':itemKey': config.itemKeyPrefixes.stripePaymentMethods
       },
       ExpressionAttributeNames: {
         '#id': 'userId',
-        '#key': 'key'
+        '#itemKey': 'itemKey'
       }
     });
-    return _.get(result, 'Items', []).map((n) => {
-      n.set('key', utils.stripKeyPrefix(n.get('key')));
-      return n;
-    });
+    return _.get(result, 'Items', []);
   }
 }
 

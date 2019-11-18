@@ -5,7 +5,7 @@ class UsersTable extends PromisifiedTable {
   async get(userId) { // Query by ID
     const result = await super.get({
       userId,
-      key: config.keyPrefixes.users
+      itemKey: config.itemKeyPrefixes.users
     });
     return result;
   }

@@ -11,8 +11,8 @@ module.exports = {
   },
   middleware: [async (req, res, next) => {
     try {
-      const setting = new models.plans.Item({ ...req.body });
-      await setting.create();
+      const plan = new models.plans.Item({ ...req.body });
+      await plan.create();
       req.data = { status: 200 };
       next();
     } catch (err) { req.fail(err); }

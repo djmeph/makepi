@@ -11,17 +11,17 @@ const modelConfig = require('./config');
 class StripePaymentMethods extends PromisifiedItem {
   /**
    * @param  {} params={}
-   * @param { String } params.key
+   * @param { String } params.itemKey
    * @param { String } params.userId
    */
   constructor(params = {}) {
     const attrs = { ...params };
-    // If key not provided generate new UUID
-    if (typeof params.key === 'undefined') {
+    // If itemKey not provided generate new UUID
+    if (typeof params.itemKey === 'undefined') {
       const stripePaymentMethodId = _.get(params, 'source.id');
       const type = modelConfig.types[_.get(params, 'source.object')];
       if (!stripePaymentMethodId) throw new Error('Payment method ID not found');
-      attrs.key = `${config.keyPrefixes.stripePaymentMethods}${config.keyDelimiter}${stripePaymentMethodId}`;
+      attrs.itemKey = `${config.itemKeyPrefixes.stripePaymentMethods}${config.itemKeyDelimiter}${stripePaymentMethodId}`;
       attrs.stripePaymentMethodId = stripePaymentMethodId;
       attrs.type = type;
     }

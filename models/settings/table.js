@@ -6,7 +6,7 @@ class SettingsTable extends PromisifiedTable {
   async get(settingId) { // Query by ID
     const result = await super.get({
       settingId,
-      key: config.keyPrefixes.settings
+      itemKey: config.itemKeyPrefixes.settings
     });
     if (!result) throw new Error('Setting not found');
     return this._processSettingResponse(result);

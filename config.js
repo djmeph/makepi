@@ -15,14 +15,14 @@ module.exports = {
     settings: `makepi-${process.env.ENV_NAME}-settings`,
     plans: `makepi-${process.env.ENV_NAME}-plans`,
   },
-  keyPrefixes: {
+  itemKeyPrefixes: {
     users: 'base',
     settings: 'general',
     stripePaymentMethods: 'stripe-payment-methods',
     plans: 'base',
     subscriptions: 'subscriptions',
   },
-  keyDelimiter: '#',
+  itemKeyDelimiter: '#',
   access: {
     level: {
       admin: 0

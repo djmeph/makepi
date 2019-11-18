@@ -8,7 +8,7 @@ const { joi } = DB;
 const userId = joi.string()
   .description('User ID');
 
-const key = joi.string()
+const itemKey = joi.string()
   .description('Stripe Payment Method Key');
 
 const stripePaymentMethodId = joi.string()
@@ -32,7 +32,7 @@ const sourceOutput = joi.object({
 });
 
 const output = joi.object({
-  key,
+  itemKey,
   createdAt,
   type,
   source: sourceOutput
@@ -41,7 +41,7 @@ const output = joi.object({
 module.exports = {
   elements: {
     userId,
-    key,
+    itemKey,
     source
   },
   post: {
@@ -60,12 +60,12 @@ module.exports = {
     tableName: config.tableNames.users,
     key: {
       hash: 'userId',
-      range: 'key'
+      range: 'itemKey'
     },
     timestamps: true,
     schema: {
       userId: userId.required(),
-      key: key.required(),
+      itemKey: itemKey.required(),
       stripePaymentMethodId: stripePaymentMethodId.required(),
       type: type.required(),
       source: source.required()

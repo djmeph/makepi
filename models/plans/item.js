@@ -2,27 +2,27 @@
  * Plans model item class:
  * Promisified Item with History
  */
-const { PromisifiedItem } = require('dynamodb-wrapper');
+const { ItemWithStream } = require('dynamodb-wrapper');
 const config = require('../../config');
 const utils = require('../../utils');
 
-class Plans extends PromisifiedItem {
+class Plans extends ItemWithStream {
   /**
    * @param  {} params={}
-   * @param { String } params.key
+   * @param { String } params.itemKey
    * @param { String } params.planId
    */
   constructor(params = {}) {
     const attrs = { ...params };
-    // If key not provided use default
-    if (typeof params.key === 'undefined') {
-      attrs.key = config.keyPrefixes.plans;
+    // If itemKey not provided use default
+    if (typeof params.itemKey === 'undefined') {
+      attrs.itemKey = config.itemKeyPrefixes.plans;
     }
     // If id not provided generate new UUID
     if (typeof params.planId === 'undefined') {
       attrs.planId = utils.uuid();
     }
-    attrs.key = config.keyPrefixes.plans;
+    attrs.itemKey = config.itemKeyPrefixes.plans;
     // Attach params and schema to item
     super({
       attrs,

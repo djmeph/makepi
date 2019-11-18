@@ -7,7 +7,7 @@ const { joi } = DB;
 const userId = joi.string()
   .description('User ID');
 
-const key = joi.string()
+const itemKey = joi.string()
   .description('Subscription Key');
 
 const planId = joi.string()
@@ -19,19 +19,19 @@ const stripePaymentMethodId = joi.string()
 module.exports = {
   elements: {
     userId,
-    key,
+    itemKey,
     planId,
   },
   dynamo: new Schema({
     tableName: config.tableNames.users,
     key: {
       hash: 'userId',
-      range: 'key'
+      range: 'itemKey'
     },
     timestamps: true,
     schema: {
       userId: userId.required(),
-      key: key.required(),
+      itemKey: itemKey.required(),
       planId: planId.required(),
       stripePaymentMethodId: stripePaymentMethodId.required(),
     }

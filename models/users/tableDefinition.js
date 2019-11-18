@@ -8,7 +8,7 @@ module.exports = {
       AttributeType: 'S'
     },
     {
-      AttributeName: 'key',
+      AttributeName: 'itemKey',
       AttributeType: 'S'
     },
     {
@@ -24,7 +24,7 @@ module.exports = {
     AttributeName: 'userId',
     KeyType: 'HASH'
   }, {
-    AttributeName: 'key',
+    AttributeName: 'itemKey',
     KeyType: 'RANGE'
   }],
   BillingMode: 'PAY_PER_REQUEST',

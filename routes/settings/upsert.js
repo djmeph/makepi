@@ -16,6 +16,7 @@ module.exports = {
         req.data = { status: 404, response: { message: 'Invalid setting ID' } };
         return next();
       }
+      console.log(modelConfig)
       const setting = new models.settings.Item({
         settingId: req.body.settingId,
         value: req.body.value,

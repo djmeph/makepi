@@ -55,6 +55,10 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     res.status(401).json({ message: 'Invalid Token' });
+  } else if (err.type === 'entity.parse.failed') {
+    res.status(400).json({ message: 'Malformed body parameters' });
+  } else {
+    res.status(500).json({ message: 'Unkown Error' });
   }
 });
 

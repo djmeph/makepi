@@ -8,7 +8,7 @@ const { joi } = DB;
 const settingId = joi.string()
   .description('Settings ID');
 
-const key = joi.string()
+const itemKey = joi.string()
   .description('Settings Key');
 
 const value = joi.string()
@@ -24,7 +24,7 @@ const type = joi.number()
 module.exports = {
   elements: {
     settingId,
-    key,
+    itemKey,
     value,
     label,
     type
@@ -44,13 +44,13 @@ module.exports = {
     tableName: config.tableNames.settings,
     key: {
       hash: 'settingId',
-      range: 'key'
+      range: 'itemKey'
     },
     timestamps: true,
     tableDefinition: require('./tableDefinition'),
     schema: {
       settingId: settingId.required(),
-      key: key.required(),
+      itemKey: itemKey.required(),
       value: value.optional(),
       type: type.required(),
       label: label.required()

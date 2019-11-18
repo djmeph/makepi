@@ -7,8 +7,8 @@ const { joi } = DB;
 const userId = joi.string()
   .description('User ID');
 
-const key = joi.string()
-  .description('Table key');
+const itemKey = joi.string()
+  .description('Table itemKey');
 
 const username = joi.string()
   .email()
@@ -59,13 +59,13 @@ module.exports = {
     tableName: config.tableNames.users,
     key: {
       hash: 'userId',
-      range: 'key'
+      range: 'itemKey'
     },
     timestamps: true,
     tableDefinition: require('./tableDefinition'),
     schema: {
       userId: userId.required(),
-      key: key.required(),
+      itemKey: itemKey.required(),
       username: username.required(),
       passwordHash: passwordHash.optional(),
       access: access.optional()

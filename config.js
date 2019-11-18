@@ -17,10 +17,10 @@ module.exports = {
   },
   itemKeyPrefixes: {
     users: 'base',
-    settings: 'general',
     stripePaymentMethods: 'stripe-payment-methods',
-    plans: 'base',
     subscriptions: 'subscriptions',
+    settings: 'general',
+    plans: 'base',
   },
   itemKeyDelimiter: '#',
   access: {

@@ -1,26 +1,22 @@
 /*
- * Plans model item class:
+ * Stripe Credit Source model item class:
  * Promisified Item with History
  */
 const { ItemWithStream } = require('dynamodb-wrapper');
 const config = require('../../config');
-const utils = require('../../utils');
 
-class Plans extends ItemWithStream {
+
+class Subscriptions extends ItemWithStream {
   /**
    * @param  {} params={}
    * @param { String } params.itemKey
-   * @param { String } params.planId
+   * @param { String } params.userId
    */
   constructor(params = {}) {
     const attrs = { ...params };
-    // If id not provided generate new UUID
-    if (typeof params.planId === 'undefined') {
-      attrs.planId = utils.uuid();
-    }
-    // If itemKey not provided use default
+    // If itemKey not provided use config
     if (typeof params.itemKey === 'undefined') {
-      attrs.itemKey = config.itemKeyPrefixes.plans;
+      attrs.itemKey = config.itemKeyPrefixes.subscriptions;
     }
     // Attach params and schema to item
     super({
@@ -30,4 +26,4 @@ class Plans extends ItemWithStream {
   }
 }
 
-module.exports = Plans;
+module.exports = Subscriptions;

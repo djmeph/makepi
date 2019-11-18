@@ -1,3 +1,5 @@
 module.exports = {
-  schema: require('./schema')
+  schema: require('./schema'),
+  Item: require('./item'),
+  table: require('./table'),
 };

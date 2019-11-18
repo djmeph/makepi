@@ -35,7 +35,8 @@ const output = joi.object({
   itemKey,
   createdAt,
   type,
-  source: sourceOutput
+  source: sourceOutput,
+  stripePaymentMethodId
 });
 
 module.exports = {

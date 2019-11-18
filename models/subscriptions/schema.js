@@ -13,14 +13,42 @@ const itemKey = joi.string()
 const planId = joi.string()
   .description('Plan ID');
 
+const versionNumber = joi.number()
+  .description('Plan Version Number');
+
 const stripePaymentMethodId = joi.string()
   .description('Unique ID for Stripe Payment Method Item');
+
+const output = joi.object({
+  plan: joi.object({
+    planId: planId.required(),
+    versionNumber: versionNumber.required()
+  }).required(),
+  stripePaymentMethodId: stripePaymentMethodId.required(),
+  versionNumber: versionNumber.required()
+});
 
 module.exports = {
   elements: {
     userId,
     itemKey,
-    planId,
+    plan: {
+      planId,
+      versionNumber
+    },
+    stripePaymentMethodId
+  },
+  post: {
+    body: joi.object({
+      plan: joi.object({
+        planId: planId.required(),
+        versionNumber: versionNumber.required()
+      }),
+      stripePaymentMethodId: stripePaymentMethodId.required()
+    })
+  },
+  get: {
+    response: output
   },
   dynamo: new Schema({
     tableName: config.tableNames.users,
@@ -32,8 +60,12 @@ module.exports = {
     schema: {
       userId: userId.required(),
       itemKey: itemKey.required(),
-      planId: planId.required(),
+      plan: joi.object({
+        planId: planId.required(),
+        versionNumber: versionNumber.required()
+      }).required(),
       stripePaymentMethodId: stripePaymentMethodId.required(),
+      versionNumber: versionNumber.required()
     }
   })
 };

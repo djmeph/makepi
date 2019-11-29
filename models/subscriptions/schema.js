@@ -23,9 +23,10 @@ const output = joi.object({
   plan: joi.object({
     planId: planId.required(),
     versionNumber: versionNumber.required()
-  }).required(),
-  stripePaymentMethodId: stripePaymentMethodId.required(),
-  versionNumber: versionNumber.required()
+  }).optional(),
+  stripePaymentMethodId: stripePaymentMethodId.optional(),
+  versionNumber: versionNumber.optional(),
+  message: joi.string().optional()
 });
 
 module.exports = {

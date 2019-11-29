@@ -8,7 +8,7 @@ class SubscriptionsTable extends PromisifiedTable {
       userId,
       itemKey: `${config.itemKeyPrefixes.subscriptions}_latest`
     });
-    return result;
+    return result || null;
   }
 
   async getAll(userId) {

@@ -6,6 +6,7 @@ const { PromisifiedItem } = require('dynamodb-wrapper');
 const _ = require('lodash');
 const config = require('../../config');
 const modelConfig = require('./config');
+const utils = require('../../utils');
 
 
 class StripePaymentMethods extends PromisifiedItem {
@@ -17,13 +18,14 @@ class StripePaymentMethods extends PromisifiedItem {
   constructor(params = {}) {
     const attrs = { ...params };
     // If itemKey not provided generate new UUID
+    if (typeof params.stripePaymentMethodId === 'undefined') {
+      attrs.stripePaymentMethodId = utils.uuid();
+    }
     if (typeof params.itemKey === 'undefined') {
-      const stripePaymentMethodId = _.get(params, 'source.id');
-      const type = modelConfig.types[_.get(params, 'source.object')];
-      if (!stripePaymentMethodId) throw new Error('Payment method ID not found');
-      attrs.itemKey = `${config.itemKeyPrefixes.stripePaymentMethods}${config.itemKeyDelimiter}${stripePaymentMethodId}`;
-      attrs.stripePaymentMethodId = stripePaymentMethodId;
-      attrs.type = type;
+      attrs.itemKey = `${config.itemKeyPrefixes.stripePaymentMethods}${config.itemKeyDelimiter}${attrs.stripePaymentMethodId}`;
+    }
+    if (typeof params.type === 'undefined') {
+      attrs.type = modelConfig.types[_.get(params, 'source.object')];
     }
     // Attach params and schema to item
     super({

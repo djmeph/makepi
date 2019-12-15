@@ -11,9 +11,9 @@
  */
 
 module.exports = {
-  users: require('./users'),
-  settings: require('./settings'),
-  stripePaymentMethods: require('./stripe-payment-methods'),
-  plans: require('./plans'),
-  subscriptions: require('./subscriptions')
+    users: require('./users'),
+    settings: require('./settings'),
+    stripePaymentMethods: require('./stripe-payment-methods'),
+    plans: require('./plans'),
+    subscriptions: require('./subscriptions')
 };

@@ -7,27 +7,27 @@ const config = require('../../config');
 const utils = require('../../utils');
 
 class Settings extends PromisifiedItem {
-  /**
+    /**
    * @param  {} params={}
    * @param { String } params.itemKey
    * @param { String } params.settingId
    */
-  constructor(params = {}) {
-    const attrs = { ...params };
-    // If itemKey not provided use default
-    if (typeof params.itemKey === 'undefined') {
-      attrs.itemKey = config.itemKeyPrefixes.settings;
+    constructor(params = {}) {
+        const attrs = { ...params };
+        // If itemKey not provided use default
+        if (typeof params.itemKey === 'undefined') {
+            attrs.itemKey = config.itemKeyPrefixes.settings;
+        }
+        // If id not provided generate new UUID
+        if (typeof params.settingId === 'undefined') {
+            attrs.settingId = utils.uuid();
+        }
+        // Attach params and schema to item
+        super({
+            attrs,
+            schema: require('./schema').dynamo
+        });
     }
-    // If id not provided generate new UUID
-    if (typeof params.settingId === 'undefined') {
-      attrs.settingId = utils.uuid();
-    }
-    // Attach params and schema to item
-    super({
-      attrs,
-      schema: require('./schema').dynamo
-    });
-  }
 }
 
 module.exports = Settings;

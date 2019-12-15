@@ -19,16 +19,16 @@ const app = express();
 
 // Set headers explicitly for browser compatibility
 app.use((req, res, next) => {
-  // Allow all origins in browsers
-  res.header('Access-Control-Allow-Origin', '*');
-  // Set allowed headers
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-  );
-  // Set allowed methods
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  next();
+    // Allow all origins in browsers
+    res.header('Access-Control-Allow-Origin', '*');
+    // Set allowed headers
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    );
+    // Set allowed methods
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    next();
 });
 
 // parse all requests as JSON
@@ -36,12 +36,12 @@ app.use(bodyParser.json({ type: 'application/json' }));
 
 // Authenticate token and reject unauthorized access
 app.use(
-  '/',
-  expressJwt({ secret: config.JWT_SECRET, output: 'json' })
-    .unless((req) => {
-      if (req.method === 'OPTIONS') return true;
-      return ['/login', '/register'].indexOf(req.url) > -1;
-    })
+    '/',
+    expressJwt({ secret: config.JWT_SECRET, output: 'json' })
+        .unless((req) => {
+            if (req.method === 'OPTIONS') return true;
+            return ['/login', '/register'].indexOf(req.url) > -1;
+        })
 );
 
 // Initialize routes
@@ -49,21 +49,21 @@ app.use('/', router());
 
 // 404 Not Found fallback
 app.use((req, res) => {
-  res.status(404).json({ message: 'NOT FOUND' });
+    res.status(404).json({ message: 'NOT FOUND' });
 });
 
-app.use((err, req, res, next) => {
-  if (err.name === 'UnauthorizedError') {
-    res.status(401).json({ message: 'Invalid Token' });
-  } else if (err.type === 'entity.parse.failed') {
-    res.status(400).json({ message: 'Malformed body parameters' });
-  } else {
-    res.status(500).json({ message: 'Unkown Error' });
-  }
+app.use((err, req, res) => {
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).json({ message: 'Invalid Token' });
+    } else if (err.type === 'entity.parse.failed') {
+        res.status(400).json({ message: 'Malformed body parameters' });
+    } else {
+        res.status(500).json({ message: 'Unkown Error' });
+    }
 });
 
 module.exports = {
-  // Wrap Express app in serverless adapter and export to Lambda handler
-  handler: serverless(app),
-  app
+    // Wrap Express app in serverless adapter and export to Lambda handler
+    handler: serverless(app),
+    app
 };

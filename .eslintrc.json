@@ -1,33 +1,33 @@
 {
-  "extends": "airbnb",
-  "rules": {
-    "comma-dangle": "off",
-    "global-require": "off",
-    "indent": ["error", 2],
-    "class-methods-use-this": "off",
-    "no-underscore-dangle": "off",
-    "max-len": ["warn", { "code": 120 }],
-    "no-use-before-define": "off",
-    "no-console": "off",
-    "no-plusplus": "off",
-    "consistent-return": "off",
-    "camelcase": "off",
-    "no-await-in-loop": "off",
-    "import/no-extraneous-dependencies": "off"
-  },
-  "env": {
-    "browser": true,
-    "mocha": true,
-    "protractor": true,
-    "es6": true,
-    "node": true
-  },
-  "globals": {
-    "moduleName": true,
-    "angular": true,
-    "sinon": true,
-    "assert": true,
-    "expect": true,
-    "inject": true
-  }
+    "extends": "airbnb",
+    "rules": {
+        "comma-dangle": "off",
+        "global-require": "off",
+        "indent": ["error", 4],
+        "class-methods-use-this": "off",
+        "no-underscore-dangle": "off",
+        "max-len": ["warn", { "code": 120 }],
+        "no-use-before-define": "off",
+        "no-console": "off",
+        "no-plusplus": "off",
+        "consistent-return": "off",
+        "camelcase": "off",
+        "no-await-in-loop": "off",
+        "import/no-extraneous-dependencies": "off"
+    },
+    "env": {
+        "browser": true,
+        "mocha": true,
+        "protractor": true,
+        "es6": true,
+        "node": true
+    },
+    "globals": {
+        "moduleName": true,
+        "angular": true,
+        "sinon": true,
+        "assert": true,
+        "expect": true,
+        "inject": true
+    }
 }

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon app.js",
     "test": "exit 0",
-    "eslint": "eslint *.js",
+    "eslint": "eslint --ignore-path .gitignore '**/*.js'",
     "deploy": "serverless deploy"
   },
   "keywords": [

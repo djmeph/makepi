@@ -10,29 +10,30 @@ const utils = require('../../utils');
 
 
 class StripePaymentMethods extends PromisifiedItem {
-  /**
+    /**
    * @param  {} params={}
    * @param { String } params.itemKey
    * @param { String } params.userId
    */
-  constructor(params = {}) {
-    const attrs = { ...params };
-    // If itemKey not provided generate new UUID
-    if (typeof params.stripePaymentMethodId === 'undefined') {
-      attrs.stripePaymentMethodId = utils.uuid();
+    constructor(params = {}) {
+        const attrs = { ...params };
+        // If itemKey not provided generate new UUID
+        if (typeof params.stripePaymentMethodId === 'undefined') {
+            attrs.stripePaymentMethodId = utils.uuid();
+        }
+        if (typeof params.itemKey === 'undefined') {
+            // eslint-disable-next-line max-len
+            attrs.itemKey = `${config.itemKeyPrefixes.stripePaymentMethods}${config.itemKeyDelimiter}${attrs.stripePaymentMethodId}`;
+        }
+        if (typeof params.type === 'undefined') {
+            attrs.type = modelConfig.types[_.get(params, 'source.object')];
+        }
+        // Attach params and schema to item
+        super({
+            attrs,
+            schema: require('./schema').dynamo
+        });
     }
-    if (typeof params.itemKey === 'undefined') {
-      attrs.itemKey = `${config.itemKeyPrefixes.stripePaymentMethods}${config.itemKeyDelimiter}${attrs.stripePaymentMethodId}`;
-    }
-    if (typeof params.type === 'undefined') {
-      attrs.type = modelConfig.types[_.get(params, 'source.object')];
-    }
-    // Attach params and schema to item
-    super({
-      attrs,
-      schema: require('./schema').dynamo
-    });
-  }
 }
 
 module.exports = StripePaymentMethods;

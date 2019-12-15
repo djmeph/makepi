@@ -5,68 +5,68 @@ const Schema = DB.schema(config.awsConfig);
 const { joi } = DB;
 
 const userId = joi.string()
-  .description('User ID');
+    .description('User ID');
 
 const itemKey = joi.string()
-  .description('Subscription Key');
+    .description('Subscription Key');
 
 const planId = joi.string()
-  .description('Plan ID');
+    .description('Plan ID');
 
 const versionNumber = joi.number()
-  .description('Plan Version Number');
+    .description('Plan Version Number');
 
 const stripePaymentMethodId = joi.string()
-  .description('Unique ID for Stripe Payment Method Item');
+    .description('Unique ID for Stripe Payment Method Item');
 
 const output = joi.object({
-  plan: joi.object({
-    planId: planId.required(),
-    versionNumber: versionNumber.required()
-  }).optional(),
-  stripePaymentMethodId: stripePaymentMethodId.optional(),
-  versionNumber: versionNumber.optional(),
-  message: joi.string().optional()
+    plan: joi.object({
+        planId: planId.required(),
+        versionNumber: versionNumber.required()
+    }).optional(),
+    stripePaymentMethodId: stripePaymentMethodId.optional(),
+    versionNumber: versionNumber.optional(),
+    message: joi.string().optional()
 });
 
 module.exports = {
-  elements: {
-    userId,
-    itemKey,
-    plan: {
-      planId,
-      versionNumber
+    elements: {
+        userId,
+        itemKey,
+        plan: {
+            planId,
+            versionNumber
+        },
+        stripePaymentMethodId
     },
-    stripePaymentMethodId
-  },
-  post: {
-    body: joi.object({
-      plan: joi.object({
-        planId: planId.required(),
-        versionNumber: versionNumber.required()
-      }),
-      stripePaymentMethodId: stripePaymentMethodId.required()
+    post: {
+        body: joi.object({
+            plan: joi.object({
+                planId: planId.required(),
+                versionNumber: versionNumber.required()
+            }),
+            stripePaymentMethodId: stripePaymentMethodId.required()
+        })
+    },
+    get: {
+        response: output
+    },
+    dynamo: new Schema({
+        tableName: config.tableNames.users,
+        key: {
+            hash: 'userId',
+            range: 'itemKey'
+        },
+        timestamps: true,
+        schema: {
+            userId: userId.required(),
+            itemKey: itemKey.required(),
+            plan: joi.object({
+                planId: planId.required(),
+                versionNumber: versionNumber.required()
+            }).required(),
+            stripePaymentMethodId: stripePaymentMethodId.required(),
+            versionNumber: versionNumber.required()
+        }
     })
-  },
-  get: {
-    response: output
-  },
-  dynamo: new Schema({
-    tableName: config.tableNames.users,
-    key: {
-      hash: 'userId',
-      range: 'itemKey'
-    },
-    timestamps: true,
-    schema: {
-      userId: userId.required(),
-      itemKey: itemKey.required(),
-      plan: joi.object({
-        planId: planId.required(),
-        versionNumber: versionNumber.required()
-      }).required(),
-      stripePaymentMethodId: stripePaymentMethodId.required(),
-      versionNumber: versionNumber.required()
-    }
-  })
 };

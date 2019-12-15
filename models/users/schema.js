@@ -5,70 +5,70 @@ const Schema = DB.schema(config.awsConfig);
 const { joi } = DB;
 
 const userId = joi.string()
-  .description('User ID');
+    .description('User ID');
 
 const itemKey = joi.string()
-  .description('Table itemKey');
+    .description('Table itemKey');
 
 const username = joi.string()
-  .email()
-  .description('Username');
+    .email()
+    .description('Username');
 
 const password = joi.string()
-  .min(8)
-  .max(255)
-  .regex(/[a-zA-Z]/)
-  .regex(/[0-9]/)
-  .description('New password in plain-text');
+    .min(8)
+    .max(255)
+    .regex(/[a-zA-Z]/)
+    .regex(/[0-9]/)
+    .description('New password in plain-text');
 
 const passwordHash = joi.string()
-  .description('Salted and Hashed Password');
+    .description('Salted and Hashed Password');
 
 const remember = joi.boolean()
-  .description('Conditional: expiration set on token');
+    .description('Conditional: expiration set on token');
 
 const token = joi.string()
-  .description('JWT Auth token');
+    .description('JWT Auth token');
 
 const access = joi.array()
-  .items(joi.number().allow(Object.values(config.access.level)))
-  .description('Access levels granted to user');
+    .items(joi.number().allow(Object.values(config.access.level)))
+    .description('Access levels granted to user');
 
 module.exports = {
-  elements: {
-    username,
-    password,
-    token,
-    remember,
-    access
-  },
-  register: {
-    body: joi.object({
-      username: username.required(),
-      password
-    })
-  },
-  login: {
-    body: joi.object({
-      username: username.required(),
-      password: joi.string().required(),
-      remember: remember.required()
-    })
-  },
-  dynamo: new Schema({
-    tableName: config.tableNames.users,
-    key: {
-      hash: 'userId',
-      range: 'itemKey'
+    elements: {
+        username,
+        password,
+        token,
+        remember,
+        access
     },
-    timestamps: true,
-    tableDefinition: require('./tableDefinition'),
-    schema: {
-      userId: userId.required(),
-      itemKey: itemKey.required(),
-      username: username.required(),
-      passwordHash: passwordHash.optional(),
-      access: access.optional()
-    }
-  })
+    register: {
+        body: joi.object({
+            username: username.required(),
+            password
+        })
+    },
+    login: {
+        body: joi.object({
+            username: username.required(),
+            password: joi.string().required(),
+            remember: remember.required()
+        })
+    },
+    dynamo: new Schema({
+        tableName: config.tableNames.users,
+        key: {
+            hash: 'userId',
+            range: 'itemKey'
+        },
+        timestamps: true,
+        tableDefinition: require('./tableDefinition'),
+        schema: {
+            userId: userId.required(),
+            itemKey: itemKey.required(),
+            username: username.required(),
+            passwordHash: passwordHash.optional(),
+            access: access.optional()
+        }
+    })
 };

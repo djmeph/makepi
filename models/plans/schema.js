@@ -16,40 +16,40 @@ const versionNumber = joi.number();
 const sort = joi.number();
 
 module.exports = {
-  elements: {},
-  post: {
-    body: joi.object({
-      planId: planId.required(),
-      name: name.required(),
-      amount: amount.required(),
-      increments: increments.required(),
-      price: price.required(),
-      sort: sort.required()
-    })
-  },
-  get: {
-    params: joi.object({
-      planId: planId.required(),
-      versionNumber: versionNumber.required()
-    })
-  },
-  dynamo: new Schema({
-    tableName: config.tableNames.plans,
-    key: {
-      hash: 'planId',
-      range: 'itemKey'
+    elements: {},
+    post: {
+        body: joi.object({
+            planId: planId.required(),
+            name: name.required(),
+            amount: amount.required(),
+            increments: increments.required(),
+            price: price.required(),
+            sort: sort.required()
+        })
     },
-    timestamps: true,
-    tableDefinition: require('./tableDefinition'),
-    schema: {
-      planId: planId.required(),
-      itemKey: itemKey.required(),
-      versionNumber: versionNumber.required(),
-      name: name.required(),
-      amount: amount.required(),
-      increments: increments.required(),
-      price: price.required(),
-      sort: sort.required()
-    }
-  })
+    get: {
+        params: joi.object({
+            planId: planId.required(),
+            versionNumber: versionNumber.required()
+        })
+    },
+    dynamo: new Schema({
+        tableName: config.tableNames.plans,
+        key: {
+            hash: 'planId',
+            range: 'itemKey'
+        },
+        timestamps: true,
+        tableDefinition: require('./tableDefinition'),
+        schema: {
+            planId: planId.required(),
+            itemKey: itemKey.required(),
+            versionNumber: versionNumber.required(),
+            name: name.required(),
+            amount: amount.required(),
+            increments: increments.required(),
+            price: price.required(),
+            sort: sort.required()
+        }
+    })
 };

@@ -11,7 +11,7 @@ module.exports = {
         try {
             const stripeCredit = await models.stripePaymentMethods.table.get({
                 userId: req.user.sub,
-                key: `${config.keyPrefixes.stripePaymentMethods}${config.keyDelimiter}${req.params.key}`
+                itemKey: `${config.itemKeyPrefixes.stripePaymentMethods}${config.itemKeyDelimiter}${req.params.key}`
             });
             if (!stripeCredit) req.data = { status: 404, response: { message: 'Not Found' } };
             else req.data = { status: 200, response: stripeCredit.get() };

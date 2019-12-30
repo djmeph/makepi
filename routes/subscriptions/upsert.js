@@ -4,7 +4,6 @@ const config = require('../../config');
 module.exports = {
     method: 'POST',
     endpoint: '/subscriptions',
-    access: [config.access.level.admin],
     validate: {
         body: models.subscriptions.schema.post.body
     },

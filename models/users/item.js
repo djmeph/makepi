@@ -3,16 +3,11 @@
  * Promisified Item with History
  */
 const { PromisifiedItem } = require('dynamodb-wrapper');
-const bcrypt = require('bcrypt-nodejs');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { promisify } = require('util');
 const AWS = require('aws-sdk');
 const config = require('../../config');
 const utils = require('../../utils');
-
-const genSalt = promisify(bcrypt.genSalt);
-const genHash = promisify(bcrypt.hash);
-const compare = promisify(bcrypt.compare);
 
 const { SALT_WORK_FACTOR } = config;
 const documentClient = new AWS.DynamoDB.DocumentClient({
@@ -71,8 +66,8 @@ class Users extends PromisifiedItem {
     }
 
     async saltAndHashPassword(password) {
-        const salt = await genSalt(SALT_WORK_FACTOR);
-        const hash = await genHash(password, salt, null);
+        const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
+        const hash = await bcrypt.hash(password, salt);
         return hash;
     }
 
@@ -85,7 +80,7 @@ class Users extends PromisifiedItem {
     }
 
     async checkPassword(password) {
-        const result = await compare(password, this.get('passwordHash'));
+        const result = await bcrypt.compare(password, this.get('passwordHash'));
         return result;
     }
 }

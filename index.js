@@ -40,7 +40,7 @@ app.use(
     expressJwt({ secret: config.JWT_SECRET, output: 'json' })
         .unless((req) => {
             if (req.method === 'OPTIONS') return true;
-            return ['/login', '/register'].indexOf(req.url) > -1;
+            return ['/login', '/register', '/recover-code', '/recover-reset'].indexOf(req.url) > -1;
         })
 );
 

@@ -14,6 +14,10 @@ const items = {
     'source-email': {
         type: types.string,
         label: 'From Email'
+    },
+    'sqs-recover-url': {
+        type: types.string,
+        label: 'SQS Recover Queue URL'
     }
 };
 

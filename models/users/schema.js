@@ -67,6 +67,18 @@ module.exports = {
             remember: remember.required()
         })
     },
+    recoverCode: {
+        body: joi.object({
+            username: username.required()
+        })
+    },
+    recoverReset: {
+        body: joi.object({
+            username: username.required(),
+            recoverCode: recoverCode.required(),
+            password
+        })
+    },
     dynamo: new Schema({
         tableName: config.tableNames.users,
         key: {

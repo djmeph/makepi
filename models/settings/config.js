@@ -10,6 +10,10 @@ const items = {
     'stripe-key': {
         type: types.string,
         label: 'Stripe API Key'
+    },
+    'source-email': {
+        type: types.string,
+        label: 'From Email'
     }
 };
 

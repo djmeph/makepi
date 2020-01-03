@@ -4,7 +4,6 @@
  */
 const { PromisifiedItem } = require('dynamodb-wrapper');
 const config = require('../../config');
-const utils = require('../../utils');
 
 class Settings extends PromisifiedItem {
     /**
@@ -17,10 +16,6 @@ class Settings extends PromisifiedItem {
         // If itemKey not provided use default
         if (typeof params.itemKey === 'undefined') {
             attrs.itemKey = config.itemKeyPrefixes.settings;
-        }
-        // If id not provided generate new UUID
-        if (typeof params.settingId === 'undefined') {
-            attrs.settingId = utils.uuid();
         }
         // Attach params and schema to item
         super({

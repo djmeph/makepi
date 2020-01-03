@@ -6,10 +6,11 @@ const { PromisifiedItem } = require('dynamodb-wrapper');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const AWS = require('aws-sdk');
+const moment = require('moment-timezone');
 const config = require('../../config');
 const utils = require('../../utils');
 
-const { SALT_WORK_FACTOR } = config;
+const { SALT_WORK_FACTOR, MAX_LOGIN_ATTEMPTS, LOCK_TIME } = config;
 const documentClient = new AWS.DynamoDB.DocumentClient({
     version: config.awsConfig.apiVersions.dynamodb,
     region: config.awsConfig.region
@@ -82,6 +83,44 @@ class Users extends PromisifiedItem {
     async checkPassword(password) {
         const result = await bcrypt.compare(password, this.get('passwordHash'));
         return result;
+    }
+
+    async incLoginAttempts() {
+        // If account lock is set and it's in the past, reset login attempts at 1 and remove lock.
+        const lockUntil = this.get('lockUntil');
+        if (lockUntil && moment(lockUntil).isBefore(moment())) {
+            this.set('loginAttempts', 1);
+            this.remove('lockUntil');
+            await this.update();
+            return;
+        }
+
+        // Increase login Attmempts
+        let loginAttempts = this.get('loginAttempts', 0);
+        loginAttempts++;
+        this.set('loginAttempts', loginAttempts);
+
+        // Check login attempts and lock if maximum reached
+        if (loginAttempts >= MAX_LOGIN_ATTEMPTS && !this.isLocked()) {
+            this.set('lockUntil', moment().add(LOCK_TIME, 'seconds').toISOString());
+        }
+
+        // Save everything
+        await this.update();
+    }
+
+    isLocked() {
+        const lockUntil = this.get('lockUntil');
+        return lockUntil && moment(lockUntil).isAfter(moment());
+    }
+
+    async resetLoginAttempts() {
+        const loginAttempts = this.get('loginAttempts');
+        const lockUntil = this.get('lockUntil');
+        if (!loginAttempts && !lockUntil) return;
+        this.set('loginAttempts', 0);
+        this.remove('lockUntil');
+        await this.update();
     }
 }
 

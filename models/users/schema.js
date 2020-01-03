@@ -34,13 +34,25 @@ const access = joi.array()
     .items(joi.number().allow(Object.values(config.access.level)))
     .description('Access levels granted to user');
 
+const loginAttempts = joi.number()
+    .description('Counter for invalid login attempts');
+
+const lockUntil = joi.date().iso()
+    .description('Expiration timestamp for account lock');
+
+const recoverCode = joi.string()
+    .description('Code to unlock account');
+
 module.exports = {
     elements: {
         username,
         password,
         token,
         remember,
-        access
+        access,
+        loginAttempts,
+        lockUntil,
+        recoverCode
     },
     register: {
         body: joi.object({
@@ -68,7 +80,10 @@ module.exports = {
             itemKey: itemKey.required(),
             username: username.required(),
             passwordHash: passwordHash.optional(),
-            access: access.optional()
+            access: access.optional(),
+            loginAttempts: loginAttempts.optional(),
+            lockUntil: lockUntil.optional(),
+            recoverCode: recoverCode.optional(),
         }
     })
 };

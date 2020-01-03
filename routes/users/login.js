@@ -22,12 +22,22 @@ module.exports = {
                 req.data = { status: 401, response: { message: 'Username not found' } };
                 return next();
             }
+            // Check if account locked
+            if (user.isLocked()) {
+                req.data = { status: 401, response: { message: 'Account is locked' } };
+                return next();
+            }
             // Check password against hash
             const authenticated = await user.checkPassword(req.body.password);
             if (!authenticated) {
+                await user.incLoginAttempts();
                 req.data = { status: 401, response: { message: 'Unauthorized' } };
                 return next();
             }
+
+            // Reset Login Attempts
+            await user.resetLoginAttempts();
+
             // Generate token, set expiration if remember set to false
             const token = user.getToken(req.body.remember ? 0 : config.EXPIRY);
 

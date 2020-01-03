@@ -79,6 +79,12 @@ module.exports = {
             password
         })
     },
+    changePassword: {
+        body: joi.object({
+            old: joi.string().required(),
+            new: password
+        })
+    },
     dynamo: new Schema({
         tableName: config.tableNames.users,
         key: {

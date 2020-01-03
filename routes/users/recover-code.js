@@ -3,11 +3,9 @@
 * @param { String } username
 */
 
-const AWS = require('aws-sdk');
 const models = require('../../models');
 const utils = require('../../utils');
-
-const sqs = new AWS.SQS();
+const { sqs } = require('../../services');
 
 module.exports = {
     method: 'POST',
@@ -29,11 +27,10 @@ module.exports = {
             const uuid = utils.uuid();
             user.set('recoverCode', uuid);
             await user.update();
-            await sqs.sendMessage({
-                MessageBody: JSON.stringify({ userId: user.get('userId') }),
-                QueueUrl: url.value,
-            }).promise();
-
+            await sqs.send({
+                message: { userId: user.get('userId') },
+                url: url.value
+            });
             req.data = { status: 200 };
             next();
         } catch (err) { req.fail(err); }

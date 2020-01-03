@@ -1,7 +1,5 @@
-const AWS = require('aws-sdk');
 const models = require('../models');
-
-const ses = new AWS.SES();
+const { ses } = require('../services');
 
 module.exports = async (event) => {
     const sourceEmail = await models.settings.table.get('source-email');
@@ -9,23 +7,11 @@ module.exports = async (event) => {
         const body = JSON.parse(message.body);
         const user = await models.users.table.get(body.userId);
         if (!user) throw new Error('User not found');
-        await ses.sendEmail({
-            Destination: {
-                ToAddresses: [user.get('username')]
-            },
-            Message: {
-                Body: {
-                    Text: {
-                        Charset: 'UTF-8',
-                        Data: `Your recovery code is: ${user.get('recoverCode')}`
-                    }
-                },
-                Subject: {
-                    Charset: 'UTF-8',
-                    Data: 'MakePI Recovery Code',
-                }
-            },
-            Source: sourceEmail.value
-        }).promise();
+        await ses.send({
+            to: [user.get('username')],
+            from: sourceEmail.value,
+            subject: 'MakePI Recovery Code',
+            textBody: `Your recovery code is: ${user.get('recoverCode')}`
+        });
     }));
 };

@@ -1,5 +1,4 @@
 const models = require('../../models');
-const config = require('../../config');
 
 module.exports = {
     method: 'POST',

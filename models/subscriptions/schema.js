@@ -19,7 +19,7 @@ const versionNumber = joi.number()
 const stripePaymentMethodId = joi.string()
     .description('Unique ID for Stripe Payment Method Item');
 
-const paymentDay = joi.number()
+const paymentDay = joi.number().integer().min(1).max(28)
     .description('Day of month to process payment');
 
 const output = joi.object({

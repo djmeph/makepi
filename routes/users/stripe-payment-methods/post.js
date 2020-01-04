@@ -1,4 +1,5 @@
 const models = require('../../../models');
+const { stripe } = require('../../../services');
 
 module.exports = {
     method: 'POST',
@@ -8,36 +9,32 @@ module.exports = {
         response: models.stripePaymentMethods.schema.post.response
     },
     middleware: [async (req, res, next) => {
-        let stripe;
         let customer;
-        let stripePaymentMethods;
         let username;
+
         try {
-            // Get Stripe secret key from database.
-            const { value: stripeKey } = await models.settings.table.get('stripe-key');
-            stripe = require('stripe')(stripeKey);
-            // Fetch user item
             const user = await models.users.table.get(req.user.sub);
             username = user.get('username');
+        } catch (err) {
+            return req.fail(err);
+        }
+
+        try {
             // Attempt to fetch customer
             customer = await stripe.customers.retrieve(req.user.sub);
         } catch (err) {
             // Create customer if they dont' exist yet
             if (err.statusCode === 404) {
-                customer = await stripe.customers.create({
-                    id: req.user.sub,
-                    email: username
-                });
+                customer = await stripe.customers.create(req.user.sub, username);
             } else return req.fail(err);
         }
+
         try {
             // Create source and attach to customer using public token
-            const source = await stripe.customers.createSource(customer.id, {
-                source: req.body.publicToken
-            });
+            const source = await stripe.customers.createSource(customer.id, req.body.publicToken);
 
             // Insert source data into database
-            stripePaymentMethods = new models.stripePaymentMethods.Item({
+            const stripePaymentMethods = new models.stripePaymentMethods.Item({
                 userId: req.user.sub,
                 source
             });
@@ -46,6 +43,8 @@ module.exports = {
             // Return Stripe source data
             req.data = { status: 200, response: stripePaymentMethods.get() };
             next();
-        } catch (err) { req.fail(err); }
+        } catch (err) {
+            req.fail(err);
+        }
     }]
 };

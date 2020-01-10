@@ -20,6 +20,12 @@ module.exports = {
             const stripe = StripeConstructor(stripeKey);
             const result = await stripe.customers.createSource(id, { source });
             return result;
+        },
+        deleteSource: async (customerId, sourceId) => {
+            const { value: stripeKey } = await models.settings.table.get('stripe-key');
+            const stripe = StripeConstructor(stripeKey);
+            const result = await stripe.customers.deleteSource(customerId, sourceId);
+            return result;
         }
     }
 };

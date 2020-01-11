@@ -1,8 +1,10 @@
 const models = require('../../models');
+const config = require('../../config');
 
 module.exports = {
     method: 'GET',
     endpoint: '/subscriptions/latest',
+    access: [config.access.level.member],
     validate: {
         response: models.subscriptions.schema.get.response
     },

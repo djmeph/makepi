@@ -1,8 +1,10 @@
 const models = require('../../models');
+const config = require('../../config');
 
 module.exports = {
     method: 'POST',
     endpoint: '/subscriptions',
+    access: [config.access.level.member],
     validate: {
         body: models.subscriptions.schema.post.body
     },

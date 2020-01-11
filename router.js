@@ -7,8 +7,8 @@ const express = require('express');
 const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
-
 const models = require('./models');
+const config = require('./config');
 
 const router = express.Router();
 const routesDir = `${__dirname}/routes`;
@@ -80,8 +80,9 @@ async function validateAccess(req, res, next) {
     const access = user.get('access', []);
     let authorized = false;
     req.access.forEach((level) => {
-        if (access.indexOf(level) > -1) authorized = true;
+        if (access.indexOf(level) >= 0) authorized = true;
     });
+    if (access.indexOf(config.access.level.admin) >= 0) authorized = true;
     if (authorized) return next();
     res.status(403).json({ message: 'Access Denied' });
 }

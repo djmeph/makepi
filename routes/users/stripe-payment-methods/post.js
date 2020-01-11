@@ -1,9 +1,11 @@
 const models = require('../../../models');
 const { stripe } = require('../../../services');
+const config = require('../../../config');
 
 module.exports = {
     method: 'POST',
     endpoint: '/stripe-payment-methods',
+    access: [config.access.level.member],
     validate: {
         body: models.stripePaymentMethods.schema.post.body,
         response: models.stripePaymentMethods.schema.post.response

@@ -27,7 +27,8 @@ module.exports = {
     itemKeyDelimiter: '#',
     access: {
         level: {
-            admin: 0
+            admin: 0,
+            member: 1,
         }
     }
 };

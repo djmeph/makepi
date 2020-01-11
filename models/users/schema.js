@@ -67,6 +67,12 @@ module.exports = {
             remember: remember.required()
         })
     },
+    get: {
+        response: joi.object({
+            username,
+            access,
+        })
+    },
     recoverCode: {
         body: joi.object({
             username: username.required()

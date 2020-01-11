@@ -25,4 +25,4 @@
 }
 ```
 
-Run with `npm start`
+Run nodemon with `npm start`

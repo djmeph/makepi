@@ -1,28 +1,21 @@
 # Example buildspec.yml
 
 ```
-{
-  "restartable": "rs",
-  "ignore": [
-    ".git",
-    "node_modules/**/node_modules"
-  ],
-  "verbose": true,
-  "execMap": {
-    "js": "node --harmony"
-  },
-  "events": {
-    "restart": "osascript -e 'display notification \"App restarted due to:\n'$FILENAME'\" with title \"nodemon\"'"
-  },
-  "env": {
-    "ENV_NAME": "dev",
-    "JWT_SECRET": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    "EXPIRY": 86400,
-    "SALT_WORK_FACTOR": 11,
-    "AWS_REGION": "us-east-1"
-  },
-  "ext": "js,json"
-}
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12
+  pre_build:
+    commands:
+      - cp serverless.yml ${CODEBUILD_SRC_DIR_makepi}/
+      - cd $CODEBUILD_SRC_DIR_makepi
+      - npm i
+  post_build:
+    commands:
+      - npm run deploy
+
 ```
 
-Run with `npm start`
+Place this file and serverless.yml in a separate, private repository and set it as the primary source in the CodeBuild Project. Use the makepi repo as the secondary source. Make sure to use the correct suffix in the secondary source dir. `$CODEBUILD_SRC_DIR_{{secondary-source-id}}`

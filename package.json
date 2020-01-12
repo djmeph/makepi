@@ -1,6 +1,6 @@
 {
   "name": "makepi",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "An Open Source Makerspace CRM API",
   "repository": "git@github.com:djmeph/makepi.git",
   "main": "index.js",

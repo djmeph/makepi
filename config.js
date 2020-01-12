@@ -30,5 +30,6 @@ module.exports = {
             admin: 0,
             member: 1,
         }
-    }
+    },
+    exceptions: ['/login', '/register', '/recover-code', '/recover-reset']
 };

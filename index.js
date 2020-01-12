@@ -10,9 +10,8 @@
 const serverless = require('serverless-http');
 const bodyParser = require('body-parser');
 const express = require('express');
-const expressJwt = require('express-jwt');
 const router = require('./router');
-const config = require('./config');
+const { jwt } = require('./services');
 
 // Build express app and export to serverless or vanilla nodeJS
 const app = express();
@@ -35,14 +34,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json({ type: 'application/json' }));
 
 // Authenticate token and reject unauthorized access
-app.use(
-    '/',
-    expressJwt({ secret: config.JWT_SECRET, output: 'json' })
-        .unless((req) => {
-            if (req.method === 'OPTIONS') return true;
-            return ['/login', '/register', '/recover-code', '/recover-reset'].indexOf(req.url) > -1;
-        })
-);
+app.use('/', jwt);
 
 // Initialize routes
 app.use('/', router());

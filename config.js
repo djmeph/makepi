@@ -29,6 +29,7 @@ module.exports = {
         level: {
             admin: 0,
             member: 1,
+            keyMaster: 2,
         }
     },
     exceptions: ['/login', '/register', '/recover-code', '/recover-reset']

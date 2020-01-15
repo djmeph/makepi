@@ -25,13 +25,13 @@ class UsersTable extends PromisifiedTable {
         return result.Count ? result.Items[0] : null;
     }
 
-    async getAll(exclusiveStartKey) {
+    async getAll(exclusiveStartKey, limit = 30, active = modelConfig.active.TRUE) {
         const params = {
             IndexName: 'active-index',
             KeyConditionExpression: '#a = :a',
             ExpressionAttributeNames: { '#a': 'active' },
-            ExpressionAttributeValues: { ':a': modelConfig.active.TRUE },
-            Limit: 30
+            ExpressionAttributeValues: { ':a': active },
+            Limit: limit
         };
         if (exclusiveStartKey) params.ExclusiveStartKey = exclusiveStartKey;
         const result = await super.query(params);

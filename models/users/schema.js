@@ -124,6 +124,24 @@ module.exports = {
         }),
         response: joi.array().items(response)
     },
+    admin: {
+        put: {
+            params: joi.object({
+                username
+            }),
+            body: joi.object({
+                username,
+                password,
+                access,
+                loginAttempts,
+                lockUntil,
+                recoverCode,
+                active,
+                verificationCode,
+            }),
+            response
+        }
+    },
     dynamo: new Schema({
         tableName: config.tableNames.users,
         key: {

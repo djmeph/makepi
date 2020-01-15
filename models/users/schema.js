@@ -1,5 +1,6 @@
 const DB = require('dynamodb-wrapper');
 const config = require('../../config');
+const modelConfig = require('./config');
 
 const Schema = DB.schema(config.awsConfig);
 const { joi } = DB;
@@ -43,6 +44,26 @@ const lockUntil = joi.date().iso()
 const recoverCode = joi.string()
     .description('Code to unlock account');
 
+const active = joi.number().allow(Object.values(modelConfig.active))
+    .description('Active user');
+
+const verificationCode = joi.string()
+    .description('Verification Code');
+
+const response = joi.object({
+    username,
+    access,
+    createdAt: joi.string(),
+    updatedAt: joi.string(),
+    active
+});
+
+const lastEvaluatedKey = joi.object({
+    userId,
+    itemKey,
+    active
+});
+
 module.exports = {
     elements: {
         username,
@@ -52,7 +73,9 @@ module.exports = {
         access,
         loginAttempts,
         lockUntil,
-        recoverCode
+        recoverCode,
+        active,
+        verificationCode
     },
     register: {
         body: joi.object({
@@ -68,10 +91,7 @@ module.exports = {
         })
     },
     get: {
-        response: joi.object({
-            username,
-            access,
-        })
+        response
     },
     recoverCode: {
         body: joi.object({
@@ -91,6 +111,19 @@ module.exports = {
             new: password
         })
     },
+    list: {
+        query: lastEvaluatedKey.optional(),
+        response: joi.object({
+            items: joi.array().items(response),
+            lastEvaluatedKey
+        })
+    },
+    search: {
+        query: joi.object({
+            key: joi.string().required()
+        }),
+        response: joi.array().items(response)
+    },
     dynamo: new Schema({
         tableName: config.tableNames.users,
         key: {
@@ -108,6 +141,8 @@ module.exports = {
             loginAttempts: loginAttempts.optional(),
             lockUntil: lockUntil.optional(),
             recoverCode: recoverCode.optional(),
+            active: active.required(),
+            verificationCode: verificationCode.optional(),
         }
     })
 };

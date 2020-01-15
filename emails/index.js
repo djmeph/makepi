@@ -1,3 +1,4 @@
 module.exports = {
-    recover: require('./recover')
+    recover: require('./recover'),
+    verify: require('./verify'),
 };

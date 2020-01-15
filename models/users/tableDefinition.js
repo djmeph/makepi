@@ -18,6 +18,10 @@ module.exports = {
         {
             AttributeName: 'type',
             AttributeType: 'N'
+        },
+        {
+            AttributeName: 'active',
+            AttributeType: 'N'
         }
     ],
     KeySchema: [{
@@ -48,6 +52,17 @@ module.exports = {
             KeySchema: [
                 {
                     AttributeName: 'type',
+                    KeyType: 'HASH'
+                }
+            ],
+            Projection: {
+                ProjectionType: 'ALL'
+            }
+        }, {
+            IndexName: 'active-index',
+            KeySchema: [
+                {
+                    AttributeName: 'active',
                     KeyType: 'HASH'
                 }
             ],

@@ -7,6 +7,7 @@
 const models = require('../../models');
 const UserItem = require('../../models/users/item');
 const config = require('../../config');
+const { uuid } = require('../../utils');
 
 module.exports = {
     method: 'POST',
@@ -18,7 +19,17 @@ module.exports = {
         try {
             // Create user in db
             const user = new UserItem(req.body);
+
+            // Set to inactive
+            user.set('active', models.users.config.active.FALSE);
+
+            // Generate Verification Code
+            user.set('verificationCode', uuid());
+
+            // PUT to db
             await user.create();
+
+            // Send verification email
 
             // Generate token
             const token = user.getToken(config.EXPIRY);

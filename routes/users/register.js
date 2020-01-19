@@ -41,7 +41,7 @@ module.exports = {
             req.data = { status: 200, response: { token } };
             next();
         } catch (err) {
-            req.data = { status: 400 || err.status, response: err.message };
+            req.data = { status: 400 || err.status, response: { message: err.message } };
             next();
         }
     }]

@@ -8,6 +8,7 @@
  * item - instantiates new instance of a documentClient item using DynamoDB schema
  * table - contains functions to query records within this model
  * tableDefinition (optional) - Contains parameters for base table.
+ * config - (optional) cotains configuration and enumurators relative to the model.
  */
 
 module.exports = {
@@ -15,5 +16,7 @@ module.exports = {
     settings: require('./settings'),
     stripePaymentMethods: require('./stripe-payment-methods'),
     plans: require('./plans'),
-    subscriptions: require('./subscriptions')
+    subscriptions: require('./subscriptions'),
+    schedules: require('./schedules'),
+    payments: require('./payments'),
 };

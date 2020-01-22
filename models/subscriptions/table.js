@@ -11,7 +11,7 @@ class SubscriptionsTable extends PromisifiedTable {
         return result || null;
     }
 
-    async getAll(userId) {
+    async getAllByUserId(userId) {
         let result = await super.query({
             KeyConditionExpression: 'userId = :TOKEN1 and begins_with(itemKey, :TOKEN2)',
             ExpressionAttributeValues: {
@@ -22,6 +22,20 @@ class SubscriptionsTable extends PromisifiedTable {
         result = _.sortBy(result.Items, (n) => n.get('versionNumber'));
         result = _.reverse(result);
         return result;
+    }
+
+    async getAllLatest() {
+        const result = await super.query({
+            IndexName: 'itemKey-index',
+            KeyConditionExpression: '#key = :key',
+            ExpressionAttributeValues: {
+                ':key': `${config.itemKeyPrefixes.subscriptions}_latest`
+            },
+            ExpressionAttributeNames: {
+                '#key': 'itemKey'
+            }
+        });
+        return result.Items;
     }
 
     async get({ userId, versionNumber }) {

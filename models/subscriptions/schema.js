@@ -57,6 +57,11 @@ module.exports = {
     get: {
         response: output
     },
+    admin: {
+        getAll: {
+
+        }
+    },
     dynamo: new Schema({
         tableName: config.tableNames.users,
         key: {

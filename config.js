@@ -23,6 +23,7 @@ module.exports = {
         subscriptions: 'subscriptions',
         settings: 'general',
         plans: 'base',
+        contacts: 'contacts'
     },
     itemKeyDelimiter: '#',
     access: {

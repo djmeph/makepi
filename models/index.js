@@ -15,5 +15,6 @@ module.exports = {
     settings: require('./settings'),
     stripePaymentMethods: require('./stripe-payment-methods'),
     plans: require('./plans'),
-    subscriptions: require('./subscriptions')
+    subscriptions: require('./subscriptions'),
+    contacts: require('./contacts'),
 };

@@ -40,6 +40,29 @@ module.exports = {
         phone,
         type,
     },
+    user: {
+        post: {
+            body: {
+                firstName: firstName.optional(),
+                middleName: middleName.optional(),
+                lastName: lastName.optional(),
+                email: email.optional(),
+                phone: phone.optional(),
+                type: type.required(),
+            }
+        },
+        params: {
+            contactId: contactId.required()
+        },
+        response: {
+            firstName: firstName.optional(),
+            middleName: middleName.optional(),
+            lastName: lastName.optional(),
+            email: email.optional(),
+            phone: phone.optional(),
+            type: type.required(),
+        }
+    },
     dynamo: new Schema({
         tableName: config.tableNames.users,
         key: {

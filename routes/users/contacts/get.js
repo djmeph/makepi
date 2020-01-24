@@ -2,16 +2,16 @@ const models = require('../../../models');
 
 module.exports = {
     method: 'GET',
-    endpoint: '/contacts/:contactId',
+    endpoint: '/contacts/:type',
     validate: {
         params: models.contacts.schema.user.params,
-        response: models.contacts.schema.user.get.response
+        response: models.contacts.schema.user.response
     },
     middleware: [async (req, res, next) => {
         try {
-            const { Item: contact } = await models.contacts.table.get({
+            const contact = await models.contacts.table.get({
                 userId: req.user.sub,
-                contactId: req.params.contactId,
+                type: req.params.type,
             });
             if (!contact) {
                 req.data = { status: 404, response: { message: 'NOT FOUND' } };

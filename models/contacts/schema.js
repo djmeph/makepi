@@ -11,9 +11,6 @@ const userId = joi.string()
 const itemKey = joi.string()
     .description('contacts Key');
 
-const contactId = joi.string()
-    .description('Contact ID');
-
 const firstName = joi.string()
     .description('First Name');
 const lastName = joi.string()
@@ -32,7 +29,6 @@ module.exports = {
     elements: {
         userId,
         itemKey,
-        contactId,
         firstName,
         middleName,
         lastName,
@@ -42,26 +38,27 @@ module.exports = {
     },
     user: {
         post: {
-            body: {
+            body: joi.object({
                 firstName: firstName.optional(),
                 middleName: middleName.optional(),
                 lastName: lastName.optional(),
                 email: email.optional(),
                 phone: phone.optional(),
                 type: type.required(),
-            }
+            })
         },
-        params: {
-            contactId: contactId.required()
-        },
-        response: {
+        params: joi.object({
+            type: type.required()
+        }),
+        response: joi.object({
             firstName: firstName.optional(),
             middleName: middleName.optional(),
             lastName: lastName.optional(),
             email: email.optional(),
             phone: phone.optional(),
-            type: type.required(),
-        }
+            type: type.optional(),
+            message: joi.string().optional(),
+        })
     },
     dynamo: new Schema({
         tableName: config.tableNames.users,
@@ -73,7 +70,6 @@ module.exports = {
         schema: {
             userId: userId.required(),
             itemKey: itemKey.required(),
-            contactId: itemKey.required(),
             firstName: firstName.optional(),
             middleName: middleName.optional(),
             lastName: lastName.optional(),

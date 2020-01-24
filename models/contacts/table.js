@@ -2,10 +2,10 @@ const { PromisifiedTable } = require('dynamodb-wrapper');
 const config = require('../../config');
 
 class ContactsTable extends PromisifiedTable {
-    get({ userId, contactId }) {
+    get({ userId, type }) {
         return super.get({
             userId,
-            itemKey: `${config.itemKeyPrefixes.contacts}${config.itemKeyDelimiter}${contactId}`
+            itemKey: `${config.itemKeyPrefixes.contacts}${config.itemKeyDelimiter}${type}`
         });
     }
 }

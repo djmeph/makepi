@@ -140,6 +140,19 @@ module.exports = {
                 verificationCode,
             }),
             response
+        },
+        post: {
+            body: joi.object({
+                username,
+                password,
+                access,
+                loginAttempts,
+                lockUntil,
+                recoverCode,
+                active,
+                verificationCode,
+            }),
+            response
         }
     },
     dynamo: new Schema({

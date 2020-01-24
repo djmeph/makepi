@@ -1,0 +1,33 @@
+const models = require('../../models');
+const config = require('../../config');
+
+module.exports = {
+    method: 'GET',
+    endpoint: '/admin/subscriptions/latest',
+    access: [config.access.level.keyMaster],
+    validate: {
+        response: models.subscriptions.schema.admin.getall
+    },
+    middleware: [async (req, res, next) => {
+        try {
+            const subscriptions = await models.subscriptions.table.getAllLatest();
+            const response = await Promise.all(subscriptions.map(async (subscription) => {
+                const planKey = subscription.get('plan');
+                if (!planKey) return { subscription: subscription.get() };
+                const plan = await models.plans.table.get({
+                    planId: planKey.planId,
+                    itemKey: `${config.itemKeyPrefixes.plans}_v${subscription.get('plan.versionNumber')}`
+                });
+                const user = await models.users.table.get(subscription.get('userId'));
+                if (!user) return { subscription: subscription.get() };
+                return {
+                    subscription: subscription.get(),
+                    plan: plan.get(),
+                    user: user.get(),
+                };
+            }));
+            req.data = { status: 200, response };
+            next();
+        } catch (err) { req.fail(err); }
+    }]
+};

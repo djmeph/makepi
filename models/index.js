@@ -19,4 +19,5 @@ module.exports = {
     subscriptions: require('./subscriptions'),
     schedules: require('./schedules'),
     payments: require('./payments'),
+    contacts: require('./contacts'),
 };

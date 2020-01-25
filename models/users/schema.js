@@ -55,7 +55,7 @@ const response = joi.object({
     access,
     createdAt: joi.string(),
     updatedAt: joi.string(),
-    active
+    active,
 });
 
 const lastEvaluatedKey = joi.object({

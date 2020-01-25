@@ -3,7 +3,7 @@ const config = require('../../config');
 
 module.exports = {
     method: 'PUT',
-    endpoint: '/admin/user/:username',
+    endpoint: '/admin/users/:username',
     access: [config.access.level.keyMaster],
     validate: {
         params: models.users.schema.admin.put.params,

@@ -16,9 +16,11 @@ module.exports = {
                 req.data = { status: 404, response: { message: 'NOT FOUND' } };
                 return next();
             }
-            await contact.delete();
-            req.data = { status: 200 };
-            next();
+            contact.delete((err) => {
+                if (err) return req.fail(err);
+                req.data = { status: 200 };
+                next();
+            });
         } catch (err) { req.fail(err); }
     }]
 };

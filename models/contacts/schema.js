@@ -22,6 +22,9 @@ const email = joi.string().email()
 const phone = joi.string()
     .description('Phone Number');
 
+const relation = joi.string()
+    .description('Relation');
+
 const type = joi.number().allow([Object.values(modelConfig.types)])
     .description('Contact Type');
 
@@ -35,6 +38,7 @@ module.exports = {
         email,
         phone,
         type,
+        relation,
     },
     user: {
         post: {
@@ -44,19 +48,20 @@ module.exports = {
                 lastName: lastName.optional(),
                 email: email.optional(),
                 phone: phone.optional(),
-                type: type.required(),
+                relation: relation.optional()
             })
         },
         params: joi.object({
             type: type.required()
         }),
         response: joi.object({
-            firstName: firstName.optional(),
-            middleName: middleName.optional(),
-            lastName: lastName.optional(),
-            email: email.optional(),
-            phone: phone.optional(),
-            type: type.optional(),
+            firstName,
+            middleName,
+            lastName,
+            relation,
+            email,
+            phone,
+            type,
             message: joi.string().optional(),
         })
     },
@@ -75,6 +80,7 @@ module.exports = {
             lastName: lastName.optional(),
             email: email.optional(),
             phone: phone.optional(),
+            relation: relation.optional(),
             type: type.required(),
         }
     })

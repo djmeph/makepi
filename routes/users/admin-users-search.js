@@ -2,7 +2,7 @@ const models = require('../../models');
 
 module.exports = {
     method: 'GET',
-    endpoint: '/users-search',
+    endpoint: '/admin/users-search',
     validate: {
         query: models.users.schema.search.query,
         response: models.users.schema.search.response

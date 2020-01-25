@@ -2,7 +2,7 @@ const models = require('../../models');
 
 module.exports = {
     method: 'GET',
-    endpoint: '/users',
+    endpoint: '/admin/users',
     validate: {
         query: models.users.schema.list.query,
         response: models.users.schema.list.response

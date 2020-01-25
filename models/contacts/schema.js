@@ -65,6 +65,33 @@ module.exports = {
             message: joi.string().optional(),
         })
     },
+    admin: {
+        post: {
+            body: joi.object({
+                firstName: firstName.optional(),
+                middleName: middleName.optional(),
+                lastName: lastName.optional(),
+                email: email.optional(),
+                phone: phone.optional(),
+                relation: relation.optional()
+            })
+        },
+        params: joi.object({
+            userId: userId.required(),
+            type: type.required()
+        }),
+        response: joi.object({
+            userId,
+            firstName,
+            middleName,
+            lastName,
+            relation,
+            email,
+            phone,
+            type,
+            message: joi.string().optional(),
+        })
+    },
     dynamo: new Schema({
         tableName: config.tableNames.users,
         key: {

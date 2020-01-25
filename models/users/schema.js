@@ -51,6 +51,7 @@ const verificationCode = joi.string()
     .description('Verification Code');
 
 const response = joi.object({
+    userId,
     username,
     access,
     createdAt: joi.string(),

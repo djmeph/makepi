@@ -11,18 +11,18 @@ const userId = joi.string()
 const itemKey = joi.string()
     .description('contacts Key');
 
-const firstName = joi.string()
+const firstName = joi.string().allow([null])
     .description('First Name');
-const lastName = joi.string()
+const lastName = joi.string().allow([null])
     .description('Last Name');
-const middleName = joi.string()
+const middleName = joi.string().allow([null])
     .description('Middle Name');
-const email = joi.string().email()
+const email = joi.string().email().allow([null])
     .description('Email Address');
-const phone = joi.string()
+const phone = joi.string().allow([null])
     .description('Phone Number');
 
-const relation = joi.string()
+const relation = joi.string().allow([null])
     .description('Relation');
 
 const type = joi.number().allow([Object.values(modelConfig.types)])

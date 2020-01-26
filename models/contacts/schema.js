@@ -11,16 +11,19 @@ const userId = joi.string()
 const itemKey = joi.string()
     .description('contacts Key');
 
-const firstName = joi.string()
+const firstName = joi.string().allow([null])
     .description('First Name');
-const lastName = joi.string()
+const lastName = joi.string().allow([null])
     .description('Last Name');
-const middleName = joi.string()
+const middleName = joi.string().allow([null])
     .description('Middle Name');
-const email = joi.string().email()
+const email = joi.string().email().allow([null])
     .description('Email Address');
-const phone = joi.string()
+const phone = joi.string().allow([null])
     .description('Phone Number');
+
+const relation = joi.string().allow([null])
+    .description('Relation');
 
 const type = joi.number().allow([Object.values(modelConfig.types)])
     .description('Contact Type');
@@ -35,6 +38,7 @@ module.exports = {
         email,
         phone,
         type,
+        relation,
     },
     user: {
         post: {
@@ -44,19 +48,47 @@ module.exports = {
                 lastName: lastName.optional(),
                 email: email.optional(),
                 phone: phone.optional(),
-                type: type.required(),
+                relation: relation.optional()
             })
         },
         params: joi.object({
             type: type.required()
         }),
         response: joi.object({
-            firstName: firstName.optional(),
-            middleName: middleName.optional(),
-            lastName: lastName.optional(),
-            email: email.optional(),
-            phone: phone.optional(),
-            type: type.optional(),
+            firstName,
+            middleName,
+            lastName,
+            relation,
+            email,
+            phone,
+            type,
+            message: joi.string().optional(),
+        })
+    },
+    admin: {
+        post: {
+            body: joi.object({
+                firstName: firstName.optional(),
+                middleName: middleName.optional(),
+                lastName: lastName.optional(),
+                email: email.optional(),
+                phone: phone.optional(),
+                relation: relation.optional()
+            })
+        },
+        params: joi.object({
+            userId: userId.required(),
+            type: type.required()
+        }),
+        response: joi.object({
+            userId,
+            firstName,
+            middleName,
+            lastName,
+            relation,
+            email,
+            phone,
+            type,
             message: joi.string().optional(),
         })
     },
@@ -75,6 +107,7 @@ module.exports = {
             lastName: lastName.optional(),
             email: email.optional(),
             phone: phone.optional(),
+            relation: relation.optional(),
             type: type.required(),
         }
     })

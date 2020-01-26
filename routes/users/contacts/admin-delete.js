@@ -1,17 +1,16 @@
 const models = require('../../../models');
+const config = require('../../../config');
 
 module.exports = {
     method: 'DELETE',
-    endpoint: '/contacts/:type',
+    endpoint: '/admin/contacts/:userId/:type',
+    access: [config.access.level.keyMaster],
     validate: {
-        params: models.contacts.schema.user.params
+        params: models.contacts.schema.admin.params
     },
     middleware: [async (req, res, next) => {
         try {
-            const contact = await models.contacts.table.get({
-                userId: req.user.sub,
-                type: req.params.type,
-            });
+            const contact = await models.contacts.table.get(req.params);
             if (!contact) {
                 req.data = { status: 404, response: { message: 'NOT FOUND' } };
                 return next();

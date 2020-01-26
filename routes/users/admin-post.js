@@ -3,7 +3,7 @@ const config = require('../../config');
 
 module.exports = {
     method: 'POST',
-    endpoint: '/admin/user',
+    endpoint: '/admin/users',
     access: [config.access.level.keyMaster],
     validate: {
         body: models.users.schema.admin.post.body,

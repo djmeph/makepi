@@ -5,7 +5,7 @@ const config = require('../../config');
 module.exports = {
     method: 'GET',
     endpoint: '/plans/latest',
-    access: [config.access.level.member],
+    access: [config.access.level.onboarding, config.access.level.member],
     middleware: [async (req, res, next) => {
         try {
             let plans = await models.plans.table.getLatest();

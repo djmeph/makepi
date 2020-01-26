@@ -4,7 +4,7 @@ const config = require('../../../config');
 module.exports = {
     method: 'GET',
     endpoint: '/stripe-payment-methods',
-    access: [config.access.level.member],
+    access: [config.access.level.onboarding, config.access.level.member],
     validate: {
         response: models.stripePaymentMethods.schema.getAll.response
     },

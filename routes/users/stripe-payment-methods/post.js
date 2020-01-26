@@ -5,7 +5,7 @@ const config = require('../../../config');
 module.exports = {
     method: 'POST',
     endpoint: '/stripe-payment-methods',
-    access: [config.access.level.member],
+    access: [config.access.level.onboarding, config.access.level.member],
     validate: {
         body: models.stripePaymentMethods.schema.post.body,
         response: models.stripePaymentMethods.schema.post.response

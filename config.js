@@ -32,6 +32,7 @@ module.exports = {
             admin: 0,
             member: 1,
             keyMaster: 2,
+            onboarding: 3,
         }
     },
     exceptions: ['/login', '/register', '/recover-code', '/recover-reset']

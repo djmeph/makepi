@@ -5,7 +5,7 @@ const { stripe } = require('../../../services');
 module.exports = {
     method: 'DELETE',
     endpoint: '/stripe-payment-methods/:key',
-    access: [config.access.level.member],
+    access: [config.access.level.onboarding, config.access.level.member],
     middleware: [async (req, res, next) => {
         try {
             const stripeCredit = await models.stripePaymentMethods.table.get({

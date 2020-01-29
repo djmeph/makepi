@@ -2,16 +2,18 @@
  * Schedules model item class:
  * Promisified Item with History
  */
-const { PromisifiedItem } = require('dynamodb-wrapper');
+const { ItemWithStream } = require('dynamodb-wrapper');
 const config = require('../../config');
 const utils = require('../../utils');
 
 
-class Schedules extends PromisifiedItem {
+class Schedules extends ItemWithStream {
     /**
    * @param  {} params={}
    * @param { String } params.itemKey
    * @param { String } params.userId
+   * @param { String } params.scheduleId
+   * @param { Number } params.versionNumber
    */
     constructor(params = {}) {
         const attrs = { ...params };
@@ -19,6 +21,7 @@ class Schedules extends PromisifiedItem {
             const uuid = utils.uuid();
             // eslint-disable-next-line max-len
             attrs.itemKey = `${config.itemKeyPrefixes.schedules}${config.itemKeyDelimiter}${uuid}`;
+            attrs.scheduleId = uuid;
         }
         // Attach params and schema to item
         super({

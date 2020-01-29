@@ -35,5 +35,14 @@ module.exports = {
             onboarding: 3,
         }
     },
-    exceptions: ['/login', '/register', '/recover-code', '/recover-reset']
+    exceptions: ['/login', '/register', '/recover-code', '/recover-reset'],
+    payments: {
+        increments: {
+            days: 0,
+            weeks: 1,
+            months: 2,
+            quarters: 3,
+            years: 4
+        }
+    }
 };

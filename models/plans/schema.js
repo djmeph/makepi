@@ -1,6 +1,5 @@
 const DB = require('dynamodb-wrapper');
 const config = require('../../config');
-const modelConfig = require('./config');
 
 const Schema = DB.schema(config.awsConfig);
 const { joi } = DB;
@@ -10,7 +9,7 @@ const itemKey = joi.string();
 
 const name = joi.string();
 const amount = joi.number();
-const increments = joi.number().allow(Object.values(modelConfig.increments));
+const increments = joi.number().allow(Object.values(config.payments.increments));
 const price = joi.number();
 const versionNumber = joi.number();
 const sort = joi.number();

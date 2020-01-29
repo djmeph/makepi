@@ -22,7 +22,7 @@ module.exports = {
         {
             AttributeName: 'active',
             AttributeType: 'N'
-        }
+        },
     ],
     KeySchema: [{
         AttributeName: 'userId',
@@ -63,6 +63,17 @@ module.exports = {
             KeySchema: [
                 {
                     AttributeName: 'active',
+                    KeyType: 'HASH'
+                }
+            ],
+            Projection: {
+                ProjectionType: 'ALL'
+            }
+        }, {
+            IndexName: 'itemKey-index',
+            KeySchema: [
+                {
+                    AttributeName: 'itemKey',
                     KeyType: 'HASH'
                 }
             ],

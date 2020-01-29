@@ -1,3 +1,1 @@
-const emails = require('./emails');
-
-module.exports = emails;
+module.exports = require('./emails');

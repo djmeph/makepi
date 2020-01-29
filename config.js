@@ -5,6 +5,7 @@ module.exports = {
     SALT_WORK_FACTOR: Number(process.env.SALT_WORK_FACTOR),
     MAX_LOGIN_ATTEMPTS: Number(process.env.MAX_LOGIN_ATTEMPTS),
     LOCK_TIME: Number(process.env.LOCK_TIME),
+    TIMEZONE: process.env.TIMEZONE,
     awsConfig: {
         region: process.env.AWS_REGION,
         sslEnabled: true,

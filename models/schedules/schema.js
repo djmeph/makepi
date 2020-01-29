@@ -1,6 +1,7 @@
 const DB = require('dynamodb-wrapper');
 const config = require('../../config');
 const modelConfig = require('./config');
+const historySchema = require('../shared/history');
 
 const Schema = DB.schema(config.awsConfig);
 const { joi } = DB;
@@ -14,9 +15,6 @@ const itemKey = joi.string()
 const scheduleId = joi.string()
     .description('Schedule item unique identifier');
 
-const versionNumber = joi.number()
-    .description('Historic version number');
-
 const paymentDate = joi.string().isoDate()
     .description('Scheduled Payment Date');
 
@@ -28,6 +26,8 @@ const amount = joi.number()
 
 const status = joi.number().allow(Object.values(modelConfig.statuses))
     .description('Scheduled Payment Status');
+
+const statusHistory = historySchema;
 
 const payments = joi.array().items(joi.object({
     paymentId: joi.string(),
@@ -45,11 +45,11 @@ module.exports = {
         userId,
         itemKey,
         scheduleId,
-        versionNumber,
         paymentDate,
         increments,
         amount,
         status,
+        statusHistory,
         payments,
         total,
         balance,
@@ -65,11 +65,11 @@ module.exports = {
             userId: userId.required(),
             itemKey: itemKey.required(),
             scheduleId: scheduleId.required(),
-            versionNumber: versionNumber.required(),
             paymentDate: paymentDate.required(),
-            increments: paymentDate.required(),
+            increments: increments.required(),
             amount: amount.required(),
             status: status.required(),
+            statusHistory,
             payments: payments.required(),
             total: total.required(),
             balance: balance.required(),

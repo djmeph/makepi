@@ -2,12 +2,11 @@
  * Schedules model item class:
  * Promisified Item with History
  */
-const { ItemWithStream } = require('dynamodb-wrapper');
+const { ItemWithHistory } = require('dynamodb-wrapper');
 const config = require('../../config');
 const utils = require('../../utils');
 
-
-class Schedules extends ItemWithStream {
+class Schedules extends ItemWithHistory {
     /**
    * @param  {} params={}
    * @param { String } params.itemKey

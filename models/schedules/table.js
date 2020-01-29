@@ -1,6 +1,28 @@
 const { PromisifiedTable } = require('dynamodb-wrapper');
+const _ = require('lodash');
+const moment = require('moment-timezone');
+const config = require('../../config');
 
-class SchedulesTable extends PromisifiedTable {}
+class SchedulesTable extends PromisifiedTable {
+
+    async getLatestByUserIdAfterDate({ userId, paymentDate = moment().toISOString() }) {
+        const results = await super.query({
+            FilterExpression: '#date >= :date',
+            KeyConditionExpression: '#id = :id and begins_with(#key, :key)',
+            ExpressionAttributeNames: {
+                '#id': 'userId',
+                '#key': 'itemKey',
+                '#date': 'paymentDate',
+            },
+            ExpressionAttributeValues: {
+                ':id': userId,
+                ':key': `${config.itemKeyPrefixes.schedules}${config.itemKeyDelimiter}`,
+                ':date': paymentDate,
+            },
+        });
+        return _.get(results, 'Items', []);
+    }
+}
 
 module.exports = new SchedulesTable({
     schema: require('./schema').dynamo,

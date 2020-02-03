@@ -19,7 +19,7 @@ class Payments extends ItemWithHistory {
         if (typeof params.itemKey === 'undefined') {
             const uuid = utils.uuid();
             // eslint-disable-next-line max-len
-            attrs.itemKey = `${config.itemKeyPrefixes.schedules}${config.itemKeyDelimiter}${uuid}`;
+            attrs.itemKey = `${config.itemKeyPrefixes.payments}${config.itemKeyDelimiter}${uuid}`;
             attrs.paymentId = uuid;
         }
         // Attach params and schema to item

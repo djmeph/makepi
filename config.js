@@ -6,6 +6,7 @@ module.exports = {
     MAX_LOGIN_ATTEMPTS: Number(process.env.MAX_LOGIN_ATTEMPTS),
     LOCK_TIME: Number(process.env.LOCK_TIME),
     TIMEZONE: process.env.TIMEZONE,
+    APP_NAME: process.env.APP_NAME,
     awsConfig: {
         region: process.env.AWS_REGION,
         sslEnabled: true,
@@ -26,6 +27,7 @@ module.exports = {
         plans: 'base',
         schedules: 'schedules',
         contacts: 'contacts',
+        payments: 'payments',
     },
     itemKeyDelimiter: '#',
     access: {
@@ -45,5 +47,8 @@ module.exports = {
             quarters: 3,
             years: 4
         }
+    },
+    paymentMethods: {
+        'stripe-payment-methods': 'stripePaymentMethods'
     }
 };

@@ -7,6 +7,7 @@ const _ = require('lodash');
 const config = require('../../config');
 const modelConfig = require('./config');
 const utils = require('../../utils');
+const { stripe } = require('../../services');
 
 
 class StripePaymentMethods extends PromisifiedItem {
@@ -32,6 +33,19 @@ class StripePaymentMethods extends PromisifiedItem {
             attrs,
             schema: require('./schema').dynamo
         });
+    }
+
+    async charge({ amount, description }) {
+        const userId = this.get('userId');
+        const source = this.get('source');
+        const metadata = await stripe.charges.create({
+            amount: Math.floor(amount * 100),
+            currency: 'usd',
+            description,
+            customer: userId,
+            source: source.id
+        });
+        return { metadata, amount: _.round(metadata.amount / 100, 2) };
     }
 }
 

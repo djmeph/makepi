@@ -37,14 +37,6 @@ class SubscriptionsTable extends PromisifiedTable {
         });
         return result.Items;
     }
-
-    async get({ userId, versionNumber }) {
-        const result = await super.get({
-            userId,
-            itemKey: `${config.itemKeyPrefixes.subscriptions}_v${versionNumber}`
-        });
-        return result.Item;
-    }
 }
 
 module.exports = new SubscriptionsTable({

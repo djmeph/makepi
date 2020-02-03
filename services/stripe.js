@@ -1,9 +1,18 @@
 const StripeConstructor = require('stripe');
-const models = require('../models');
+const AWS = require('aws-sdk');
+
+const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 let stripe;
 
-const service = {
+module.exports = {
+    charges: {
+        create: async (params) => {
+            await wait(50);
+            const charge = await stripe.charges.create(params);
+            return charge;
+        }
+    },
     customers: {
         retrieve: async (id) => {
             await wait(50);
@@ -28,8 +37,6 @@ const service = {
     }
 };
 
-module.exports = service;
-
 // Private Functions
 
 getStripeId()
@@ -41,8 +48,14 @@ getStripeId()
     });
 
 async function getStripeId() {
-    const { value } = await models.settings.table.get('stripe-key');
-    return StripeConstructor(value);
+    const result = await dynamodb.get({
+        TableName: `makepi-${process.env.ENV_NAME}-settings`,
+        Key: {
+            settingId: 'stripe-key',
+            itemKey: 'general',
+        }
+    }).promise();
+    return StripeConstructor(result.Item.value);
 }
 
 async function wait(ms) {

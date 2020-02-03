@@ -18,12 +18,11 @@ class StripePaymentMethods extends PromisifiedItem {
     constructor(params = {}) {
         const attrs = { ...params };
         // If itemKey not provided generate new UUID
-        if (typeof params.stripePaymentMethodId === 'undefined') {
-            attrs.stripePaymentMethodId = utils.uuid();
-        }
         if (typeof params.itemKey === 'undefined') {
+            const uuid = utils.uuid();
             // eslint-disable-next-line max-len
-            attrs.itemKey = `${config.itemKeyPrefixes.stripePaymentMethods}${config.itemKeyDelimiter}${attrs.stripePaymentMethodId}`;
+            attrs.itemKey = `${config.itemKeyPrefixes.stripePaymentMethods}${config.itemKeyDelimiter}${uuid}`;
+            attrs.stripePaymentMethodId = uuid;
         }
         if (typeof params.type === 'undefined') {
             attrs.type = modelConfig.types[_.get(params, 'source.object')];

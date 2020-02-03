@@ -1,5 +1,5 @@
-const models = require('../../models');
-const config = require('../../config');
+const models = require('../../../models');
+const config = require('../../../config');
 
 module.exports = {
     method: 'GET',

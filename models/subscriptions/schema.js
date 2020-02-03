@@ -81,7 +81,7 @@ module.exports = {
                 planId: planId.required(),
                 versionNumber: versionNumber.required()
             }).required(),
-            stripePaymentMethodId: stripePaymentMethodId.required(),
+            stripePaymentMethodId: stripePaymentMethodId.optional(),
             paymentMethodKey: paymentMethodKey.optional(),
             versionNumber: versionNumber.required(),
             paymentDay: paymentDay.required()

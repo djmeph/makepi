@@ -13,7 +13,6 @@ module.exports = async () => {
                 paymentDate: moment().toISOString(),
             });
             if (!schedules.length) {
-                return console.log(schedules.length);
                 const { planId, versionNumber } = subscription.get('plan');
                 const plan = await models.plans.table.get({
                     planId,

@@ -19,6 +19,9 @@ const versionNumber = joi.number()
 const stripePaymentMethodId = joi.string()
     .description('Unique ID for Stripe Payment Method Item');
 
+const paymentMethodKey = itemKey
+    .description('Item key pointer to payment method');
+
 const paymentDay = joi.number().integer().min(1).max(28)
     .description('Day of month to process payment');
 
@@ -28,6 +31,7 @@ const output = joi.object({
         versionNumber: versionNumber.required()
     }).optional(),
     stripePaymentMethodId: stripePaymentMethodId.optional(),
+    paymentMethodKey: paymentMethodKey.optional(),
     versionNumber: versionNumber.optional(),
     paymentDay: paymentDay.optional(),
     message: joi.string().optional(),
@@ -42,6 +46,7 @@ module.exports = {
             versionNumber
         },
         stripePaymentMethodId,
+        paymentMethodKey,
         paymentDay
     },
     post: {
@@ -50,7 +55,8 @@ module.exports = {
                 planId: planId.required(),
                 versionNumber: versionNumber.required()
             }),
-            stripePaymentMethodId: stripePaymentMethodId.required(),
+            stripePaymentMethodId: stripePaymentMethodId.optional(),
+            paymentMethodKey: paymentMethodKey.optional(),
             paymentDay: paymentDay.required()
         })
     },
@@ -77,6 +83,7 @@ module.exports = {
                 versionNumber: versionNumber.required()
             }).required(),
             stripePaymentMethodId: stripePaymentMethodId.required(),
+            paymentMethodKey: paymentMethodKey.optional(),
             versionNumber: versionNumber.required(),
             paymentDay: paymentDay.required()
         }

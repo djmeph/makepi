@@ -54,6 +54,11 @@ module.exports = {
         total,
         balance,
     },
+    post: {
+        params: {
+            getStatus: status.required(),
+        }
+    },
     dynamo: new Schema({
         tableName: config.tableNames.users,
         key: {

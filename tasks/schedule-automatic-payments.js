@@ -1,11 +1,12 @@
 const moment = require('moment-timezone');
+const _ = require('lodash');
 const models = require('../models');
 const config = require('../config');
 
 module.exports = async () => {
     const subscriptions = await models.subscriptions.table.getAllLatest();
 
-    await Promise.all(subscriptions.map(async (subscription) => {
+    const processed = await Promise.all(subscriptions.map(async (subscription) => {
         const userId = subscription.get('userId');
         try {
             const schedules = await models.schedules.table.getLatestByUserIdAfterDate({
@@ -40,10 +41,14 @@ module.exports = async () => {
                     balance: total,
                 });
                 await schedule.create();
+                return true;
             }
+            return false;
         } catch (err) {
             console.log({ userId });
             console.error(err);
         }
     }));
+
+    console.log({ scheduled: _.filter(processed, (n) => n).length });
 };

@@ -55,7 +55,18 @@ module.exports = {
         response: joi.array().items(output)
     },
     get: {
+        params: joi.object({
+            key: stripePaymentMethodId.required(),
+        }),
         response: output
+    },
+    admin: {
+        get: {
+            params: joi.object({
+                userId: userId.required(),
+                key: stripePaymentMethodId.required(),
+            })
+        },
     },
     dynamo: new Schema({
         tableName: config.tableNames.users,

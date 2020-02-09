@@ -67,6 +67,11 @@ module.exports = {
                 key: stripePaymentMethodId.required(),
             })
         },
+        getUser: {
+            params: joi.object({
+                userId: userId.required()
+            })
+        },
     },
     dynamo: new Schema({
         tableName: config.tableNames.users,

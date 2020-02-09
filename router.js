@@ -75,14 +75,14 @@ async function validateInput(req, res, next) {
 
 // Validate Access
 async function validateAccess(req, res, next) {
-    if (!req.access) return next();
     const user = await models.users.table.get(req.user.sub);
-    const access = user.get('access', []);
+    req.user.access = user.get('access', []);
+    if (!req.access) return next();
     let authorized = false;
     req.access.forEach((level) => {
-        if (access.indexOf(level) >= 0) authorized = true;
+        if (req.user.access.indexOf(level) >= 0) authorized = true;
     });
-    if (access.indexOf(config.access.level.admin) >= 0) authorized = true;
+    if (req.user.access.indexOf(config.access.level.admin) >= 0) authorized = true;
     if (authorized) return next();
     res.status(403).json({ message: 'Access Denied' });
 }

@@ -54,9 +54,48 @@ module.exports = {
         total,
         balance,
     },
+    getStatus: {
+        params: joi.object({
+            status: status.required(),
+        })
+    },
     post: {
-        params: {
-            getStatus: status.required(),
+        params: joi.object({
+            status: status.required(),
+        })
+    },
+    admin: {
+        getUser: joi.object({
+            params: userId.required(),
+            status: status.required(),
+        }),
+        post: {
+            body: joi.object({
+                userId: userId.required(),
+                scheduleId: scheduleId.required(),
+                paymentDate: paymentDate.required(),
+                increments: increments.required(),
+                amount: amount.required(),
+                status: status.required(),
+                payments: payments.required(),
+                total: total.required(),
+                balance: balance.required(),
+            })
+        },
+        put: {
+            params: joi.object({
+                userId: userId.required(),
+                scheduleId: scheduleId.required(),
+            }),
+            body: joi.object({
+                paymentDate: paymentDate.optional(),
+                increments: increments.optional(),
+                amount: amount.optional(),
+                status: status.optional(),
+                payments: payments.optional(),
+                total: total.optional(),
+                balance: balance.optional(),
+            })
         }
     },
     dynamo: new Schema({

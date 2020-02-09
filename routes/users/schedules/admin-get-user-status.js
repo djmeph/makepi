@@ -3,15 +3,15 @@ const config = require('../../../config');
 
 module.exports = {
     method: 'GET',
-    endpoint: '/schedules/:status',
-    access: [config.access.level.onboarding, config.access.level.member],
+    endpoint: '/admin/schedules/:userId/:status',
+    access: [config.access.level.keyMaster],
     validate: {
-        params: models.schedules.schema.getStatus.params
+        params: models.schedules.schema.admin.getUser.params
     },
     middleware: [async (req, res, next) => {
         try {
             const schedules = await models.schedules.table.getByUserIdAndStatus({
-                userId: req.user.sub,
+                userId: req.params.userId,
                 status: Number(req.params.status),
             });
             req.data = { status: 200, response: schedules.map((n) => n.get()) };

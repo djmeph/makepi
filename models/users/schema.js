@@ -129,6 +129,16 @@ module.exports = {
         get: {
             params: joi.object({
                 userId: userId.required(),
+            }),
+            response: joi.object({
+                active,
+                loginAttempts,
+                userId,
+                access,
+                itemKey,
+                username,
+                createdAt: joi.string(),
+                updatedAt: joi.string(),
             })
         },
         put: {

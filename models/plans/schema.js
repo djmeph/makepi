@@ -14,8 +14,22 @@ const price = joi.number();
 const versionNumber = joi.number();
 const sort = joi.number();
 
+const access = joi.array()
+    .items(joi.number().allow(Object.values(config.access.level)))
+    .description('Access levels granted to user');
+
 module.exports = {
-    elements: {},
+    elements: {
+        planId,
+        itemKey,
+        name,
+        amount,
+        increments,
+        price,
+        versionNumber,
+        sort,
+        access
+    },
     post: {
         body: joi.object({
             planId: planId.required(),
@@ -23,7 +37,8 @@ module.exports = {
             amount: amount.required(),
             increments: increments.required(),
             price: price.required(),
-            sort: sort.required()
+            sort: sort.required(),
+            access: access.required(),
         })
     },
     get: {
@@ -48,7 +63,8 @@ module.exports = {
             amount: amount.required(),
             increments: increments.required(),
             price: price.required(),
-            sort: sort.required()
+            sort: sort.required(),
+            access: access.required(),
         }
     })
 };

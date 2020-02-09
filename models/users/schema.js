@@ -76,7 +76,7 @@ module.exports = {
         lockUntil,
         recoverCode,
         active,
-        verificationCode
+        verificationCode,
     },
     register: {
         body: joi.object({
@@ -126,6 +126,11 @@ module.exports = {
         response: joi.array().items(response)
     },
     admin: {
+        get: {
+            params: joi.object({
+                userId: userId.required(),
+            })
+        },
         put: {
             params: joi.object({
                 username

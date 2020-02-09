@@ -1,8 +1,10 @@
 const models = require('../../models');
+const config = require('../../config');
 
 module.exports = {
     method: 'GET',
     endpoint: '/admin/users-search',
+    access: [config.access.level.keyMaster],
     validate: {
         query: models.users.schema.search.query,
         response: models.users.schema.search.response

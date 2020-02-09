@@ -1,8 +1,10 @@
 const models = require('../../models');
+const config = require('../../config');
 
 module.exports = {
     method: 'GET',
     endpoint: '/admin/users',
+    access: [config.access.level.keyMaster],
     validate: {
         query: models.users.schema.list.query,
         response: models.users.schema.list.response

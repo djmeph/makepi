@@ -65,6 +65,8 @@ const lastEvaluatedKey = joi.object({
     active
 });
 
+const searchTerms = joi.string();
+
 module.exports = {
     elements: {
         username,
@@ -77,6 +79,7 @@ module.exports = {
         recoverCode,
         active,
         verificationCode,
+        searchTerms,
     },
     register: {
         body: joi.object({
@@ -190,6 +193,7 @@ module.exports = {
             recoverCode: recoverCode.optional(),
             active: active.required(),
             verificationCode: verificationCode.optional(),
+            searchTerms: searchTerms.optional(),
         }
     })
 };

@@ -75,6 +75,7 @@ async function validateInput(req, res, next) {
 
 // Validate Access
 async function validateAccess(req, res, next) {
+    if (config.exceptions.indexOf(req.originalUrl) >= 0) return next();
     const user = await models.users.table.get(req.user.sub);
     req.user.access = user.get('access', []);
     if (!req.access) return next();

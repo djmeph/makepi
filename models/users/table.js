@@ -43,17 +43,24 @@ class UsersTable extends PromisifiedTable {
         const params = {
             IndexName: 'active-index',
             KeyConditionExpression: '#a = :a',
-            FilterExpression: 'contains(#key, :val)',
             ExpressionAttributeNames: {
                 '#a': 'active',
-                '#key': 'username',
+                '#key': 'searchTerms',
             },
             ExpressionAttributeValues: {
-                ':a': modelConfig.active.TRUE,
-                ':val': key.toLowerCase()
+                ':a': modelConfig.active.TRUE
             },
             Limit: 300
         };
+        const terms = key.split(' ');
+        const filterExpression = [];
+        terms.forEach((term, i) => {
+            if (term) {
+                filterExpression.push(`contains(#key, :val${i})`);
+                params.ExpressionAttributeValues[`:val${i}`] = term.toLowerCase();
+            }
+        });
+        params.FilterExpression = filterExpression.join(' and ');
         let result;
         let results = [];
         result = await super.query(params);

@@ -44,13 +44,14 @@ class Users extends PromisifiedItem {
     async create() {
     // Hash and salt password if set
         const password = this.get('password');
+        const username = this.get('username').toLowerCase();
         if (password) {
             const passwordHash = await this.saltAndHashPassword(password);
             this.set('passwordHash', passwordHash);
             this.remove('password');
         }
         // convert username to all lower case
-        this.set('username', this.get('username').toLowerCase());
+        this.set('username', username);
         // Check for duplicate usernames
         const result = await documentClient.query({
             IndexName: 'username-index',
@@ -62,6 +63,7 @@ class Users extends PromisifiedItem {
         }).promise();
         // If username exists throw error
         if (result.Count) throw new Error('Duplicate username found');
+        this.set('searchTerms', username);
         // Return promise
         return super.create();
     }

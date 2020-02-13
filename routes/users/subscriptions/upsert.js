@@ -18,8 +18,18 @@ module.exports = {
                 req.data = { status: 404 };
                 return next();
             }
+            const planId = plan.get('planId');
+            const latestSubscription = await models.subscriptions.table.get({
+                userId: req.user.sub,
+                itemKey: `${config.itemKeyPrefixes.subscriptions}_latest`,
+            });
+            let currentPlan = {};
+            if (latestSubscription) {
+                currentPlan = latestSubscription.get('plan');
+            }
             const access = plan.get('access', []);
             let authorized = false;
+            if (planId === currentPlan.planId) authorized = true;
             access.forEach((item) => {
                 if (req.user.access.indexOf(item) >= 0) authorized = true;
             });

@@ -44,15 +44,17 @@ class SchedulesTable extends PromisifiedTable {
     async getAllUnpaidBeforeDate(paymentDate = moment.tz(config.TIMEZONE).format()) {
         const results = await super.query({
             IndexName: 'status-index',
-            FilterExpression: '#date <= :date',
+            FilterExpression: '#date <= :date and begins_with(#key, :key)',
             KeyConditionExpression: '#status = :status',
             ExpressionAttributeNames: {
+                '#key': 'itemKey',
                 '#status': 'status',
                 '#date': 'paymentDate',
             },
             ExpressionAttributeValues: {
                 ':status': modelConfig.statuses.unpaid,
                 ':date': paymentDate,
+                ':key': `${config.itemKeyPrefixes.schedules}${config.itemKeyDelimiter}`,
             }
         });
         return _.get(results, 'Items', []);
@@ -61,15 +63,17 @@ class SchedulesTable extends PromisifiedTable {
     async getAllUnpaidAfterDate(paymentDate = moment.tz(config.TIMEZONE).format()) {
         const results = await super.query({
             IndexName: 'status-index',
-            FilterExpression: '#date >= :date',
+            FilterExpression: '#date >= :date and begins_with(#key, :key)',
             KeyConditionExpression: '#status = :status',
             ExpressionAttributeNames: {
+                '#key': 'itemKey',
                 '#status': 'status',
                 '#date': 'paymentDate',
             },
             ExpressionAttributeValues: {
                 ':status': modelConfig.statuses.unpaid,
                 ':date': paymentDate,
+                ':key': `${config.itemKeyPrefixes.schedules}${config.itemKeyDelimiter}`,
             }
         });
         return _.get(results, 'Items', []);
@@ -78,15 +82,34 @@ class SchedulesTable extends PromisifiedTable {
     async getByUserIdAndStatus({ userId, status }) {
         const results = await super.query({
             IndexName: 'status-index',
-            FilterExpression: '#id = :id',
+            FilterExpression: '#id = :id and begins_with(#key, :key)',
             KeyConditionExpression: '#s = :s',
             ExpressionAttributeNames: {
+                '#key': 'itemKey',
                 '#id': 'userId',
                 '#s': 'status',
             },
             ExpressionAttributeValues: {
                 ':id': userId,
                 ':s': status,
+                ':key': `${config.itemKeyPrefixes.schedules}${config.itemKeyDelimiter}`,
+            }
+        });
+        return _.get(results, 'Items', []);
+    }
+
+    async getAllByStatus({ status }) {
+        const results = await super.query({
+            IndexName: 'status-index',
+            KeyConditionExpression: '#s = :s',
+            FilterExpression: 'begins_with(#key, :key)',
+            ExpressionAttributeNames: {
+                '#s': 'status',
+                '#key': 'itemKey',
+            },
+            ExpressionAttributeValues: {
+                ':s': status,
+                ':key': `${config.itemKeyPrefixes.schedules}${config.itemKeyDelimiter}`,
             }
         });
         return _.get(results, 'Items', []);

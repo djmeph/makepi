@@ -65,9 +65,16 @@ module.exports = {
         })
     },
     admin: {
+        getAllUsers: joi.object({
+            params: {
+                status: status.required(),
+            },
+        }),
         getUser: joi.object({
-            params: userId.required(),
-            status: status.required(),
+            params: {
+                userId: userId.required(),
+                status: status.required(),
+            },
         }),
         post: {
             body: joi.object({

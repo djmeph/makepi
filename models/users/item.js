@@ -124,6 +124,38 @@ class Users extends PromisifiedItem {
         this.remove('lockUntil');
         await this.update();
     }
+
+    async cancelSubscription() {
+        const userId = this.get('userId');
+        const { Item: latestSubscription } = await documentClient.get({
+            TableName: config.tableNames.users,
+            Key: {
+                userId,
+                itemKey: `${config.itemKeyPrefixes.subscriptions}_latest`,
+            }
+        }).promise();
+        if (!latestSubscription) return;
+        if (latestSubscription.plan.planId === 'cancel') return;
+        const newHistoryItem = { ...latestSubscription };
+        newHistoryItem.versionNumber += 1;
+        newHistoryItem.itemKey = `${config.itemKeyPrefixes.subscriptions}_${newHistoryItem.versionNumber}`;
+        newHistoryItem.plan = { planId: 'cancel' };
+        newHistoryItem.paymentDay = 0;
+        newHistoryItem.createdAt = moment().toISOString();
+        newHistoryItem.paymentMethodKey = null;
+        const newLatestItem = { ...newHistoryItem };
+        newLatestItem.itemKey = `${config.itemKeyPrefixes.subscriptions}_latest`;
+        await Promise.all([
+            documentClient.put({
+                TableName: config.tableNames.users,
+                Item: newHistoryItem,
+            }).promise(),
+            documentClient.put({
+                TableName: config.tableNames.users,
+                Item: newLatestItem,
+            }).promise(),
+        ]);
+    }
 }
 
 module.exports = Users;

@@ -19,18 +19,17 @@ const versionNumber = joi.number()
 const stripePaymentMethodId = joi.string()
     .description('Unique ID for Stripe Payment Method Item');
 
-const paymentMethodKey = itemKey
+const paymentMethodKey = itemKey.allow([null])
     .description('Item key pointer to payment method');
 
-const paymentDay = joi.number().integer().min(1).max(28)
+const paymentDay = joi.number().integer().min(0).max(28)
     .description('Day of month to process payment');
 
 const output = joi.object({
     plan: joi.object({
-        planId: planId.required(),
-        versionNumber: versionNumber.required()
-    }).optional(),
-    stripePaymentMethodId: stripePaymentMethodId.optional(),
+        planId: planId.optional(),
+        versionNumber: versionNumber.optional()
+    }),
     paymentMethodKey: paymentMethodKey.optional(),
     versionNumber: versionNumber.optional(),
     paymentDay: paymentDay.optional(),

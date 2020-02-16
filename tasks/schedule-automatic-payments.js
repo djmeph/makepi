@@ -12,6 +12,9 @@ module.exports = async () => {
     const processed = await Promise.all(subscriptions.map(async (subscription) => {
         // Pull userId, which is used multiple times.
         const userId = subscription.get('userId');
+        const plan = subscription.get('plan');
+
+        if (plan.planId === 'cancel') return false;
 
         try {
             // Look for all future schedule items by userId
@@ -22,7 +25,6 @@ module.exports = async () => {
 
             // If empty array returned, there are no schedule items. Create one.
             if (!schedules.length) {
-
                 // Deconstruct plan info from subscription and use to fetch selected plan
                 const { planId, versionNumber } = subscription.get('plan');
                 const plan = await models.plans.table.get({

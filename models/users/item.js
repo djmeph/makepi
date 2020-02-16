@@ -134,6 +134,23 @@ class Users extends PromisifiedItem {
                 itemKey: `${config.itemKeyPrefixes.subscriptions}_latest`,
             }
         }).promise();
+        const { Items: unpaidSchedules } = await documentClient.query({
+            TableName: config.tableNames.users,
+            KeyConditionExpression: '#id = :id and begins_with(#key, :key)',
+            FilterExpression: '#s = :s and #pd > :pd',
+            ExpressionAttributeNames: {
+                '#id': 'userId',
+                '#key': 'itemKey',
+                '#s': 'status',
+                '#pd': 'paymentDate',
+            },
+            ExpressionAttributeValues: {
+                ':id': userId,
+                ':key': `${config.itemKeyPrefixes.schedules}${config.itemKeyDelimiter}`,
+                ':s': 0,
+                ':pd': moment.tz(config.TIMEZONE).format(),
+            },
+        }).promise();
         if (!latestSubscription) return;
         if (latestSubscription.plan.planId === 'cancel') return;
         const newHistoryItem = { ...latestSubscription };
@@ -145,7 +162,7 @@ class Users extends PromisifiedItem {
         newHistoryItem.paymentMethodKey = null;
         const newLatestItem = { ...newHistoryItem };
         newLatestItem.itemKey = `${config.itemKeyPrefixes.subscriptions}_latest`;
-        await Promise.all([
+        const dbTasks = [
             documentClient.put({
                 TableName: config.tableNames.users,
                 Item: newHistoryItem,
@@ -154,7 +171,15 @@ class Users extends PromisifiedItem {
                 TableName: config.tableNames.users,
                 Item: newLatestItem,
             }).promise(),
-        ]);
+        ];
+        unpaidSchedules.forEach((schedule) => dbTasks.push(documentClient.delete({
+            TableName: config.tableNames.users,
+            Key: {
+                userId: schedule.userId,
+                itemKey: schedule.itemKey,
+            },
+        }).promise()));
+        await Promise.all(dbTasks);
     }
 }
 

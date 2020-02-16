@@ -13,7 +13,7 @@ module.exports = {
             const subscriptions = await models.subscriptions.table.getAllLatest();
             const response = await Promise.all(subscriptions.map(async (subscription) => {
                 const planKey = subscription.get('plan');
-                if (!planKey) return { subscription: subscription.get() };
+                if (!planKey || planKey.planId === 'cancel') return { subscription: subscription.get() };
                 const plan = await models.plans.table.get({
                     planId: planKey.planId,
                     itemKey: `${config.itemKeyPrefixes.plans}_v${subscription.get('plan.versionNumber')}`

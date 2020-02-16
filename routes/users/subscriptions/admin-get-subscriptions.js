@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const models = require('../../../models');
 const config = require('../../../config');
 
@@ -26,7 +27,7 @@ module.exports = {
                     user: user.get(),
                 };
             }));
-            req.data = { status: 200, response };
+            req.data = { status: 200, response: _.filter(response, (n) => n.subscription.plan.planId !== 'cancel') };
             next();
         } catch (err) { req.fail(err); }
     }]

@@ -33,6 +33,11 @@ module.exports = {
             await wait(50);
             const result = await stripe.customers.deleteSource(customerId, sourceId);
             return result;
+        },
+        verifySource: async (customerId, sourceId, amounts) => {
+            await wait(50);
+            const result = await stripe.customers.verifySource(customerId, sourceId, amounts);
+            return result;
         }
     }
 };

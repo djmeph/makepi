@@ -31,25 +31,41 @@ const sourceOutput = joi.object({
     bank_name: joi.string().optional(),
 });
 
+const verified = joi.boolean();
+
 const output = joi.object({
     itemKey,
     createdAt,
     type,
     source: sourceOutput,
-    stripePaymentMethodId
+    stripePaymentMethodId,
+    verified,
 });
 
 module.exports = {
     elements: {
         userId,
         itemKey,
-        source
+        source,
+        verified
     },
     post: {
         body: joi.object({
             publicToken: publicToken.required()
         }),
         response: output
+    },
+    verify: {
+        params: joi.object({
+            stripePaymentMethodId: stripePaymentMethodId.required()
+        }),
+        body: joi.object({
+            amounts: joi.array()
+                .items(joi.number())
+                .min(2)
+                .max(2)
+                .required()
+        })
     },
     getAll: {
         response: joi.array().items(output)
@@ -85,7 +101,8 @@ module.exports = {
             itemKey: itemKey.required(),
             stripePaymentMethodId: stripePaymentMethodId.required(),
             type: type.required(),
-            source: source.required()
+            source: source.required(),
+            verified: verified.required(),
         }
     })
 };

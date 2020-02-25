@@ -35,11 +35,31 @@ module.exports = {
             // Create source and attach to customer using public token
             const source = await stripe.customers.createSource(customer.id, req.body.publicToken);
 
-            // Insert source data into database
-            const stripePaymentMethods = new models.stripePaymentMethods.Item({
+            const params = {
                 userId: req.user.sub,
                 source
-            });
+            };
+
+            switch (source.object) {
+            case 'bank_account':
+                switch (source.status) {
+                case 'verified':
+                    params.verified = true;
+                    break;
+                case 'new':
+                default:
+                    params.verified = false;
+                }
+                break;
+            case 'card':
+                params.verified = true;
+                break;
+            default:
+                params.verified = false;
+            }
+
+            // Insert source data into database
+            const stripePaymentMethods = new models.stripePaymentMethods.Item(params);
             await stripePaymentMethods.create();
 
             // Return Stripe source data

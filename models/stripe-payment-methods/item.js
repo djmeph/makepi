@@ -47,6 +47,10 @@ class StripePaymentMethods extends PromisifiedItem {
         });
         return { metadata, amount: _.round(metadata.amount / 100, 2) };
     }
+
+    get verified() {
+        return this.get('verified', false);
+    }
 }
 
 module.exports = StripePaymentMethods;

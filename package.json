@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon app.js",
-    "test": "exit 0",
+    "test": "mocha -u bdd --timeout 999999 --colors --exit --inspect --recursive ./test/**/*.spec.js",
     "eslint": "eslint --ignore-path .gitignore '**/*.js'",
     "deploy": "serverless deploy"
   },

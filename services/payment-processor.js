@@ -1,16 +1,14 @@
-const _ = require('lodash');
 const models = require('../models');
 const config = require('../config');
 
 class PaymentProcessor {
-
     async run() {
-        await this.getAllUnpaidBeforeDate();
+        await this.getAllUnpaidDue();
         await this.processScheduledPayments();
         return this.processed;
     }
 
-    async getAllUnpaidBeforeDate() {
+    async getAllUnpaidDue() {
         this.schedules = await models.schedules.table.getAllUnpaidBeforeDate();
     }
 
@@ -19,36 +17,55 @@ class PaymentProcessor {
     }
 
     async processScheduledPayment(schedule) {
+        // Grab userId
         const userId = schedule.get('userId');
-        const balance = await this._getBalance(schedule);
-        const subscription = await this._getSubscription(userId);
+        // Get balance
+        const balance = await this.getBalance(schedule);
+        // Get current subscription
+        const subscription = await this.getSubscription(userId);
+
+        // If no subscription found do not process
         if (!subscription) return false;
+
+        // If balance is non-zero process it
         if (balance > 0) {
-            const { amount, payment } = await this.schedulePayment(userId, subscription, balance);
+            // Process payment
+            const { amount, payment } = await this.processPayment(userId, subscription, balance);
+            // update scheduled item with payment info
             await this.updateScheduledItem(schedule, payment, balance, amount, models.schedules.config.statuses.paid);
             return true;
         }
-        const result = await this.setSchedulePaid(schedule);
+
+        // If zero balance mark paid
+        const result = await this.setScheduleStatus(models.schedules.config.statuses.paid);
         return !!result;
     }
 
-    async schedulePayment(userId, subscription, balance) {
+    async processPayment(userId, subscription, balance) {
+        // Fetch payment method key from subscription
         const paymentMethodKey = subscription.get('paymentMethodKey');
+        // Skip cash payments. They will be entered manually.
         if (paymentMethodKey === 'cash') return false;
-        const schema = this._getSchema(paymentMethodKey);
-        const paymentMethod = await this.getPaymentMethod(userId, paymentMethodKey, schema);
+        // Fetch payment method
+        const paymentMethod = await this.getPaymentMethod(userId, paymentMethodKey);
+        // If payment method doesn't exist, skip payment.
         if (!paymentMethod) return false;
+        // Charge payment method and return charge info
         const { metadata, amount } = await this.charge(balance, paymentMethod);
-        const payment = await this.putPaymentItem(userId, paymentMethodKey, amount, models.payments.config.statuses.pending, metadata);
+        // Save Payment item
+        const payment = await this
+            .putPaymentItem(userId, paymentMethodKey, amount, models.payments.config.statuses.pending, metadata);
+        // Return charge info
         return { amount, payment };
     }
 
-    async setSchedulePaid(schedule) {
-        schedule.set('status', models.schedules.config.statuses.paid);
+    async setScheduleStatus(schedule, status) {
+        schedule.set('status', status);
         await schedule.update();
     }
 
-    getPaymentMethod(userId, paymentMethodKey, schema) {
+    getPaymentMethod(userId, paymentMethodKey) {
+        const schema = this._getSchema(paymentMethodKey);
         return models[config.paymentMethods[schema]].table.get({
             userId,
             itemKey: paymentMethodKey
@@ -96,11 +113,12 @@ class PaymentProcessor {
         await schedule.update();
     }
 
-    async _getBalance(schedule) {
+    // This will eventually calculate the balance based on past payments
+    async getBalance(schedule) {
         return schedule.get('balance');
     }
 
-    _getSubscription(userId) {
+    getSubscription(userId) {
         return models.subscriptions.table.get({
             userId,
             itemKey: `${config.itemKeyPrefixes.subscriptions}_latest`

@@ -1,7 +1,12 @@
 const models = require('../models');
 const config = require('../config');
+const log = require('./logger');
 
 class PaymentProcessor {
+    constructor() {
+        this.log = log;
+    }
+
     async run() {
         await this.getAllUnpaidDue();
         await this.processScheduledPayments();
@@ -13,39 +18,46 @@ class PaymentProcessor {
     }
 
     async processScheduledPayments() {
-        this.processed = await Promise.all(this.schedules.map(this.processScheduledPayment));
+        this.processed = await Promise
+            .all(this.schedules.map((schedule) => this.processScheduledPayment(schedule)));
     }
 
     async processScheduledPayment(schedule) {
-        // Grab userId
-        const userId = schedule.get('userId');
-        // Get balance
-        const balance = await this.getBalance(schedule);
-        // Get current subscription
-        const subscription = await this.getSubscription(userId);
+        try {
+            // Grab userId
+            const userId = schedule.get('userId');
+            // Get balance
+            const balance = await this.getBalance(schedule);
+            // Get current subscription
+            const subscription = await this.getSubscription(userId);
 
-        // If no subscription found do not process
-        if (!subscription) return false;
+            // If no subscription found do not process
+            if (!subscription) return false;
 
-        // If balance is non-zero process it
-        if (balance > 0) {
-            // Process payment
-            const { amount, payment } = await this.processPayment(userId, subscription, balance);
-            // update scheduled item with payment info
-            await this.updateScheduledItem(schedule, payment, balance, amount, models.schedules.config.statuses.paid);
-            return true;
+            // If balance is non-zero process it
+            if (balance > 0) {
+                // Get Payment key. If it's cash, skip. This payment will be entered manually.
+                const paymentMethodKey = subscription.get('paymentMethodKey');
+                if (paymentMethodKey === 'cash') return false;
+                // Process payment
+                const payment = await this.processPayment(userId, paymentMethodKey, balance);
+                const amount = payment.get('amount');
+                // update scheduled item with payment info
+                await this
+                    .updateScheduledItem(schedule, payment, balance, amount, models.schedules.config.statuses.paid);
+                return true;
+            }
+
+            // If zero balance mark paid
+            const result = await this.setScheduleStatus(models.schedules.config.statuses.paid);
+            return !!result;
+        } catch (err) {
+            this.log.error(err);
+            return false;
         }
-
-        // If zero balance mark paid
-        const result = await this.setScheduleStatus(models.schedules.config.statuses.paid);
-        return !!result;
     }
 
-    async processPayment(userId, subscription, balance) {
-        // Fetch payment method key from subscription
-        const paymentMethodKey = subscription.get('paymentMethodKey');
-        // Skip cash payments. They will be entered manually.
-        if (paymentMethodKey === 'cash') return false;
+    async processPayment(userId, paymentMethodKey, balance) {
         // Fetch payment method
         const paymentMethod = await this.getPaymentMethod(userId, paymentMethodKey);
         // If payment method doesn't exist, skip payment.
@@ -56,7 +68,7 @@ class PaymentProcessor {
         const payment = await this
             .putPaymentItem(userId, paymentMethodKey, amount, models.payments.config.statuses.pending, metadata);
         // Return charge info
-        return { amount, payment };
+        return payment;
     }
 
     async setScheduleStatus(schedule, status) {
@@ -115,7 +127,7 @@ class PaymentProcessor {
 
     // This will eventually calculate the balance based on past payments
     async getBalance(schedule) {
-        return schedule.get('balance');
+        return schedule.get('balance', 0);
     }
 
     getSubscription(userId) {

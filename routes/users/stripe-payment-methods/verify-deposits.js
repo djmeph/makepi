@@ -16,6 +16,14 @@ module.exports = {
         let stripePaymentMethod;
         let customer;
 
+        const itemKey = `${
+            config.itemKeyPrefixes.stripePaymentMethods
+        }${
+            config.itemKeyDelimiter
+        }${
+            req.params.stripePaymentMethodId
+        }`;
+
         try {
             user = await models.users.table.get(req.user.sub);
             if (!user) {
@@ -24,7 +32,7 @@ module.exports = {
             }
             stripePaymentMethod = await models.stripePaymentMethods.table.get({
                 userId: user.get('userId'),
-                itemKey: `${config.itemKeyPrefixes.stripePaymentMethods}${config.itemKeyDelimiter}${req.params.stripePaymentMethodId}`
+                itemKey
             });
             if (!stripePaymentMethod) {
                 req.data = { status: 404, response: { message: 'NOT FOUND' } };
@@ -43,7 +51,8 @@ module.exports = {
 
         try {
             // Check verification and set to verified
-            const source = await stripe.customers.verifySource(customer.id, stripePaymentMethod.get('source.id'), { amounts: req.body.amounts });
+            const source = await stripe.customers
+                .verifySource(customer.id, stripePaymentMethod.get('source.id'), { amounts: req.body.amounts });
             if (source.status === 'verified') stripePaymentMethod.set('verified', true);
             stripePaymentMethod.set('source', source);
             await stripePaymentMethod.update();

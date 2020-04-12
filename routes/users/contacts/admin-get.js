@@ -11,7 +11,6 @@ module.exports = {
     },
     middleware: [async (req, res, next) => {
         try {
-            console.log(req.params)
             const contact = await models.contacts.table.get(req.params);
             if (!contact) {
                 req.data = { status: 404, response: { message: 'NOT FOUND' } };

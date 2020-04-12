@@ -3,7 +3,6 @@ const models = require('../models');
 const config = require('../config');
 
 module.exports = async () => {
-
     // First, use status-index to search all scheduled payments due before now()
     const schedules = await models.schedules.table.getAllUnpaidBeforeDate();
 

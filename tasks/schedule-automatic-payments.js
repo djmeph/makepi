@@ -46,10 +46,13 @@ module.exports = async () => {
                 if (thisMonthsPaymentDay.isBefore(now)) thisMonthsPaymentDay.add(1, 'months');
 
                 // Use timezone setting to calculate 00:00:000 on the payment day, in the selected timezone
-                // Since this value is saved in local time with a timezone offset, do the same when searching paymentDate-index
-                const paymentDate = moment.tz(thisMonthsPaymentDay.format('YYYY-MM-DD'), 'YYYY-MM-DD', config.TIMEZONE);
+                // Since this value is saved in local time with a timezone offset,
+                // do the same when searching paymentDate-index
+                const paymentDate = moment
+                    .tz(thisMonthsPaymentDay.format('YYYY-MM-DD'), 'YYYY-MM-DD', config.TIMEZONE);
 
-                // Save information about the price, and the amount at the selected increment this scheduled payment will apply to
+                // Save information about the price, and the amount at the selected increment this scheduled
+                // payment will apply to
                 const increments = plan.get('increments');
                 const amount = plan.get('amount');
                 const total = plan.get('price');

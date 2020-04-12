@@ -3,7 +3,6 @@
  * Promisified Item with History
  */
 const { PromisifiedItem } = require('dynamodb-wrapper');
-const _ = require('lodash');
 const AWS = require('aws-sdk');
 const config = require('../../config');
 

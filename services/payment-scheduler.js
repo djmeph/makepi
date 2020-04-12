@@ -4,10 +4,16 @@ const config = require('../config');
 const log = require('./logger');
 
 class PaymentScheduler {
-    constructor(params) {
+    constructor(params = {}) {
         this.log = params.log || log;
         this.now = params.now ? moment(params.now) : moment();
         this.timezone = params.timezone ? params.timezone : config.TIMEZONE;
+    }
+
+    async run() {
+        await this.getAllSubscriptions();
+        await this.processSubscriptions();
+        return this.processed;
     }
 
     async getAllSubscriptions() {

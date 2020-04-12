@@ -3,8 +3,8 @@ const config = require('../config');
 const log = require('./logger');
 
 class PaymentProcessor {
-    constructor() {
-        this.log = log;
+    constructor(params = {}) {
+        this.log = params.log || log;
     }
 
     async run() {

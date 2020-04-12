@@ -40,7 +40,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.16.0",
     "mocha": "^6.2.1",
-    "nodemon": "^1.19.3",
+    "nodemon": "^2.0.3",
     "react": "^16.10.2",
     "serverless": "^1.67.3",
     "serverless-offline": "^5.12.1",

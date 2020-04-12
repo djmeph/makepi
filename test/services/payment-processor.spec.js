@@ -74,6 +74,12 @@ describe('UnitTests::', () => {
             const result = await paymentProcessor.processScheduledPayment(schedule);
             expect(result).to.equal(false);
         });
+        it('Should return false if payment method is cash', async () => {
+            sinon.stub(paymentProcessor, 'getBalance').callsFake(async () => balance);
+            sinon.stub(paymentProcessor, 'getSubscription').callsFake(async () => subscriptionCashMonthly);
+            const result = await paymentProcessor.processScheduledPayment(schedule);
+            expect(result).to.equal(false);
+        });
         it('should return false if subscription not found', async () => {
             sinon.stub(paymentProcessor, 'getBalance').callsFake(async () => balance);
             sinon.stub(paymentProcessor, 'getSubscription').callsFake(async () => null);

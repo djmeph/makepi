@@ -1,14 +1,10 @@
 process.env.AWS_REGION = 'us-east-1';
 
 const sinon = require('sinon');
-const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
+const { expect, assert } = require('chai');
 const PaymentScheduler = require('../../services/payment-scheduler');
 const fakeLogger = require('../util/fakeLogger');
 const { userId, subscriptionCreditMonthly, subscriptionCashMonthly, plan, schedule, subscriptionFifteenthPaymentDate } = require('../util/mocks');
-
-const { expect, assert } = chai;
-chai.use(chaiAsPromised);
 
 describe('UnitTests::', () => {
     describe('PaymentScheduler::', () => {

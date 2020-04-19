@@ -35,7 +35,7 @@ describe('UnitTests::', () => {
             assert(result);
         });
         it('Should return false if payment processing fails', async () => {
-            sinon.stub(paymentScheduler, 'getSchedulesByUserIdAndStatus').throws();
+            sinon.stub(paymentScheduler, 'getSchedulesByUserIdAndStatus').rejects();
             const result = await paymentScheduler.processSubscription(userId, subscriptionCreditMonthly);
             expect(result).to.equal(false);
         });
@@ -45,7 +45,7 @@ describe('UnitTests::', () => {
             sinon.stub(paymentScheduler, 'saveScheduleItem').callsFake(async () => schedule);
             const getSchedulesByUserIdAndStatusStub = sinon.stub(paymentScheduler, 'getSchedulesByUserIdAndStatus');
             getSchedulesByUserIdAndStatusStub.onCall(0).callsFake(async () => []);
-            getSchedulesByUserIdAndStatusStub.onCall(1).throws();
+            getSchedulesByUserIdAndStatusStub.onCall(1).rejects();
             await paymentScheduler.processSubscriptions();
             assert(paymentScheduler.processed[0]);
             expect(paymentScheduler.processed[1]).to.equal(false);

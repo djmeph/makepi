@@ -32,7 +32,7 @@ describe('UnitTests::', () => {
             payment = new models.payments.Item(mocks.payment);
             paymentMethodCredit = new models.stripePaymentMethods.Item(mocks.paymentMethodCredit);
             paymentProcessor = new PaymentProcessor({
-                // log: fakeLogger
+                log: fakeLogger
             });
         });
         it('Should return true if payment processing succeeds', async () => {
@@ -47,7 +47,7 @@ describe('UnitTests::', () => {
         });
         it('Should return false if payment processing fails', async () => {
             sinon.stub(paymentProcessor, 'getBalance').callsFake(async () => balance);
-            sinon.stub(paymentProcessor, 'getSubscription').throws();
+            sinon.stub(paymentProcessor, 'getSubscription').rejects();
             const result = await paymentProcessor.processScheduledPayment(schedule);
             expect(result).to.equal(false);
         });
@@ -60,7 +60,7 @@ describe('UnitTests::', () => {
             sinon.stub(paymentProcessor, 'paymentSuccessEmail');
             const getSubscriptionStub = sinon.stub(paymentProcessor, 'getSubscription');
             getSubscriptionStub.onCall(0).callsFake(async () => subscriptionCreditMonthly);
-            getSubscriptionStub.onCall(1).throws();
+            getSubscriptionStub.onCall(1).rejects();
             await paymentProcessor.processScheduledPayments();
             expect(paymentProcessor.processed[0]).to.equal(true);
             expect(paymentProcessor.processed[1]).to.equal(false);

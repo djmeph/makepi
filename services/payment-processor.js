@@ -5,6 +5,7 @@ const log = require('./logger');
 class PaymentProcessor {
     constructor(params = {}) {
         this.log = params.log || log;
+        this.ses = require('./ses');
     }
 
     async run() {
@@ -49,13 +50,21 @@ class PaymentProcessor {
                     return false;
                 }
                 // Process payment
-                const payment = await this.processPayment(userId, paymentMethodKey, balance);
-                const amount = payment.get('amount');
-                // update scheduled item with payment info
-                await this
-                    .updateScheduledItem(schedule, payment, balance, amount, models.schedules.config.statuses.paid);
-                this.log.info({ userId, scheduleId, message: 'PAID IN FULL' });
-                return true;
+                try {
+                    const payment = await this.processPayment(userId, paymentMethodKey, balance);
+                    const amount = payment.get('amount');
+                    // update scheduled item with payment info
+                    await this
+                        .updateScheduledItem(schedule, payment, balance, amount, models.schedules.config.statuses.paid);
+                    this.log.info({ userId, scheduleId, message: 'PAID IN FULL' });
+                    // Send success email
+                    await this.paymentSuccessEmail(userId, amount);
+                    return true;
+                } catch (err) {
+                    // Send failure email
+                    await this.paymentFailedEmail(userId, balance, err.errorMessage);
+                    throw err;
+                }
             }
 
             // If zero balance mark paid
@@ -146,6 +155,40 @@ class PaymentProcessor {
             userId,
             itemKey: `${config.itemKeyPrefixes.subscriptions}_latest`
         });
+    }
+
+    async paymentSuccessEmail(userId, amount) {
+        try {
+            const sourceEmail = await models.settings.table.get('source-email');
+            const user = await models.users.table.get(userId);
+            if (!user) throw new Error('User not found');
+            const email = user.get('username');
+            await this.ses.send({
+                to: [email],
+                from: sourceEmail.value,
+                subject: `MakePI: ${config.APP_NAME} Payment Success`,
+                textBody: `Your payment of $${amount} was successfully charged.`,
+            });
+        } catch (err) {
+            this.log.error({ userId }, err);
+        }
+    }
+
+    async paymentFailedEmail(userId, amount, reason) {
+        try {
+            const sourceEmail = await models.settings.table.get('source-email');
+            const user = await models.users.table.get(userId);
+            if (!user) throw new Error('User not found');
+            const email = user.get('username');
+            await this.ses.send({
+                to: [email],
+                from: sourceEmail.value,
+                subject: `MakePI: ${config.APP_NAME} Payment Failure`,
+                textBody: `Your payment of $${amount} failed. Reason: ${reason}`,
+            });
+        } catch (err) {
+            this.log.error({ userId }, err);
+        }
     }
 
     _getSchema(paymentMethodKey) {

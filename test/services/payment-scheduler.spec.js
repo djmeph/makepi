@@ -34,7 +34,7 @@ describe('UnitTests::', () => {
             const result = await paymentScheduler.processSubscription(userId, subscriptionCreditMonthly);
             assert(result);
         });
-        it('Should return false if payment processing fails', async () => {
+        it('Should return false if payment scheduling fails', async () => {
             sinon.stub(paymentScheduler, 'getSchedulesByUserIdAndStatus').rejects();
             const result = await paymentScheduler.processSubscription(userId, subscriptionCreditMonthly);
             expect(result).to.equal(false);

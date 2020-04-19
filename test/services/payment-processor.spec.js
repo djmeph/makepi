@@ -46,10 +46,15 @@ describe('UnitTests::', () => {
             expect(result).to.equal(true);
         });
         it('Should return false if payment processing fails', async () => {
+            console.log('Stub get balance');
             sinon.stub(paymentProcessor, 'getBalance').resolves(balance);
+            console.log('Stub getSubscription');
             sinon.stub(paymentProcessor, 'getSubscription').rejects();
+            console.log('Run processScheduledPayment');
             const result = await paymentProcessor.processScheduledPayment(schedule);
+            console.log('Assert result');
             expect(result).to.equal(false);
+            console.log('fine')
         });
         it('Should pass and fail on a per schedule item basis', async () => {
             paymentProcessor.schedules = [schedule, schedule];

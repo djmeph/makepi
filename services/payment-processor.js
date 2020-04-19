@@ -25,11 +25,9 @@ class PaymentProcessor {
     }
 
     async processScheduledPayment(schedule) {
-        console.log(schedule.get());
         // Grab userId
         const userId = schedule.get('userId');
         const scheduleId = schedule.get('scheduleId');
-        console.log({ userId, scheduleId });
         this.log.info({ userId, scheduleId, message: 'processScheduledPayment' });
         try {
             // Get balance

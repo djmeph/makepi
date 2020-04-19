@@ -32,8 +32,10 @@ class PaymentProcessor {
         try {
             // Get balance
             const balance = await this.getBalance(schedule);
+            this.log.info({ balance });
             // Get current subscription
             const subscription = await this.getSubscription(userId);
+            this.log.info({ subscription: subscription.get() });
 
             // If no subscription found do not process
             if (!subscription) {

@@ -40,6 +40,11 @@ const total = joi.number()
 const balance = joi.number()
     .description('Schedule item payment balance');
 
+const failure = joi.object()
+    .description('Payment failure details');
+
+const failureHistory = historySchema;
+
 module.exports = {
     elements: {
         userId,
@@ -53,6 +58,8 @@ module.exports = {
         payments,
         total,
         balance,
+        failure,
+        failureHistory
     },
     getStatus: {
         params: joi.object({
@@ -124,6 +131,8 @@ module.exports = {
             payments: payments.required(),
             total: total.required(),
             balance: balance.required(),
+            failure: failure.optional(),
+            failureHistory,
         }
     })
 };

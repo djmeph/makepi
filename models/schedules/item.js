@@ -28,6 +28,10 @@ class Schedules extends ItemWithHistory {
             schema: require('./schema').dynamo
         });
     }
+
+    shouldAddHistory(field) {
+        return ['status', 'failure'].includes(field);
+    }
 }
 
 module.exports = Schedules;

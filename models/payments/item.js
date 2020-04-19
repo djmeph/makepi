@@ -28,6 +28,10 @@ class Payments extends ItemWithHistory {
             schema: require('./schema').dynamo
         });
     }
+
+    shouldAddHistory(field) {
+        return field === 'status';
+    }
 }
 
 module.exports = Payments;

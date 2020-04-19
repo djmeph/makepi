@@ -5,7 +5,17 @@ const { expect, assert } = require('chai');
 const PaymentProcessor = require('../../services/payment-processor');
 const models = require('../../models');
 const fakeLogger = require('../util/fakeLogger');
-const { schedule, userId, paymentMethodKey, balance, subscriptionCashMonthly, subscriptionCreditMonthly, paymentMethodCredit, payment } = require('../util/mocks');
+const mocks = require('../util/mocks');
+const {
+    userId,
+    paymentMethodKey,
+    balance,
+} = mocks;
+let schedule,
+    subscriptionCashMonthly,
+    subscriptionCreditMonthly,
+    payment,
+    paymentMethodCredit;
 
 describe('UnitTests::', () => {
     describe('PaymentProcessor::', () => {
@@ -16,13 +26,22 @@ describe('UnitTests::', () => {
             sinon.stub(PaymentProcessor.prototype, 'updateScheduledItem');
         });
         beforeEach(() => {
-            paymentProcessor = new PaymentProcessor();
-            paymentProcessor.log = fakeLogger;
+            schedule = new models.schedules.Item(mocks.schedule);
+            subscriptionCashMonthly = new models.subscriptions.Item(mocks.subscriptionCashMonthly);
+            subscriptionCreditMonthly = new models.subscriptions.Item(mocks.subscriptionCreditMonthly);
+            payment = new models.payments.Item(mocks.payment);
+            paymentMethodCredit = new models.stripePaymentMethods.Item(mocks.paymentMethodCredit);
+            paymentProcessor = new PaymentProcessor({
+                log: fakeLogger
+            });
         });
         it('Should return true if payment processing succeeds', async () => {
+            sinon.stub(payment, 'create').callsFake(async () => payment);
+            sinon.stub(schedule, 'update').callsFake(async () => schedule);
             sinon.stub(paymentProcessor, 'getBalance').callsFake(async () => balance);
             sinon.stub(paymentProcessor, 'getSubscription').callsFake(async () => subscriptionCreditMonthly);
             sinon.stub(paymentProcessor, 'getPaymentMethod').callsFake(async () => paymentMethodCredit);
+            sinon.stub(paymentProcessor, 'paymentSuccessEmail');
             const result = await paymentProcessor.processScheduledPayment(schedule);
             expect(result).to.equal(true);
         });
@@ -34,8 +53,11 @@ describe('UnitTests::', () => {
         });
         it('Should pass and fail on a per schedule item basis', async () => {
             paymentProcessor.schedules = [schedule, schedule];
+            sinon.stub(payment, 'create').callsFake(async () => payment);
+            sinon.stub(schedule, 'update').callsFake(async () => schedule);
             sinon.stub(paymentProcessor, 'getBalance').callsFake(async () => balance);
             sinon.stub(paymentProcessor, 'getPaymentMethod').callsFake(async () => paymentMethodCredit);
+            sinon.stub(paymentProcessor, 'paymentSuccessEmail');
             const getSubscriptionStub = sinon.stub(paymentProcessor, 'getSubscription');
             getSubscriptionStub.onCall(0).callsFake(async () => subscriptionCreditMonthly);
             getSubscriptionStub.onCall(1).throws();

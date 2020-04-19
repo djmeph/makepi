@@ -4,11 +4,23 @@ const sinon = require('sinon');
 const { expect, assert } = require('chai');
 const PaymentScheduler = require('../../services/payment-scheduler');
 const fakeLogger = require('../util/fakeLogger');
-const { userId, subscriptionCreditMonthly, subscriptionCashMonthly, plan, schedule, subscriptionFifteenthPaymentDate } = require('../util/mocks');
+const models = require('../../models');
+const mocks = require('../util/mocks');
+const { userId } = mocks;
+let subscriptionCreditMonthly,
+    subscriptionCashMonthly,
+    plan,
+    schedule,
+    subscriptionFifteenthPaymentDate;
 
 describe('UnitTests::', () => {
     describe('PaymentScheduler::', () => {
         beforeEach(() => {
+            subscriptionCreditMonthly = new models.subscriptions.Item(mocks.subscriptionCreditMonthly);
+            subscriptionCashMonthly = new models.subscriptions.Item(mocks.subscriptionCashMonthly);
+            plan = new models.plans.Item(mocks.plan);
+            schedule = new models.schedules.Item(mocks.schedule);
+            subscriptionFifteenthPaymentDate = new models.subscriptions.Item(mocks.subscriptionFifteenthPaymentDate);
             paymentScheduler = new PaymentScheduler({
                 now: '2020-04-11T13:00:00.000Z',
                 log: fakeLogger,

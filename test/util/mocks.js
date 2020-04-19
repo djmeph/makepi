@@ -1,4 +1,3 @@
-const models = require('../../models');
 const config = require('../../config');
 
 const userId = '66351cc2-7fe6-466b-8ab8-424742721561';
@@ -9,11 +8,11 @@ module.exports = {
     userId,
     paymentMethodKey: `stripe-payment-methods#${paymentMethodKey}`,
     balance,
-    schedule: new models.schedules.Item({
+    schedule: {
         userId,
         balance,
-    }),
-    subscriptionCashMonthly: new models.subscriptions.Item({
+    },
+    subscriptionCashMonthly: {
         paymentDay: 1,
         paymentMethodKey: 'cash',
         plan: {
@@ -21,8 +20,8 @@ module.exports = {
             versionNumber: 1
         },
         userId
-    }),
-    subscriptionCreditMonthly: new models.subscriptions.Item({
+    },
+    subscriptionCreditMonthly: {
         paymentDay: 1,
         paymentMethodKey,
         plan: {
@@ -30,8 +29,8 @@ module.exports = {
             versionNumber: 1,
         },
         userId
-    }),
-    subscriptionFifteenthPaymentDate: new models.subscriptions.Item({
+    },
+    subscriptionFifteenthPaymentDate: {
         paymentDay: 15,
         paymentMethodKey,
         plan: {
@@ -39,19 +38,19 @@ module.exports = {
             versionNumber: 1,
         },
         userId
-    }),
-    payment: new models.payments.Item({}),
-    paymentMethodCredit: new models.stripePaymentMethods.Item({
+    },
+    payment: {},
+    paymentMethodCredit: {
         userId,
         source: {
             id: 'card_xxxxxxxxxxxxxxxxxxxxxxxx'
         }
-    }),
-    plan: new models.plans.Item({
+    },
+    plan: {
         planId: 'monthly-membership',
         versionNumber: 1,
         increments: config.payments.increments.months,
         amount: 1,
         price: balance
-    })
+    }
 };

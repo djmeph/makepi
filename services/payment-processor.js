@@ -61,6 +61,9 @@ class PaymentProcessor {
                     await this.paymentSuccessEmail(userId, amount);
                     return true;
                 } catch (err) {
+                    // Add failure object to schedule item
+                    schedule.set('failure', { ...err });
+                    await schedule.update();
                     // Send failure email
                     await this.paymentFailedEmail(userId, balance, err.errorMessage);
                     throw err;

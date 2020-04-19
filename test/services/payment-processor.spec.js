@@ -31,7 +31,7 @@ describe('UnitTests::', () => {
             payment = new models.payments.Item(mocks.payment);
             paymentMethodCredit = new models.stripePaymentMethods.Item(mocks.paymentMethodCredit);
             paymentProcessor = new PaymentProcessor({
-                // log: fakeLogger
+                log: fakeLogger
             });
         });
         it('Should return true if payment processing succeeds', async () => {
@@ -46,15 +46,10 @@ describe('UnitTests::', () => {
             expect(result).to.equal(true);
         });
         it('Should return false if payment processing fails', async () => {
-            console.log('Stub get balance');
             sinon.stub(paymentProcessor, 'getBalance').resolves(balance);
-            console.log('Stub getSubscription');
             sinon.stub(paymentProcessor, 'getSubscription').rejects();
-            console.log('Run processScheduledPayment');
             const result = await paymentProcessor.processScheduledPayment(schedule);
-            console.log('Assert result');
             expect(result).to.equal(false);
-            console.log('fine')
         });
         it('Should pass and fail on a per schedule item basis', async () => {
             paymentProcessor.schedules = [schedule, schedule];

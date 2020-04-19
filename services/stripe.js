@@ -1,5 +1,6 @@
 const StripeConstructor = require('stripe');
 const AWS = require('aws-sdk');
+const config = require('../config');
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
@@ -53,7 +54,7 @@ getStripeId()
     });
 
 async function getStripeId() {
-    const result = await dynamodb.get({
+    const result = config.NODE_ENV === 'test' ? { Item: { value: 'xxxxxxxx' } } : await dynamodb.get({
         TableName: `makepi-${process.env.ENV_NAME}-settings`,
         Key: {
             settingId: 'stripe-key',

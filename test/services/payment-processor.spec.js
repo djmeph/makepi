@@ -32,7 +32,7 @@ describe('UnitTests::', () => {
             payment = new models.payments.Item(mocks.payment);
             paymentMethodCredit = new models.stripePaymentMethods.Item(mocks.paymentMethodCredit);
             paymentProcessor = new PaymentProcessor({
-                log: fakeLogger
+                // log: fakeLogger
             });
         });
         it('Should return true if payment processing succeeds', async () => {

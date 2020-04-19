@@ -184,7 +184,14 @@ class PaymentProcessor {
                 to: [email],
                 from: sourceEmail.value,
                 subject: `MakePI: ${config.APP_NAME} Payment Failure`,
-                textBody: `Your payment of $${amount} failed. Reason: ${reason}`,
+                textBody: [
+                    `Your payment of $${amount} failed.`,
+                    `Reason: ${reason}`,
+                    [
+                        'We will attempt your payment again tomorrow.',
+                        'Re-check your account settings to change your payment method or cancel further attempts.'
+                    ].join(' ')
+                ].join('\n\n')
             });
         } catch (err) {
             this.log.error({ userId }, err);

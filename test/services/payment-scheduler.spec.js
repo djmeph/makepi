@@ -28,9 +28,9 @@ describe('UnitTests::', () => {
             });
         });
         it('Should return truthy if payment scheduling succeeds', async () => {
-            sinon.stub(paymentScheduler, 'getSchedulesByUserIdAndStatus').callsFake(async () => []);
-            sinon.stub(paymentScheduler, 'getPlan').callsFake(async () => plan);
-            sinon.stub(paymentScheduler, 'saveScheduleItem').callsFake(async () => schedule);
+            sinon.stub(paymentScheduler, 'getSchedulesByUserIdAndStatus').resolves([]);
+            sinon.stub(paymentScheduler, 'getPlan').resolves(plan);
+            sinon.stub(paymentScheduler, 'saveScheduleItem').resolves(schedule);
             const result = await paymentScheduler.processSubscription(userId, subscriptionCreditMonthly);
             assert(result);
         });
@@ -41,10 +41,10 @@ describe('UnitTests::', () => {
         });
         it('Should pass and fail on a per subscription item basis', async () => {
             paymentScheduler.subscriptions = [subscriptionCreditMonthly, subscriptionCreditMonthly];
-            sinon.stub(paymentScheduler, 'getPlan').callsFake(async () => plan);
-            sinon.stub(paymentScheduler, 'saveScheduleItem').callsFake(async () => schedule);
+            sinon.stub(paymentScheduler, 'getPlan').resolves(plan);
+            sinon.stub(paymentScheduler, 'saveScheduleItem').resolves(schedule);
             const getSchedulesByUserIdAndStatusStub = sinon.stub(paymentScheduler, 'getSchedulesByUserIdAndStatus');
-            getSchedulesByUserIdAndStatusStub.onCall(0).callsFake(async () => []);
+            getSchedulesByUserIdAndStatusStub.onCall(0).resolves([]);
             getSchedulesByUserIdAndStatusStub.onCall(1).rejects();
             await paymentScheduler.processSubscriptions();
             assert(paymentScheduler.processed[0]);
@@ -55,21 +55,21 @@ describe('UnitTests::', () => {
             expect(result).to.equal(false);
         });
         it('should return false if unpaid schedule item found', async () => {
-            sinon.stub(paymentScheduler, 'getSchedulesByUserIdAndStatus').callsFake(async () => [schedule]);
+            sinon.stub(paymentScheduler, 'getSchedulesByUserIdAndStatus').resolves([schedule]);
             const result = await paymentScheduler.processSubscription(userId, subscriptionCreditMonthly);
             expect(result).to.equal(false);
         });
         it('Should calculate date as the 1st of next month in Detroit time because now is after this month\'s paymentDay', async () => {
-            sinon.stub(paymentScheduler, 'getSchedulesByUserIdAndStatus').callsFake(async () => []);
-            sinon.stub(paymentScheduler, 'getPlan').callsFake(async () => plan);
-            sinon.stub(paymentScheduler, 'saveScheduleItem').callsFake(async () => schedule);
+            sinon.stub(paymentScheduler, 'getSchedulesByUserIdAndStatus').resolves([]);
+            sinon.stub(paymentScheduler, 'getPlan').resolves(plan);
+            sinon.stub(paymentScheduler, 'saveScheduleItem').resolves(schedule);
             const result = await paymentScheduler.processSubscription(userId, subscriptionCreditMonthly);
             expect(result).to.equal('2020-05-01T04:00:00.000Z');
         });
         it('Should calculate date as the 15th of this month in Detroit time because now is before this month\'s paymentDay', async () => {
-            sinon.stub(paymentScheduler, 'getSchedulesByUserIdAndStatus').callsFake(async () => []);
-            sinon.stub(paymentScheduler, 'getPlan').callsFake(async () => plan);
-            sinon.stub(paymentScheduler, 'saveScheduleItem').callsFake(async () => schedule);
+            sinon.stub(paymentScheduler, 'getSchedulesByUserIdAndStatus').resolves([]);
+            sinon.stub(paymentScheduler, 'getPlan').resolves(plan);
+            sinon.stub(paymentScheduler, 'saveScheduleItem').resolves(schedule);
             const result = await paymentScheduler.processSubscription(userId, subscriptionFifteenthPaymentDate);
             expect(result).to.equal('2020-04-15T04:00:00.000Z');
         });

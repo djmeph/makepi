@@ -18,41 +18,52 @@ class PaymentProcessor {
     }
 
     async processScheduledPayments() {
+        this.log.info({ scheduleIds: this.schedules.map((n) => n.get('scheduleId')), message: 'Processing ...' });
         this.processed = await Promise
             .all(this.schedules.map((schedule) => this.processScheduledPayment(schedule)));
     }
 
     async processScheduledPayment(schedule) {
+        // Grab userId
+        const userId = schedule.get('userId');
+        const scheduleId = schedule.get('scheduleId');
+        this.log.info({ userId, scheduleId, message: 'processScheduledPayment' });
         try {
-            // Grab userId
-            const userId = schedule.get('userId');
             // Get balance
             const balance = await this.getBalance(schedule);
             // Get current subscription
             const subscription = await this.getSubscription(userId);
 
             // If no subscription found do not process
-            if (!subscription) return false;
+            if (!subscription) {
+                this.log.info({ userId, scheduleId, message: 'NO SUBSCRIPTION FOUND' });
+                return false;
+            }
 
             // If balance is non-zero process it
             if (balance > 0) {
                 // Get Payment key. If it's cash, skip. This payment will be entered manually.
                 const paymentMethodKey = subscription.get('paymentMethodKey');
-                if (paymentMethodKey === 'cash') return false;
+                if (paymentMethodKey === 'cash') {
+                    this.log.info({ userId, scheduleId, message: 'CASH PAYMENT SELECTED' });
+                    return false;
+                }
                 // Process payment
                 const payment = await this.processPayment(userId, paymentMethodKey, balance);
                 const amount = payment.get('amount');
                 // update scheduled item with payment info
                 await this
                     .updateScheduledItem(schedule, payment, balance, amount, models.schedules.config.statuses.paid);
+                this.log.info({ userId, scheduleId, message: 'PAID IN FULL' });
                 return true;
             }
 
             // If zero balance mark paid
             const result = await this.setScheduleStatus(models.schedules.config.statuses.paid);
+            this.log.info({ userId, scheduleId, message: 'ZERO BALANCE MARKED PAID' });
             return !!result;
         } catch (err) {
-            this.log.error(err);
+            this.log.error({ userId }, err);
             return false;
         }
     }

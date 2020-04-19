@@ -36,11 +36,17 @@ class PaymentScheduler {
             const paymentDay = subscription.get('paymentDay');
             const paymentMethodKey = subscription.get('paymentMethodKey');
             // Don't schedule cash payments yet. Need to turn this into an env var parameter.
-            if (paymentMethodKey === 'cash') return false;
+            if (paymentMethodKey === 'cash') {
+                this.log.info({ userId, paymentMethodKey });
+                return false;
+            }
             // Look for all future schedule items by userId
             const schedules = await this.getSchedulesByUserIdAndStatus(userId, models.schedules.config.statuses.unpaid);
             // If array returns with 1 or more items, ignore.
-            if (schedules.length) return false;
+            if (schedules.length) {
+                this.log.info({ userId, message: 'SCHEDULE(S) FOUND' });
+                return false;
+            }
             // get subscription info and calculate payment date
             const thisMonthsPaymentDay = moment()
                 .year(this.now.year())
@@ -57,10 +63,11 @@ class PaymentScheduler {
             const total = plan.get('price');
             // Finally, save schedule item to database
             await this.saveScheduleItem(userId, paymentDate, increments, amount, total);
+            this.log.info({ userId, message: 'PAYMENT SCHEDULED' });
             // return true to include in the `scheduled` count
             return paymentDate.toISOString();
         } catch (err) {
-            this.log.error(err);
+            this.log.error({ userId }, err);
             return false;
         }
     }

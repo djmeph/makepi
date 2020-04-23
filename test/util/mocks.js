@@ -13,6 +13,7 @@ module.exports = {
     schedule: {
         userId,
         balance,
+        total: balance
     },
     subscriptionCashMonthly: {
         paymentDay: 1,

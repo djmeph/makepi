@@ -3,11 +3,13 @@ const config = require('../../config');
 const userId = '66351cc2-7fe6-466b-8ab8-424742721561';
 const balance = 50;
 const paymentMethodKey = '08601afd-627f-456c-8cfc-3b0038a45401';
+const username = 'username';
 
 module.exports = {
     userId,
     paymentMethodKey: `stripe-payment-methods#${paymentMethodKey}`,
     balance,
+    username,
     schedule: {
         userId,
         balance,
@@ -52,5 +54,9 @@ module.exports = {
         increments: config.payments.increments.months,
         amount: 1,
         price: balance
+    },
+    user: {
+        userId,
+        username,
     }
 };

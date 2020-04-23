@@ -18,6 +18,10 @@ const items = {
     'sqs-recover-url': {
         type: types.string,
         label: 'SQS Recover Queue URL'
+    },
+    'treasurer-email': {
+        type: types.string,
+        label: 'Treasurer Email'
     }
 };
 

@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const models = require('../models');
 const config = require('../config');
 const log = require('./logger');
@@ -11,6 +12,7 @@ class PaymentProcessor {
     async run() {
         await this.getAllUnpaidDue();
         await this.processScheduledPayments();
+        await this.processTreasurerEmail();
         return this.processed;
     }
 
@@ -60,14 +62,15 @@ class PaymentProcessor {
                     this.log.info({ userId, scheduleId, message: 'PAID IN FULL' });
                     // Send success email
                     await this.paymentSuccessEmail(userId, amount);
-                    return true;
+                    return schedule;
                 } catch (err) {
                     // Add failure object to schedule item
                     schedule.set('failure', { ...err });
                     await schedule.update();
                     // Send failure email
                     await this.paymentFailedEmail(userId, balance, err.errorMessage);
-                    throw err;
+                    this.log.error({ userId }, err);
+                    return schedule;
                 }
             }
 
@@ -163,8 +166,10 @@ class PaymentProcessor {
 
     async paymentSuccessEmail(userId, amount) {
         try {
-            const sourceEmail = await models.settings.table.get('source-email');
-            const user = await models.users.table.get(userId);
+            const [sourceEmail, user] = await Promise.all([
+                models.settings.table.get('source-email'),
+                models.users.table.get(userId)
+            ]);
             if (!user) throw new Error('User not found');
             const email = user.get('username');
             await this.ses.send({
@@ -180,8 +185,10 @@ class PaymentProcessor {
 
     async paymentFailedEmail(userId, amount, reason) {
         try {
-            const sourceEmail = await models.settings.table.get('source-email');
-            const user = await models.users.table.get(userId);
+            const [sourceEmail, user] = await Promise.all([
+                models.settings.table.get('source-email'),
+                models.users.table.get(userId)
+            ]);
             if (!user) throw new Error('User not found');
             const email = user.get('username');
             await this.ses.send({
@@ -199,6 +206,31 @@ class PaymentProcessor {
             });
         } catch (err) {
             this.log.error({ userId }, err);
+        }
+    }
+
+    async processTreasurerEmail() {
+        let processed = _.cloneDeep(this.processed);
+        processed = _.filter(processed, (n) => !!n);
+        if (processed.length) {
+            const [sourceEmail, treasurerEmail] = await Promise.all([
+                models.settings.table.get('source-email'),
+                models.settings.table.get('treasurer-email')
+            ]);
+            processed = await Promise.all(processed.map(async (n) => {
+                const user = await models.users.table.get(n.get('userId'));
+                n.set('username', user.get('username'));
+                return n;
+            }));
+            let textBody = `${processed.length} Payment${processed.length > 1 ? 's' : ''} Processed\n\n`;
+            textBody += processed.map((n) => `${n.get('username')}\t$${n.get('balance')}\t${n.get('failure.errorMessage', '')}`).join('\n\n');
+            await this.ses.send({
+                to: [treasurerEmail.value],
+                from: sourceEmail.value,
+                subject: `MakePI: ${config.APP_NAME} Treasurer Report`,
+                textBody
+            });
+            return textBody;
         }
     }
 

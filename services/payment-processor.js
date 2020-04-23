@@ -212,6 +212,7 @@ class PaymentProcessor {
     async processTreasurerEmail() {
         let processed = _.cloneDeep(this.processed);
         processed = _.filter(processed, (n) => !!n);
+        if (!processed.length) return;
         if (processed.length) {
             const [sourceEmail, treasurerEmail] = await Promise.all([
                 models.settings.table.get('source-email'),

@@ -112,5 +112,15 @@ describe('UnitTests::', () => {
             const textBody = await paymentProcessor.processTreasurerEmail();
             expect(textBody).to.equal('1 Payment Processed\n\nusername\t$50\tFAIL');
         });
+        it('should ignore empty array', async () => {
+            paymentProcessor.processed = [];
+            const textBody = await paymentProcessor.processTreasurerEmail();
+            expect(textBody).to.be.an('undefined');
+        });
+        it('should ignore all unprocessed', async () => {
+            paymentProcessor.processed = [false, false, false];
+            const textBody = await paymentProcessor.processTreasurerEmail();
+            expect(textBody).to.be.an('undefined');
+        });
     });
 });

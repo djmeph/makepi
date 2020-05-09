@@ -4,6 +4,7 @@
  */
 const { ItemWithHistory } = require('dynamodb-wrapper');
 const config = require('../../config');
+const modelConfig = require('./config');
 const utils = require('../../utils');
 
 class Schedules extends ItemWithHistory {
@@ -31,6 +32,21 @@ class Schedules extends ItemWithHistory {
 
     shouldAddHistory(field) {
         return ['status', 'failure'].includes(field);
+    }
+
+    statusText() {
+        switch (this.get('status')) {
+        case modelConfig.statuses.unpaid:
+            return 'unpaid';
+        case modelConfig.statuses.paid:
+            return 'paid';
+        case modelConfig.statuses.late:
+            return 'late';
+        case modelConfig.statuses.cancelled:
+            return 'cancelled';
+        default:
+            return null;
+        }
     }
 }
 

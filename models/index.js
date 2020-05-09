@@ -20,4 +20,5 @@ module.exports = {
     schedules: require('./schedules'),
     payments: require('./payments'),
     contacts: require('./contacts'),
+    joi: require('dynamodb-wrapper').joi
 };

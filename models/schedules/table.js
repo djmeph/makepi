@@ -114,6 +114,21 @@ class SchedulesTable extends PromisifiedTable {
         });
         return _.get(results, 'Items', []);
     }
+
+    async getAllByUserId(userId) {
+        const { Items } = await super.query({
+            KeyConditionExpression: '#id = :id and begins_with(#key, :key)',
+            ExpressionAttributeNames: {
+                '#id': 'userId',
+                '#key': 'itemKey',
+            },
+            ExpressionAttributeValues: {
+                ':id': userId,
+                ':key': `${config.itemKeyPrefixes.schedules}${config.itemKeyDelimiter}`,
+            }
+        });
+        return Items;
+    }
 }
 
 module.exports = new SchedulesTable({

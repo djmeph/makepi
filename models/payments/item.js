@@ -4,6 +4,7 @@
  */
 const { ItemWithHistory } = require('dynamodb-wrapper');
 const config = require('../../config');
+const modelConfig = require('./config');
 const utils = require('../../utils');
 
 
@@ -31,6 +32,19 @@ class Payments extends ItemWithHistory {
 
     shouldAddHistory(field) {
         return field === 'status';
+    }
+
+    statusText() {
+        switch (this.get('status')) {
+        case modelConfig.statuses.pending:
+            return 'pending';
+        case modelConfig.statuses.complete:
+            return 'complete';
+        case modelConfig.statuses.failed:
+            return 'failed';
+        default:
+            return null;
+        }
     }
 }
 

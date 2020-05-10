@@ -24,10 +24,10 @@ class StripePaymentMethodsTable extends PromisifiedTable {
             IndexName: 'stripeSourceId-index',
             TableName: config.tableNames.users,
             KeyConditionExpression: '#id = :id',
-            ExpressionAttributeValues: { ':id:': 'stripeSourceId' },
-            ExpressionAttributeNames: { '#id': stripeSourceId },
+            ExpressionAttributeNames: { '#id': 'stripeSourceId' },
+            ExpressionAttributeValues: { ':id:': stripeSourceId },
         });
-        return _.get(result, 'Items.0');
+        return _.get(result, 'Items.0', null);
     }
 }
 

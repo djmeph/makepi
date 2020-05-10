@@ -1,6 +1,6 @@
 module.exports = async (event) => {
     for (let i = 0; i < event.Records.length; i++) {
-        await handler(event.Records[i]);
+        await handler(JSON.parse(event.Records[i].body));
     }
 };
 

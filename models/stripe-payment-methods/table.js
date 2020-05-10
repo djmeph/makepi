@@ -7,13 +7,13 @@ class StripePaymentMethodsTable extends PromisifiedTable {
         const result = await super.query({
             TableName: config.tableNames.users,
             KeyConditionExpression: '#id = :id and begins_with(#itemKey, :itemKey)',
-            ExpressionAttributeValues: {
-                ':id': userId,
-                ':itemKey': config.itemKeyPrefixes.stripePaymentMethods
-            },
             ExpressionAttributeNames: {
                 '#id': 'userId',
                 '#itemKey': 'itemKey'
+            },
+            ExpressionAttributeValues: {
+                ':id': userId,
+                ':itemKey': config.itemKeyPrefixes.stripePaymentMethods
             }
         });
         return _.get(result, 'Items', []);
@@ -25,7 +25,7 @@ class StripePaymentMethodsTable extends PromisifiedTable {
             TableName: config.tableNames.users,
             KeyConditionExpression: '#id = :id',
             ExpressionAttributeNames: { '#id': 'stripeSourceId' },
-            ExpressionAttributeValues: { ':id:': stripeSourceId },
+            ExpressionAttributeValues: { ':id': stripeSourceId },
         });
         return _.get(result, 'Items.0', null);
     }

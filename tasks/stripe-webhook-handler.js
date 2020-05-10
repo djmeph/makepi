@@ -10,32 +10,33 @@ module.exports = async (event) => {
 async function handler(record) {
     console.log(record);
     switch (record.type) {
-    case 'source.canceled':
-    case 'source.chargeable':
-    case 'source.failed':
-    case 'source.mandate_notification':
-    case 'source.refund_attributes_required':
-    case 'source.transaction.created':
-    case 'source.transaction.updated':
+    case 'customer.created':
+    case 'customer.updated':
+        await updateCustomer(record);
+        break;
+    case 'customer.deleted':
+        await deleteCustomer(record);
+        break;
+    case 'customer.source.created':
+    case 'customer.source.updated':
         await updateSource(record);
         break;
-    case 'payment_method.attached':
-    case 'payment_method.card_automatically_updated':
-    case 'payment_method.detached':
-    case 'payment_method.updated':
-    case 'customer.created':
-    case 'customer.deleted':
-    case 'customer.updated':
-    case 'customer.source.created':
-    case 'customer.card.created':
-    case 'customer.bank_account.created':
+    case 'customer.source.expiring':
+        await expiringSource(record);
+        break;
     case 'customer.source.deleted':
+        await deleteSource(record);
+        break;
+    case 'customer.card.created':
+    case 'customer.card.updated':
+    case 'customer.bank_account.created':
+    case 'customer.bank_account.updated':
+        await updateSource(record);
+        break;
     case 'customer.card.deleted':
     case 'customer.bank_account.deleted':
-    case 'customer.source.expiring':
-    case 'customer.source.updated':
-    case 'customer.card.updated':
-    case 'customer.bank_account.updated':
+        await deleteSource(record);
+        break;
     case 'charge.captured':
     case 'charge.expired':
     case 'charge.failed':
@@ -60,4 +61,20 @@ async function updateSource(message) {
     const source = await models.stripePaymentMethods.table.getByStripeSourceId(data.id);
     source.set('source', data);
     await source.update();
+}
+
+async function updateCustomer(message) {
+    console.log({ updateCustomer: message.type });
+}
+
+async function deleteCustomer(message) {
+    console.log({ deleteCustomer: message.type });
+}
+
+async function expiringSource(message) {
+    console.log({ expiringSource: message.type });
+}
+
+async function deleteSource(message) {
+    console.log({ deleteSource: message.type });
 }

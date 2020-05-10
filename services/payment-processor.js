@@ -224,7 +224,9 @@ class PaymentProcessor {
                 return n;
             }));
             let textBody = `${processed.length} Payment${processed.length > 1 ? 's' : ''} Processed\n\n`;
-            textBody += processed.map((n) => `${n.get('username')}\t$${n.get('total')}\t${n.get('failure.errorMessage', '')}`).join('\n\n');
+            textBody += processed.map(
+                (n) => `${n.get('username')}\t$${n.get('total')}\t${n.get('failure.errorMessage', '')}`
+            ).join('\n\n');
             await this.ses.send({
                 to: [treasurerEmail.value],
                 from: sourceEmail.value,

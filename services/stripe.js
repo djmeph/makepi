@@ -40,6 +40,13 @@ module.exports = {
             const result = await stripe.customers.verifySource(customerId, sourceId, amounts);
             return result;
         }
+    },
+    webhooks: {
+        constructEvent: async (requestBody, signature, endpointSecret) => {
+            await wait(50);
+            const result = await stripe.webhooks.constructEvent(requestBody, signature, endpointSecret);
+            return result;
+        }
     }
 };
 

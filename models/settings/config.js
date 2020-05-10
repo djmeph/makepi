@@ -19,6 +19,10 @@ const items = {
         type: types.string,
         label: 'SQS Recover Queue URL'
     },
+    'sqs-stripe-webhook-url': {
+        type: types.string,
+        label: 'SQS Stripe Webhook Queue URL'
+    },
     'treasurer-email': {
         type: types.string,
         label: 'Treasurer Email'

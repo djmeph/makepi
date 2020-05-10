@@ -1,13 +1,5 @@
 /* eslint-disable no-param-reassign */
 module.exports = {
-    JWT_SECRET: process.env.JWT_SECRET,
-    EXPIRY: Number(process.env.EXPIRY),
-    SALT_WORK_FACTOR: Number(process.env.SALT_WORK_FACTOR),
-    MAX_LOGIN_ATTEMPTS: Number(process.env.MAX_LOGIN_ATTEMPTS),
-    LOCK_TIME: Number(process.env.LOCK_TIME),
-    TIMEZONE: process.env.TIMEZONE,
-    APP_NAME: process.env.APP_NAME,
-    NODE_ENV: process.env.NODE_ENV,
     awsConfig: {
         region: process.env.AWS_REGION,
         sslEnabled: true,
@@ -51,5 +43,14 @@ module.exports = {
     },
     paymentMethods: {
         'stripe-payment-methods': 'stripePaymentMethods'
-    }
+    },
+    JWT_SECRET: process.env.JWT_SECRET,
+    EXPIRY: Number(process.env.EXPIRY),
+    SALT_WORK_FACTOR: Number(process.env.SALT_WORK_FACTOR),
+    MAX_LOGIN_ATTEMPTS: Number(process.env.MAX_LOGIN_ATTEMPTS),
+    LOCK_TIME: Number(process.env.LOCK_TIME),
+    TIMEZONE: process.env.TIMEZONE,
+    APP_NAME: process.env.APP_NAME,
+    NODE_ENV: process.env.NODE_ENV,
+    STRIPE_SIGNING_SECRET: process.env.STRIPE_SIGNING_SECRET
 };

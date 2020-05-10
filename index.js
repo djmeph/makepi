@@ -32,11 +32,12 @@ api.use((req, res, next) => {
     next();
 });
 
+// Initialize webhooks
+api.use('/webhooks', [bodyParser.raw({ type: 'application/json' })], webhooks);
+api.use('/webhooks', (req, res) => res.status(404).send('NOT FOUND'));
+
 // parse all requests as JSON
 api.use(bodyParser.json({ type: 'application/json' }));
-
-// Initialize webhooks
-api.use('/webhooks', webhooks);
 
 // Authenticate token and reject unauthorized access
 api.use('/', jwt);
@@ -45,9 +46,7 @@ api.use('/', jwt);
 api.use('/', router());
 
 // 404 Not Found fallback
-api.use((req, res) => {
-    res.status(404).json({ message: 'NOT FOUND' });
-});
+api.use((req, res) => res.status(404).json({ message: 'NOT FOUND' }));
 
 // Error handling
 api.use((err, req, res) => {

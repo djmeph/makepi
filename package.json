@@ -5,7 +5,7 @@
   "repository": "git@github.com:djmeph/makepi.git",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "nodemon api.js",
     "test": "NODE_ENV=test mocha -u bdd --timeout 999999 --colors --exit --inspect --recursive ./test/**/*.spec.js",
     "test:deploy": "NODE_ENV=test mocha -u bdd --timeout 999999 --no-colors --exit --inspect --recursive ./test/**/*.spec.js",
     "test:grep": "NODE_ENV=test mocha -u bdd --timeout 999999 --colors --exit --inspect --recursive ./test/**/*.spec.js -g",

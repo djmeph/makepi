@@ -35,6 +35,9 @@ api.use((req, res, next) => {
 // parse all requests as JSON
 api.use(bodyParser.json({ type: 'application/json' }));
 
+// Initialize webhooks
+api.use('/webhooks', webhooks);
+
 // Authenticate token and reject unauthorized access
 api.use('/', jwt);
 
@@ -46,6 +49,7 @@ api.use((req, res) => {
     res.status(404).json({ message: 'NOT FOUND' });
 });
 
+// Error handling
 api.use((err, req, res) => {
     if (err.name === 'UnauthorizedError') {
         res.status(401).json({ message: 'Invalid Token' });
@@ -58,8 +62,6 @@ api.use((err, req, res) => {
 
 module.exports = {
     // Wrap Express api in serverless adapter and export to Lambda handler
-    apiHandler: serverless(api),
-    webhooksHandler: serverless(webhooks),
-    api,
-    webhooks
+    handler: serverless(api),
+    api
 };

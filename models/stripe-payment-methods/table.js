@@ -18,6 +18,17 @@ class StripePaymentMethodsTable extends PromisifiedTable {
         });
         return _.get(result, 'Items', []);
     }
+
+    async getByStripeSourceId(stripeSourceId) {
+        const result = await super.query({
+            IndexName: 'stripeSourceId-index',
+            TableName: config.tableNames.users,
+            KeyConditionExpression: '#id = :id',
+            ExpressionAttributeValues: { ':id:': 'stripeSourceId' },
+            ExpressionAttributeNames: { '#id': stripeSourceId },
+        });
+        return _.get(result, 'Items.0');
+    }
 }
 
 module.exports = new StripePaymentMethodsTable({

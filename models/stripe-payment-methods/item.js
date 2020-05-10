@@ -28,6 +28,9 @@ class StripePaymentMethods extends PromisifiedItem {
         if (typeof params.type === 'undefined') {
             attrs.type = modelConfig.types[_.get(params, 'source.object')];
         }
+        if (typeof params.stripeSourceId === 'undefined') {
+            attrs.stripeSourceId = _.get(params, 'source.id');
+        }
         // Attach params and schema to item
         super({
             attrs,

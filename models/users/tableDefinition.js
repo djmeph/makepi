@@ -27,6 +27,10 @@ module.exports = {
             AttributeName: 'status',
             AttributeType: 'N'
         },
+        {
+            AttributeName: 'stripeSourceId',
+            AttributeType: 'S'
+        }
     ],
     KeySchema: [{
         AttributeName: 'userId',
@@ -89,6 +93,17 @@ module.exports = {
             KeySchema: [
                 {
                     AttributeName: 'status',
+                    KeyType: 'HASH'
+                }
+            ],
+            Projection: {
+                ProjectionType: 'ALL'
+            }
+        }, {
+            IndexName: 'stripeSourceId-index',
+            KeySchema: [
+                {
+                    AttributeName: 'stripeSourceId',
                     KeyType: 'HASH'
                 }
             ],

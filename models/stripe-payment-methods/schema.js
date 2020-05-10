@@ -14,6 +14,9 @@ const itemKey = joi.string()
 const stripePaymentMethodId = joi.string()
     .description('Unique ID for Stripe Payment Method Item');
 
+const stripeSourceId = joi.string()
+    .description('Stripe Source ID');
+
 const createdAt = joi.date();
 
 const publicToken = joi.string();
@@ -47,7 +50,8 @@ module.exports = {
         userId,
         itemKey,
         source,
-        verified
+        verified,
+        stripeSourceId
     },
     post: {
         body: joi.object({
@@ -100,6 +104,7 @@ module.exports = {
             userId: userId.required(),
             itemKey: itemKey.required(),
             stripePaymentMethodId: stripePaymentMethodId.required(),
+            stripeSourceId: stripeSourceId.required(),
             type: type.required(),
             source: source.required(),
             verified: verified.required(),

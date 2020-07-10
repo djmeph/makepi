@@ -1,0 +1,24 @@
+# This is a basic workflow to help you get started with Actions
+
+name: npm-audit
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  scan:
+    name: npm audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: install dependencies
+        run: npm ci
+      - uses: oke-py/npm-audit-action@v1.5.0
+        with:
+          audit_level: moderate
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          issue_assignees: oke-py
+          issue_labels: vulnerability,test

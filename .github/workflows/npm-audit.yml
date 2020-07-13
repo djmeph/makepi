@@ -19,8 +19,7 @@ jobs:
         run: npm ci
       - uses: oke-py/npm-audit-action@v1.5.0
         with:
-          audit_level: moderate
           github_token: ${{ secrets.GITHUB_TOKEN }}
           issue_assignees: oke-py
-          issue_labels: vulnerability,test
+          issue_labels: vulnerability
           dedupe_issues: true

@@ -2,7 +2,7 @@ name: npm-audit
 
 on:
   schedule:
-    - cron: '40 * * * *'
+    - cron: '0 0 1 * *'
 
 jobs:
   scan:

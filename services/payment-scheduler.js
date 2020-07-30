@@ -35,35 +35,48 @@ class PaymentScheduler {
             const planKey = subscription.get('plan');
             const paymentDay = subscription.get('paymentDay');
             const paymentMethodKey = subscription.get('paymentMethodKey');
+
             // Don't schedule cash payments yet. Need to turn this into an env var parameter.
             if (paymentMethodKey === 'cash') {
                 this.log.info({ userId, paymentMethodKey });
                 return false;
             }
-            // Look for all future schedule items by userId
-            const schedules = await this.getSchedulesByUserIdAndStatus(userId, models.schedules.config.statuses.unpaid);
+
+            // retrieve plan, isFirstPayment and schedules
+            const [plan, isFirstPayment, schedules] = await Promise.all([
+                this.getPlan(planKey),
+                this.isFirstPayment(userId),
+                this.getSchedulesByUserIdAndStatus(userId, models.schedules.config.statuses.unpaid)
+            ]);
+
             // If array returns with 1 or more items, ignore.
             if (schedules.length) {
                 this.log.info({ userId, message: 'SCHEDULE(S) FOUND' });
                 return false;
             }
-            // get subscription info and calculate payment date
-            const thisMonthsPaymentDay = moment()
-                .year(this.now.year())
-                .month(this.now.month())
-                .date(paymentDay);
-            if (thisMonthsPaymentDay.isBefore(this.now)) thisMonthsPaymentDay.add(1, 'months');
-            const paymentDate = moment
-                .tz(thisMonthsPaymentDay.format('YYYY-MM-DD'), 'YYYY-MM-DD', this.timezone);
-            // retrieve plan
-            const plan = await this.getPlan(planKey);
+
             // extract plan info
             const increments = plan.get('increments');
             const amount = plan.get('amount');
             const total = plan.get('price');
+
+            // calculate payment date
+            const thisMonthsPaymentDay = moment()
+                .year(this.now.year())
+                .month(this.now.month())
+                .date(paymentDay);
+            if (isFirstPayment) {
+                thisMonthsPaymentDay.add(1, 'months');
+            } else {
+                this.thisMonthsPaymentDay.add(amount, Object.keys(config.payments.increments)[increments]);
+            }
+            const paymentDate = moment
+                .tz(thisMonthsPaymentDay.format('YYYY-MM-DD'), 'YYYY-MM-DD', this.timezone);
+
             // Finally, save schedule item to database
             await this.saveScheduleItem(userId, paymentDate, increments, amount, total);
             this.log.info({ userId, message: 'PAYMENT SCHEDULED' });
+
             // return true to include in the `scheduled` count
             return paymentDate.toISOString();
         } catch (err) {
@@ -99,6 +112,11 @@ class PaymentScheduler {
         });
         await schedule.create();
         return schedule;
+    }
+
+    async isFirstPayment(userId) {
+        const payments = await models.payments.table.getAllByUserId(userId);
+        return !payments.length;
     }
 }
 

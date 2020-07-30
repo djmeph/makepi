@@ -68,7 +68,7 @@ class PaymentScheduler {
             if (isFirstPayment) {
                 thisMonthsPaymentDay.add(1, 'months');
             } else {
-                this.thisMonthsPaymentDay.add(amount, Object.keys(config.payments.increments)[increments]);
+                thisMonthsPaymentDay.add(amount, Object.keys(config.payments.increments)[increments]);
             }
             const paymentDate = moment
                 .tz(thisMonthsPaymentDay.format('YYYY-MM-DD'), 'YYYY-MM-DD', this.timezone);

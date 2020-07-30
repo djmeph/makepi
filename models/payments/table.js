@@ -1,9 +1,10 @@
 const { PromisifiedTable } = require('dynamodb-wrapper');
+const _ = require('lodash');
 const config = require('../../config');
 
 class PaymentsTable extends PromisifiedTable {
     async getAllByUserId(userId) {
-        const { Items } = await super.query({
+        const result = await super.query({
             KeyConditionExpression: '#id = :id and begins_with(#key, :key)',
             ExpressionAttributeNames: {
                 '#id': 'userId',
@@ -14,7 +15,7 @@ class PaymentsTable extends PromisifiedTable {
                 ':key': `${config.itemKeyPrefixes.payments}${config.itemKeyDelimiter}`,
             }
         });
-        return Items;
+        return _.get(result, 'Items', []);
     }
 }
 

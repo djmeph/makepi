@@ -71,7 +71,7 @@ describe('UnitTests::', () => {
             sinon.stub(paymentScheduler, 'getPlan').resolves(plan);
             sinon.stub(paymentScheduler, 'saveScheduleItem').resolves(schedule);
             const result = await paymentScheduler.processSubscription(userId, subscriptionFifteenthPaymentDate);
-            expect(result).to.equal('2020-04-15T04:00:00.000Z');
+            expect(result).to.equal('2020-05-15T04:00:00.000Z');
         });
     });
 });

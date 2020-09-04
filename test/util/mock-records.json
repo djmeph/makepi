@@ -1,0 +1,426 @@
+{
+    "payments": [
+      {
+        "metadata": {},
+        "paymentId": "5436cea6-8a73-45f6-a366-d77978b4a277",
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "status": 1,
+        "itemKey": "payments#5436cea6-8a73-45f6-a366-d77978b4a277",
+        "createdAt": "2020-02-16T13:39:57-05:00",
+        "amount": 59,
+        "paymentMethodKey": {
+          "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+          "itemKey": "stripe-payment-methods#2874c96c-0b47-4873-892c-a26d40f56fbb"
+        }
+      },
+      {
+        "metadata": {},
+        "paymentId": "6f813495-d1de-47e4-974b-924c0503a44d",
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "status": 0,
+        "itemKey": "payments#6f813495-d1de-47e4-974b-924c0503a44d",
+        "createdAt": "2020-04-01T04:00:14.343Z",
+        "amount": 59,
+        "paymentMethodKey": {
+          "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+          "itemKey": "stripe-payment-methods#a0728f91-f5d5-44db-98a0-338aaa57aa02"
+        }
+      },
+      {
+        "metadata": {},
+        "paymentId": "39d70380-19eb-4321-a779-d29d28554d25",
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "status": 0,
+        "itemKey": "payments#39d70380-19eb-4321-a779-d29d28554d25",
+        "createdAt": "2020-05-01T04:00:14.071Z",
+        "amount": 59,
+        "paymentMethodKey": {
+          "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+          "itemKey": "stripe-payment-methods#a0728f91-f5d5-44db-98a0-338aaa57aa02"
+        }
+      },
+      {
+        "metadata": {},
+        "paymentId": "f83b95f6-d07d-4a55-ba67-a5816f46a9f0",
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "status": 0,
+        "itemKey": "payments#f83b95f6-d07d-4a55-ba67-a5816f46a9f0",
+        "createdAt": "2020-06-01T04:00:15.213Z",
+        "amount": 59,
+        "paymentMethodKey": {
+          "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+          "itemKey": "stripe-payment-methods#6006017f-3935-44dd-b906-45da15bccb3f"
+        }
+      },
+      {
+        "metadata": {},
+        "paymentId": "46cf9632-fa46-4a20-bf14-36d4b4bb522d",
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "status": 0,
+        "itemKey": "payments#46cf9632-fa46-4a20-bf14-36d4b4bb522d",
+        "createdAt": "2020-07-01T04:00:14.780Z",
+        "amount": 59,
+        "paymentMethodKey": {
+          "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+          "itemKey": "stripe-payment-methods#6006017f-3935-44dd-b906-45da15bccb3f"
+        }
+      },
+      {
+        "metadata": {},
+        "paymentId": "97379138-0102-4038-a2f5-5ee4ca473346",
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "status": 0,
+        "itemKey": "payments#97379138-0102-4038-a2f5-5ee4ca473346",
+        "createdAt": "2020-08-01T04:00:15.027Z",
+        "amount": 59,
+        "paymentMethodKey": {
+          "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+          "itemKey": "stripe-payment-methods#6006017f-3935-44dd-b906-45da15bccb3f"
+        }
+      }
+    ],
+    "schedules": [
+      {
+        "payments": [
+          {
+            "amount": 59,
+            "paymentId": "5436cea6-8a73-45f6-a366-d77978b4a277"
+          }
+        ],
+        "balance": 0,
+        "scheduleId": "1a1ef3f8-e272-47f0-8787-592761febf50",
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "updatedAt": "2020-02-16T13:39:57-05:00",
+        "status": 1,
+        "total": 59,
+        "itemKey": "schedules#1a1ef3f8-e272-47f0-8787-592761febf50",
+        "createdAt": "2020-02-16T13:39:57-05:00",
+        "amount": 1,
+        "paymentDate": "2020-03-01T00:00:00-05:00",
+        "increments": 2
+      },
+      {
+        "payments": [
+          {
+            "paymentId": "6f813495-d1de-47e4-974b-924c0503a44d",
+            "amount": 59
+          }
+        ],
+        "balance": 0,
+        "scheduleId": "96613e49-1f5e-4d0e-af9f-d967d8cd0664",
+        "updatedAt": "2020-04-01T04:00:14.390Z",
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "status": 1,
+        "total": 59,
+        "itemKey": "schedules#96613e49-1f5e-4d0e-af9f-d967d8cd0664",
+        "amount": 1,
+        "createdAt": "2020-03-14T05:27:34.442Z",
+        "increments": 2,
+        "paymentDate": "2020-04-01T00:00:00-04:00"
+      },
+      {
+        "payments": [
+          {
+            "paymentId": "39d70380-19eb-4321-a779-d29d28554d25",
+            "amount": 59
+          }
+        ],
+        "scheduleId": "63403648-07bd-40ab-b3bc-1c7281078119",
+        "status": 1,
+        "total": 59,
+        "itemKey": "schedules#63403648-07bd-40ab-b3bc-1c7281078119",
+        "createdAt": "2020-04-21T03:00:25.388Z",
+        "increments": 2,
+        "paymentDate": "2020-05-01T00:00:00-04:00",
+        "statusHistory": [
+          {
+            "field": "status",
+            "newValue": 1,
+            "timestamp": "2020-05-01T04:00:14.124Z"
+          }
+        ],
+        "balance": 0,
+        "updatedAt": "2020-05-01T04:00:14.124Z",
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "amount": 1
+      },
+      {
+        "payments": [
+          {
+            "paymentId": "f83b95f6-d07d-4a55-ba67-a5816f46a9f0",
+            "amount": 59
+          }
+        ],
+        "scheduleId": "31fd7fe0-5ec7-4c61-9d83-4ebadfc3ee9d",
+        "status": 1,
+        "total": 59,
+        "itemKey": "schedules#31fd7fe0-5ec7-4c61-9d83-4ebadfc3ee9d",
+        "createdAt": "2020-05-02T03:00:25.337Z",
+        "increments": 2,
+        "paymentDate": "2020-06-01T00:00:00-04:00",
+        "statusHistory": [
+          {
+            "field": "status",
+            "newValue": 1,
+            "timestamp": "2020-06-01T04:00:15.274Z"
+          }
+        ],
+        "balance": 0,
+        "updatedAt": "2020-06-01T04:00:15.275Z",
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "amount": 1
+      },
+      {
+        "payments": [
+          {
+            "paymentId": "46cf9632-fa46-4a20-bf14-36d4b4bb522d",
+            "amount": 59
+          }
+        ],
+        "scheduleId": "810fcde5-a27a-4845-9e13-9cf5b6ce9b99",
+        "status": 1,
+        "total": 59,
+        "itemKey": "schedules#810fcde5-a27a-4845-9e13-9cf5b6ce9b99",
+        "createdAt": "2020-06-02T03:00:26.077Z",
+        "increments": 2,
+        "paymentDate": "2020-07-01T00:00:00-04:00",
+        "statusHistory": [
+          {
+            "field": "status",
+            "newValue": 1,
+            "timestamp": "2020-07-01T04:00:14.847Z"
+          }
+        ],
+        "balance": 0,
+        "updatedAt": "2020-07-01T04:00:14.847Z",
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "amount": 1
+      },
+      {
+        "payments": [
+          {
+            "paymentId": "97379138-0102-4038-a2f5-5ee4ca473346",
+            "amount": 59
+          }
+        ],
+        "scheduleId": "48368c4a-0b34-47a1-9dee-bceed84576fd",
+        "status": 1,
+        "total": 59,
+        "itemKey": "schedules#48368c4a-0b34-47a1-9dee-bceed84576fd",
+        "createdAt": "2020-07-17T03:00:25.963Z",
+        "increments": 2,
+        "paymentDate": "2020-08-01T00:00:00-04:00",
+        "statusHistory": [
+          {
+            "field": "status",
+            "newValue": 1,
+            "timestamp": "2020-08-01T04:00:15.080Z"
+          }
+        ],
+        "balance": 0,
+        "updatedAt": "2020-08-01T04:00:15.080Z",
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "amount": 1
+      },
+      {
+        "payments": [],
+        "balance": 59,
+        "scheduleId": "e610ccd3-c209-45bb-8122-4c821065ae25",
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "status": 0,
+        "total": 59,
+        "itemKey": "schedules#e610ccd3-c209-45bb-8122-4c821065ae25",
+        "createdAt": "2020-08-02T03:00:26.122Z",
+        "amount": 1,
+        "paymentDate": "2020-09-01T00:00:00-04:00",
+        "increments": 2
+      }
+    ],
+    "subscriptions": [
+      {
+        "paymentDay": 1,
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "plan": {
+          "planId": "monthly-membership",
+          "versionNumber": 1
+        },
+        "itemKey": "subscriptions_v1",
+        "createdAt": "2020-01-04T06:53:45.143Z",
+        "paymentMethodKey": "stripe-payment-methods#7221720e-b6dd-4285-b173-b9b9f30decd3",
+        "versionNumber": 1
+      },
+      {
+        "paymentDay": 1,
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "plan": {
+          "planId": "monthly-membership",
+          "versionNumber": 1
+        },
+        "itemKey": "subscriptions_v2",
+        "createdAt": "2020-01-05T05:38:36.829Z",
+        "paymentMethodKey": "stripe-payment-methods#7221720e-b6dd-4285-b173-b9b9f30decd3",
+        "versionNumber": 2,
+        "stripePaymentMethodId": "7221720e-b6dd-4285-b173-b9b9f30decd3"
+      },
+      {
+        "paymentDay": 1,
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "plan": {
+          "planId": "monthly-membership",
+          "versionNumber": 1
+        },
+        "itemKey": "subscriptions_v3",
+        "createdAt": "2020-01-08T05:08:00.815Z",
+        "paymentMethodKey": "cash",
+        "versionNumber": 3,
+        "stripePaymentMethodId": "cash"
+      },
+      {
+        "paymentDay": 1,
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "plan": {
+          "planId": "monthly-membership",
+          "versionNumber": 1
+        },
+        "itemKey": "subscriptions_v4",
+        "createdAt": "2020-01-09T05:05:50.399Z",
+        "paymentMethodKey": "stripe-payment-methods#7221720e-b6dd-4285-b173-b9b9f30decd3",
+        "versionNumber": 4,
+        "stripePaymentMethodId": "7221720e-b6dd-4285-b173-b9b9f30decd3"
+      },
+      {
+        "paymentDay": 1,
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "plan": {
+          "planId": "monthly-membership",
+          "versionNumber": 1
+        },
+        "itemKey": "subscriptions_v5",
+        "createdAt": "2020-01-09T05:05:57.279Z",
+        "paymentMethodKey": "cash",
+        "versionNumber": 5,
+        "stripePaymentMethodId": "cash"
+      },
+      {
+        "paymentDay": 1,
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "plan": {
+          "planId": "monthly-membership",
+          "versionNumber": 1
+        },
+        "itemKey": "subscriptions_v6",
+        "createdAt": "2020-01-09T05:06:04.521Z",
+        "paymentMethodKey": "stripe-payment-methods#7221720e-b6dd-4285-b173-b9b9f30decd3",
+        "versionNumber": 6,
+        "stripePaymentMethodId": "7221720e-b6dd-4285-b173-b9b9f30decd3"
+      },
+      {
+        "paymentDay": 1,
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "plan": {
+          "planId": "monthly-membership",
+          "versionNumber": 1
+        },
+        "itemKey": "subscriptions_v7",
+        "createdAt": "2020-01-10T05:47:36.284Z",
+        "paymentMethodKey": "stripe-payment-methods#7221720e-b6dd-4285-b173-b9b9f30decd3",
+        "versionNumber": 7,
+        "stripePaymentMethodId": "7221720e-b6dd-4285-b173-b9b9f30decd3"
+      },
+      {
+        "paymentDay": 1,
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "plan": {
+          "planId": "monthly-membership",
+          "versionNumber": 1
+        },
+        "itemKey": "subscriptions_v8",
+        "createdAt": "2020-02-03T03:29:19.581Z",
+        "paymentMethodKey": "cash",
+        "versionNumber": 8
+      },
+      {
+        "paymentDay": 1,
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "plan": {
+          "planId": "monthly-membership",
+          "versionNumber": 1
+        },
+        "itemKey": "subscriptions_v9",
+        "createdAt": "2020-02-03T03:29:26.775Z",
+        "paymentMethodKey": "stripe-payment-methods#7221720e-b6dd-4285-b173-b9b9f30decd3",
+        "versionNumber": 9
+      },
+      {
+        "paymentDay": 1,
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "plan": {
+          "planId": "monthly-membership",
+          "versionNumber": 1
+        },
+        "itemKey": "subscriptions_v10",
+        "createdAt": "2020-02-09T06:53:51.264Z",
+        "paymentMethodKey": "cash",
+        "versionNumber": 10
+      },
+      {
+        "paymentDay": 1,
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "plan": {
+          "planId": "monthly-membership",
+          "versionNumber": 1
+        },
+        "itemKey": "subscriptions_v11",
+        "createdAt": "2020-02-16T03:58:30.770Z",
+        "paymentMethodKey": "stripe-payment-methods#2874c96c-0b47-4873-892c-a26d40f56fbb",
+        "versionNumber": 11
+      },
+      {
+        "paymentDay": 0,
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "plan": {
+          "planId": "cancel"
+        },
+        "itemKey": "subscriptions_12",
+        "createdAt": "2020-02-16T23:45:34.760Z",
+        "paymentMethodKey": null,
+        "versionNumber": 12
+      },
+      {
+        "paymentDay": 1,
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "plan": {
+          "planId": "monthly-membership",
+          "versionNumber": 1
+        },
+        "itemKey": "subscriptions_v13",
+        "createdAt": "2020-02-16T23:45:46.269Z",
+        "paymentMethodKey": "stripe-payment-methods#2874c96c-0b47-4873-892c-a26d40f56fbb",
+        "versionNumber": 13
+      },
+      {
+        "paymentDay": 1,
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "plan": {
+          "planId": "monthly-membership",
+          "versionNumber": 1
+        },
+        "itemKey": "subscriptions_v14",
+        "createdAt": "2020-02-27T12:26:02.630Z",
+        "paymentMethodKey": "stripe-payment-methods#a0728f91-f5d5-44db-98a0-338aaa57aa02",
+        "versionNumber": 14
+      },
+      {
+        "paymentDay": 1,
+        "userId": "5c08e9a5-acc7-49dc-ad96-581716c67d8e",
+        "plan": {
+          "planId": "monthly-membership",
+          "versionNumber": 1
+        },
+        "itemKey": "subscriptions_v15",
+        "createdAt": "2020-05-04T13:32:48.158Z",
+        "paymentMethodKey": "stripe-payment-methods#6006017f-3935-44dd-b906-45da15bccb3f",
+        "versionNumber": 15
+      }
+    ]
+  }

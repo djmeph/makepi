@@ -149,5 +149,12 @@ describe('UnitTests::', () => {
             expect(result.schedules).to.equal(0);
             expect(result.balance).to.equal(0);
         });
+        it('Should fetch subscription history and calculate the number of active months', async () => {
+            const mockRecords = require('../util/mock-records.json');
+            const payments = mockRecords.payments.map((n) => new models.payments.Item(n));
+            const schedules = mockRecords.schedules.map((n) => new models.schedules.Item(n));
+            const subscriptions = mockRecords.subscriptions.map((n) => new models.subscriptions.Item(n));
+            console.log({ payments, schedules, subscriptions });
+        });
     });
 });

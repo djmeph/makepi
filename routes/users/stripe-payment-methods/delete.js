@@ -12,7 +12,7 @@ module.exports = {
                 userId: req.user.sub,
                 itemKey: `${config.itemKeyPrefixes.stripePaymentMethods}${config.itemKeyDelimiter}${req.params.key}`
             });
-            
+
             if (!stripeCredit) {
                 req.data = { status: 404, response: { message: 'Not Found' } };
                 return next();
@@ -20,8 +20,8 @@ module.exports = {
 
             const latestSubscription = await models.subscriptions.table.getLatest(stripeCredit.get('userId'));
 
-            if (latestSubscription && stripeCredit.get('itemKey') === latestSubscription.get('paymentMethodKey')) {       
-                const user = await models.users.table.get(stripeCredit.get('userId'));         
+            if (latestSubscription && stripeCredit.get('itemKey') === latestSubscription.get('paymentMethodKey')) {
+                const user = await models.users.table.get(stripeCredit.get('userId'));
                 await user.cancelSubscription();
             }
 

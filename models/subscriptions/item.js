@@ -1,17 +1,16 @@
 /*
- * Stripe Credit Source model item class:
+ * Subscription model item class:
  * Promisified Item with History
  */
 const { ItemWithStream } = require('dynamodb-wrapper');
 const config = require('../../config');
 
-
 class Subscriptions extends ItemWithStream {
     /**
-   * @param  {} params={}
-   * @param { String } params.itemKey
-   * @param { String } params.userId
-   */
+     * @param {} params={}
+     * @param { String } params.itemKey
+     * @param { String } params.userId
+     */
     constructor(params = {}) {
         const attrs = { ...params };
         // If itemKey not provided use config

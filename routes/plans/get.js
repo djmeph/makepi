@@ -9,10 +9,7 @@ module.exports = {
     },
     middleware: [async (req, res, next) => {
         try {
-            const plan = await models.plans.table.get({
-                planId: req.params.planId,
-                itemKey: `${config.itemKeyPrefixes.plans}_v${req.params.versionNumber}`
-            });
+            const plan = await models.plans.table.get(req.params);
             req.data = { status: 200, response: plan.get() };
             next();
         } catch (err) { req.fail(err); }

@@ -10,10 +10,7 @@ module.exports = {
     },
     middleware: [async (req, res, next) => {
         try {
-            const plan = await models.plans.table.get({
-                planId: req.body.plan.planId,
-                itemKey: `${config.itemKeyPrefixes.plans}_v${req.body.plan.versionNumber}`
-            });
+            const plan = await models.plans.table.get(req.body.plan);
             if (!plan) {
                 req.data = { status: 404 };
                 return next();

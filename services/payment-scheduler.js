@@ -92,11 +92,8 @@ class PaymentScheduler {
         });
     }
 
-    getPlan({ planId, versionNumber }) {
-        return models.plans.table.get({
-            planId,
-            itemKey: `${config.itemKeyPrefixes.plans}_v${versionNumber}`,
-        });
+    getPlan(key) {
+        return models.plans.table.get(key);
     }
 
     async saveScheduleItem(userId, paymentDate, increments, amount, total) {

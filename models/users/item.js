@@ -155,7 +155,7 @@ class Users extends PromisifiedItem {
         if (latestSubscription.plan.planId === 'cancel') return;
         const newHistoryItem = { ...latestSubscription };
         newHistoryItem.versionNumber += 1;
-        newHistoryItem.itemKey = `${config.itemKeyPrefixes.subscriptions}_${newHistoryItem.versionNumber}`;
+        newHistoryItem.itemKey = `${config.itemKeyPrefixes.subscriptions}_v${newHistoryItem.versionNumber}`;
         newHistoryItem.plan = { planId: 'cancel' };
         newHistoryItem.paymentDay = 0;
         newHistoryItem.createdAt = moment().toISOString();

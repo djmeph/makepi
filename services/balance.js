@@ -1,4 +1,5 @@
 const moment = require('moment-timezone');
+const _ = require('lodash');
 const log = require('./logger');
 const models = require('../models');
 
@@ -55,51 +56,19 @@ class Balance {
     async walkSubscription() {
         let netDues = 0;
         if (!this.subscriptionHistory.length) return netDues;
-        const startDate = moment(this.subscriptionHistory[0].get('createdAt'));
-        const now = moment();
-        const startMonth = startDate.month();
-        const startYear = startDate.year();
-        const nowMonth = now.month();
-        const nowYear = now.year();
-        const walker = {
-            currentMonth: startMonth,
-            currentYear: startYear,
-            monthsToNow: 0
-        };
-
-        // This calculates the total number of months
-        while (
-            moment()
-                .month(walker.currentMonth)
-                .year(walker.currentYear)
-                .isBefore(
-                    moment()
-                        .month(nowMonth)
-                        .year(nowYear)
-                )
-        ) {
-            walker.monthsToNow++;
-            const nextMonth = moment()
-                .month(walker.currentMonth)
-                .year(walker.currentYear)
-            nextMonth.add(1, 'month');
-            walker.currentMonth = nextMonth.month();
-            walker.currentYear = nextMonth.year();
-        }
+        const walker = this._getWalker();
 
         console.log({ walker })
 
-        for (let i = 0; i < this.subscriptionHistory.length; i++) {
-            const n = this.subscriptionHistory[i];
-            const paymentDate = n.get('createdAt');
-            const planKey = n.get('plan');
-            console.log({ planKey })
-            let subscription;
-            if (planKey) {
-                subscription = await models.plans.table.get(planKey);
-            }
-            // console.log(n.get())
-        }
+        const subscriptions = await this._getUniqueSubscriptions();
+
+        console.log(subscriptions);
+
+        const cancellations = this._getCancellations(subscriptions);
+
+        console.log(cancellations);
+
+        // cancellations =
     }
 
     paymentsCounter() {
@@ -132,6 +101,72 @@ class Balance {
             schedules,
             balance: payments - schedules
         };
+    }
+
+    _getWalker() {
+        const startDate = moment(this.subscriptionHistory[0].get('createdAt'));
+        const now = moment();
+        const startMonth = startDate.month();
+        const startYear = startDate.year();
+        const nowMonth = now.month();
+        const nowYear = now.year();
+        const walker = {
+            currentMonth: startMonth,
+            currentYear: startYear,
+            monthsToNow: 0
+        };
+
+        // This calculates the total number of months
+        while (
+            moment()
+                .month(walker.currentMonth)
+                .year(walker.currentYear)
+                .isBefore(
+                    moment()
+                        .month(nowMonth)
+                        .year(nowYear)
+                )
+        ) {
+            walker.monthsToNow++;
+            const nextMonth = moment()
+                .month(walker.currentMonth)
+                .year(walker.currentYear)
+            nextMonth.add(1, 'month');
+            walker.currentMonth = nextMonth.month();
+            walker.currentYear = nextMonth.year();
+        }
+        return walker;
+    }
+
+    async _getUniqueSubscriptions() {
+        let subscriptions = _.uniqWith(this.subscriptionHistory.map((n) => n.get('plan')), _.isEqual);
+        subscriptions = _.filter(subscriptions, (n) => n.planId !== 'cancel');
+        subscriptions = await Promise.all(subscriptions.map((planKey) => models.plans.table.get(planKey)));
+        subscriptions = subscriptions.map((n) => n.get());
+        return subscriptions;
+    }
+
+    _getCancellations(subscriptions) {
+        let cancellations = [];
+
+        this.subscriptionHistory.forEach((n) => {
+            const paymentDate = n.get('createdAt');
+            const planKey = n.get('plan');
+            console.log(planKey)
+            if (planKey.planId === 'cancel') cancellations.push({ start: paymentDate });
+            else {
+                const subscription = _.filter(subscriptions, planKey)[0];
+                const lastCancellation = _.last(cancellations);
+                if (_.get(lastCancellation, 'start') && !_.get(lastCancellation, 'end')) {
+                    lastCancellation.end = paymentDate;
+                }
+            }
+        });
+
+        cancellations = _
+            .filter(cancellations, (n) => moment(n.end).diff(moment(n.start), 'days') > 30);
+
+        return cancellations;
     }
 }
 

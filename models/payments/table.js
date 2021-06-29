@@ -22,7 +22,7 @@ class PaymentsTable extends PromisifiedTable {
             });
             result = [...result, ..._.get(response, 'Items', [])];
             exclusiveStartKey = response.LastEvaluatedKey;
-        } while (exclusiveStartKey)
+        } while (exclusiveStartKey);
         result = _.sortBy(result, (n) => n.get('paymentDate'));
         return result;
     }

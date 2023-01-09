@@ -44,7 +44,7 @@
     "nodemon": "^2.0.3",
     "react": "^16.10.2",
     "serverless": "^1.82.0",
-    "serverless-offline": "^5.12.1",
+    "serverless-offline": "^12.0.4",
     "sinon": "^7.5.0"
   }
 }

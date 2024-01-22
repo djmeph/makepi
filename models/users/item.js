@@ -9,6 +9,7 @@ const AWS = require('aws-sdk');
 const moment = require('moment-timezone');
 const config = require('../../config');
 const utils = require('../../utils');
+const _ = require('lodash');
 
 const { SALT_WORK_FACTOR, MAX_LOGIN_ATTEMPTS, LOCK_TIME } = config;
 const documentClient = new AWS.DynamoDB.DocumentClient({
@@ -134,23 +135,31 @@ class Users extends PromisifiedItem {
                 itemKey: `${config.itemKeyPrefixes.subscriptions}_latest`,
             }
         }).promise();
-        const { Items: unpaidSchedules } = await documentClient.query({
-            TableName: config.tableNames.users,
-            KeyConditionExpression: '#id = :id and begins_with(#key, :key)',
-            FilterExpression: '#s = :s and #pd > :pd',
-            ExpressionAttributeNames: {
-                '#id': 'userId',
-                '#key': 'itemKey',
-                '#s': 'status',
-                '#pd': 'paymentDate',
-            },
-            ExpressionAttributeValues: {
-                ':id': userId,
-                ':key': `${config.itemKeyPrefixes.schedules}${config.itemKeyDelimiter}`,
-                ':s': 0,
-                ':pd': moment.tz(config.TIMEZONE).format(),
-            },
-        }).promise();
+        let unpaidSchedules = [];
+        let response;
+        let exclusiveStartKey;
+        do {
+            response = await documentClient.query({
+                TableName: config.tableNames.users,
+                KeyConditionExpression: '#id = :id and begins_with(#key, :key)',
+                FilterExpression: '#s = :s and #pd > :pd',
+                ExpressionAttributeNames: {
+                    '#id': 'userId',
+                    '#key': 'itemKey',
+                    '#s': 'status',
+                    '#pd': 'paymentDate',
+                },
+                ExpressionAttributeValues: {
+                    ':id': userId,
+                    ':key': `${config.itemKeyPrefixes.schedules}${config.itemKeyDelimiter}`,
+                    ':s': 0,
+                    ':pd': moment.tz(config.TIMEZONE).format(),
+                },
+                ExclusiveStartKey: exclusiveStartKey,
+            }).promise();
+            unpaidSchedules = [...unpaidSchedules, ..._.get(response, 'Items', [])];
+            exclusiveStartKey = response.LastEvaluatedKey;
+        } while (exclusiveStartKey);
         if (!latestSubscription) return;
         if (latestSubscription.plan.planId === 'cancel') return;
         const newHistoryItem = { ...latestSubscription };
